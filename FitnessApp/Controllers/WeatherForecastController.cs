@@ -8,8 +8,8 @@ namespace FitnessApp.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering"
-    };
+            "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Test"
+        };
 
         private readonly ILogger<WeatherForecastController> _logger;
 
