@@ -1,21 +1,24 @@
 ﻿namespace FitnessApp.Services
 {
-    using FitnessApp.Data;
     using FitnessApp.Dto;
+    using FitnessApp.Models;
+    using FitnessApp.Models.Repositories;
 
     public class UsersService : IUsersService
     {
-        ApplicationDbContext dbContext;
-        public UsersService(ApplicationDbContext dbContext)
+        private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
+        public UsersService(IDeletableEntityRepository<ApplicationUser> usersRepository)
         {
-            this.dbContext = dbContext;
+            this.usersRepository = usersRepository;
         }
         public IEnumerable<UserDTO> GetUsers()
         {
-            return this.dbContext.Users.Select(x => new UserDTO
+            var users = usersRepository.AllAsNoTracking().Select(x => new UserDTO
             {
                 Email = x.Email
-            }).ToList();
+            });
+
+            return users;
         }
     }
 }

@@ -1,9 +1,15 @@
 using FitnessApp.Data;
 using FitnessApp.Models;
+using FitnessApp.Models.Repositories;
+using FitnessApp.Repositories;
 using FitnessApp.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Data repositories
+builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
+builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
 builder.Services.AddTransient<IUsersService, UsersService>();
 
