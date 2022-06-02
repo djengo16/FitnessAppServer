@@ -3,14 +3,11 @@
     using FitnessApp.Dto;
     using FitnessApp.Models;
     using FitnessApp.Services;
-    using FitnessApp.Settings;
+    using FitnessApp.Services.Security;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Options;
-    using Microsoft.IdentityModel.Tokens;
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
-    using System.Text;
 
     [ApiController]
     [Route("[controller]")]
@@ -18,15 +15,15 @@
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUsersService usersService;
-        private readonly IOptions<JwtSettings> jwtSettings;
+        private readonly IJwtService jwtService;
         public UsersController(
             UserManager<ApplicationUser> userManager,
             IUsersService usersService,
-            IOptions<JwtSettings> jwtSettings)
+            IJwtService JwtService)
         {
             this.userManager = userManager;
             this.usersService = usersService;
-            this.jwtSettings = jwtSettings;
+            this.jwtService = JwtService;
         }
 
         [HttpGet]
@@ -58,23 +55,8 @@
             {
                 return Unauthorized();
             }
-            // Authentication successful so generate jwt token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(this.jwtSettings.Value.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Email, userLoginModel.Email.ToString()),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id),
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(
-                                 new SymmetricSecurityKey(key),
-                                 SecurityAlgorithms.HmacSha256Signature)
-            };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var token = jwtService.GenerateToken(user);
 
             return Ok(new
             {
@@ -88,21 +70,20 @@
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            if(userId == null)
+            {
+                return Unauthorized();
+            }
+
             await usersService.UpdateUserDetailsAsync(user, userId);
             
             return this.NoContent();
         }
 
-        //TODO: Fix
         [HttpPut("changepassword")]
         public async Task<IActionResult> Put(ChangePasswordInputModel model)
         {
             var user = await userManager.GetUserAsync(User);
-
-            if(user == null)
-            {
-                return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
-            }
 
             await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
 

@@ -3,6 +3,7 @@ using FitnessApp.Models;
 using FitnessApp.Models.Repositories;
 using FitnessApp.Repositories;
 using FitnessApp.Services;
+using FitnessApp.Services.Security;
 using FitnessApp.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeleta
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
 builder.Services.AddTransient<IUsersService, UsersService>();
+builder.Services.AddTransient<IJwtService, JwtService>();
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
