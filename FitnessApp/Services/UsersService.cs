@@ -1,21 +1,51 @@
 ﻿namespace FitnessApp.Services
 {
-    using FitnessApp.Data;
     using FitnessApp.Dto;
+    using FitnessApp.Models;
+    using FitnessApp.Models.Repositories;
+    using Microsoft.AspNetCore.Identity;
 
     public class UsersService : IUsersService
     {
-        ApplicationDbContext dbContext;
-        public UsersService(ApplicationDbContext dbContext)
+        private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
+        private readonly UserManager<ApplicationUser> userManager;
+
+        public UsersService(IDeletableEntityRepository<ApplicationUser> usersRepository, UserManager<ApplicationUser> userManager)
         {
-            this.dbContext = dbContext;
+            this.usersRepository = usersRepository;
+            this.userManager = userManager;
         }
+
+        public async Task DeleteUserAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            this.usersRepository.Delete(user);
+            await this.usersRepository.SaveChangesAsync();
+        }
+
         public IEnumerable<UserDTO> GetUsers()
         {
-            return this.dbContext.Users.Select(x => new UserDTO
+            var users = usersRepository.AllAsNoTracking().Select(x => new UserDTO
             {
                 Email = x.Email
-            }).ToList();
+            });
+
+            return users;
+        }
+
+        public async Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model, string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+
+            user.UserName = model.Username;
+            user.Email = model.Email;
+            user.Description = model.Description;
+            user.ProfilePicture = model.ProfilePictureUrl;
+            user.PhoneNumber = model.PhoneNumber;
+
+            await userManager.UpdateAsync(user);
+
+            return userId;
         }
     }
 }
