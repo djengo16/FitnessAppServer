@@ -1,4 +1,4 @@
-﻿namespace FitnessApp.Dto
+﻿namespace FitnessApp.Dto.Users
 {
     using System.ComponentModel.DataAnnotations;
     public class UserRegisterInputModel
@@ -8,12 +8,12 @@
         public string Email { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "Username should be at least 6 characters long!", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Username should be at least 6 characters long!", MinimumLength = 6)]
         public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [StringLength(50, ErrorMessage = "Password should be at least 6 characters long!", MinimumLength = 6)]
+        [StringLength(200, ErrorMessage = "Password should be at least 6 characters long!", MinimumLength = 6)]
         public string? Password { get; set; }
 
         [Required]

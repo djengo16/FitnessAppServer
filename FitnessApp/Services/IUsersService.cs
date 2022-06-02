@@ -1,6 +1,6 @@
 ﻿namespace FitnessApp.Services
 {
-    using FitnessApp.Dto;
+    using FitnessApp.Dto.Users;
     using FitnessApp.Models;
 
     public interface IUsersService

@@ -15,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 var jwtSettingsSection = builder.Configuration.GetSection("JwtSettings");
 builder.Services.Configure<JwtSettings>(jwtSettingsSection);
 
+// Automapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // Data repositories
 builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));

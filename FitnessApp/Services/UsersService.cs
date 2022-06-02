@@ -1,6 +1,8 @@
 ﻿namespace FitnessApp.Services
 {
-    using FitnessApp.Dto;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using FitnessApp.Dto.Users;
     using FitnessApp.Models;
     using FitnessApp.Models.Repositories;
     using Microsoft.AspNetCore.Identity;
@@ -9,11 +11,15 @@
     {
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
         private readonly UserManager<ApplicationUser> userManager;
-
-        public UsersService(IDeletableEntityRepository<ApplicationUser> usersRepository, UserManager<ApplicationUser> userManager)
+        private readonly IMapper mapper;
+        public UsersService(
+            IDeletableEntityRepository<ApplicationUser> usersRepository,
+            UserManager<ApplicationUser> userManager,
+            IMapper mapper)
         {
             this.usersRepository = usersRepository;
             this.userManager = userManager;
+            this.mapper = mapper;
         }
 
         public async Task DeleteUserAsync(string userId)
@@ -25,10 +31,10 @@
 
         public IEnumerable<UserDTO> GetUsers()
         {
-            var users = usersRepository.AllAsNoTracking().Select(x => new UserDTO
-            {
-                Email = x.Email
-            });
+            var users = usersRepository
+                .AllAsNoTracking()
+                .ProjectTo<UserDTO>(this.mapper.ConfigurationProvider)
+                .ToList();
 
             return users;
         }
