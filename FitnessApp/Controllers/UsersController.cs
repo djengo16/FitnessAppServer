@@ -1,6 +1,6 @@
 ﻿namespace FitnessApp.Controllers
 {
-    using FitnessApp.Dto;
+    using FitnessApp.Dto.Users;
     using FitnessApp.Models;
     using FitnessApp.Services;
     using FitnessApp.Services.Security;
@@ -90,7 +90,6 @@
             return this.NoContent();
         }
 
-        //TODO: Fix
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {

@@ -1,4 +1,4 @@
-﻿namespace FitnessApp.Dto
+﻿namespace FitnessApp.Dto.Users
 {
     public class UpdateUserDetailsInputModel
     {
