@@ -19,5 +19,7 @@
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedOn { get; set; }
+        public WorkoutPlan WorkoutPlan { get; set; }
+        public string WorkoutPlanId { get; set; }
     }
 }

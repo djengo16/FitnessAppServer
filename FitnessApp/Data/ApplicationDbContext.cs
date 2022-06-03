@@ -16,6 +16,11 @@
             : base(options)
         {
         }
+
+        DbSet<Exercise> Exercises { get; set; }
+        DbSet<ExerciseInWorkoutDay> ExercisesInWorkoutDays { get; set; }
+        DbSet<WorkoutDay> WorkoutDays { get; set; }
+        DbSet<WorkoutPlan> WorkoutPlans { get; set; }
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
