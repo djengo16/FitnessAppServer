@@ -41,7 +41,6 @@ namespace FitnessApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -81,7 +80,6 @@ namespace FitnessApp.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ProfilePicture")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -94,6 +92,10 @@ namespace FitnessApp.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("WorkoutPlanId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -104,7 +106,124 @@ namespace FitnessApp.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("WorkoutPlanId")
+                        .IsUnique();
+
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.Exercise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MuscleGroup")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("PictureResourceUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VideoResourceUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Exercises");
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.ExerciseInWorkoutDay", b =>
+                {
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WorkoutDayId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("MaxRepos")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinReps")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sets")
+                        .HasColumnType("int");
+
+                    b.HasKey("ExerciseId", "WorkoutDayId");
+
+                    b.HasIndex("WorkoutDayId");
+
+                    b.ToTable("ExercisesInWorkoutDays");
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.WorkoutDay", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WorkoutPlanId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutPlanId");
+
+                    b.ToTable("WorkoutDays");
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.WorkoutPlan", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Goal")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkoutPlans");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -240,12 +359,53 @@ namespace FitnessApp.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FitnessApp.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("FitnessApp.Models.WorkoutPlan", "WorkoutPlan")
+                        .WithOne("User")
+                        .HasForeignKey("FitnessApp.Models.ApplicationUser", "WorkoutPlanId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("WorkoutPlan");
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.ExerciseInWorkoutDay", b =>
+                {
+                    b.HasOne("FitnessApp.Models.Exercise", "Exercise")
+                        .WithMany("ExerciseInWorkoutDay")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FitnessApp.Models.WorkoutDay", "WorkoutDay")
+                        .WithMany("ExercisesInWorkoutDays")
+                        .HasForeignKey("WorkoutDayId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("WorkoutDay");
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.WorkoutDay", b =>
+                {
+                    b.HasOne("FitnessApp.Models.WorkoutPlan", "WorkoutPlan")
+                        .WithMany("WorkoutDays")
+                        .HasForeignKey("WorkoutPlanId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("WorkoutPlan");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -254,7 +414,7 @@ namespace FitnessApp.Migrations
                     b.HasOne("FitnessApp.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -263,7 +423,7 @@ namespace FitnessApp.Migrations
                     b.HasOne("FitnessApp.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -272,13 +432,13 @@ namespace FitnessApp.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("FitnessApp.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -287,8 +447,26 @@ namespace FitnessApp.Migrations
                     b.HasOne("FitnessApp.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.Exercise", b =>
+                {
+                    b.Navigation("ExerciseInWorkoutDay");
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.WorkoutDay", b =>
+                {
+                    b.Navigation("ExercisesInWorkoutDays");
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.WorkoutPlan", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
+
+                    b.Navigation("WorkoutDays");
                 });
 #pragma warning restore 612, 618
         }
