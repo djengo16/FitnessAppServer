@@ -8,6 +8,6 @@
         public virtual WorkoutDay WorkoutDay { get; set; }
         public int Sets { get; set; }
         public int MinReps { get; set; }
-        public int MaxRepos { get; set; }
+        public int MaxReps { get; set; }
     }
 }
