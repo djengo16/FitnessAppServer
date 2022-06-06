@@ -3,6 +3,7 @@
     using FitnessApp.Models.Common;
     using Microsoft.AspNetCore.Identity;
     using System;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -19,7 +20,9 @@
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedOn { get; set; }
-        public WorkoutPlan WorkoutPlan { get; set; }
+
+        [ForeignKey(nameof(WorkoutPlan))]
         public string WorkoutPlanId { get; set; }
+        public WorkoutPlan WorkoutPlan { get; set; }
     }
 }

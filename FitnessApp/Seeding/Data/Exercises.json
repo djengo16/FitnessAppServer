@@ -1,0 +1,784 @@
+﻿[
+  {
+    "Name": "Machine Fly",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Easy",
+    "PictureResourceUrl": "https://www.bodybuilding.com/images/2021/march/machine-fly-header-830x467.jpg"
+  },
+  {
+    "Name": "Dumbbell Pull-Over",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Medium",
+    "PictureResourceUrl": "https://www.bodybuilding.com/images/2021/march/chest-dumbbell-pull-over-header-830x467.jpg"
+  },
+  {
+    "Name": "Machine Chest Press",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Easy",
+    "Description": [
+      "Sit down on the Chest Press Machine and select the weight. ",
+      "Step on the lever provided by the machine since it will help you to bring ",
+      "the handles forward so that you can grab the handles and fully extend the arms. ",
+      "Grab the handles with a palms-down grip and lift your elbows so that your upper arms ",
+      "are parallel to the floor to the sides of your torso. ",
+      "Tip: Your forearms will be pointing forward since you are grabbing the handles. ",
+      "Once you bring the handles forward and extend the arms you will be at the starting position. ",
+      "Now bring the handles back towards you as you breathe in. ",
+      "Push the handles away from you as you flex your pecs and you breathe out."
+    ],
+    "PictureResourceUrl": "https://www.bodybuilding.com/images/2021/march/machine-chest-press-header-v2-830x467.jpg"
+  },
+  {
+    "Name": "Cable Iron Cross",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Medium",
+    "Description": [
+      "Set the handles at both ends of the cable machine at the highest level. ",
+      "Stand in the center with a staggered stance and take hold of both handles. ",
+      "Lean your torso forward keeping your spine in neutral and bend your elbows slightly too. ",
+      "Keeping your core tight pull both handles down and across your body and squeeze the chest muscles ",
+      "at the end of the movement."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/taI4XduLpTk"
+  },
+  {
+    "Name": "Dip",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Easy",
+    "Description": [
+      "Grab the dip bar firmly and get yourself in the top of the dip position, ",
+      "with the upper back tight and shoulder blades squeezed together. ",
+      "Angle your torso slightly forward and allow the elbows to bend as they slightly tuck ",
+      "inwards towards the sides of the torso. Lower yourself down until your elbows bend at about 90 degrees. ",
+      "When ready, press through the handles and bring your body upright into the top of the dip position."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/YuaUTOMQQrc"
+  },
+  {
+    "Name": "Push-Up",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Easy",
+    "Description": [
+      "Get into a plank position, with your hands underneath your shoulders, ",
+      "back flat, and feet together. Screw your palms into the ground. ",
+      "You should feel your chest tighten. Hold this position, and then slowly lower yourself ",
+      "until your chest is about an inch from the floor. Now, drive back up through the palms of your hands."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/W1LCL-Sw0yU"
+  },
+  {
+    "Name": "Dumbbell Bench Press",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Medium",
+    "Description": [
+      "Sit up on a flat bench and then hinge forward to pick up each dumbbell. ",
+      "Place each weight on a knee and get set. Lean back and then drive the dumbbells back towards you ",
+      "(carefully) with your knees, simultaneously pressing the weights over your chest. Lower the weights, ",
+      "keeping your elbows tucked in at 45 degrees until your elbows break 90 degrees. ",
+      "Then, drive the dumbbells back up. You can also turn your palms, ",
+      "so they’re facing each other and press from this neutral position."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/VmB1G1K7v94"
+  },
+  {
+    "Name": "Chest Flye",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Medium",
+    "Description": [
+      "Lay back on a bench (either flat, decline, or incline — it doesn’t matter), ",
+      "with a dumbbell in each hand. With a slight bend in your elbows, ",
+      "lower your arms out to your sides slowly and with control. ",
+      "Now, reverse the motion to engage the chest. You should look like you’re hugging a tree."
+    ],
+    "PictureResourceUrl": "https://i1.wp.com/www.fitliferegime.com/wp-content/uploads/2021/05/Powtoon_Screenshot23.jpg?w=660&ssl=1",
+    "VideoResourceUrl": "https://www.youtube.com/embed/JFm8KbhjibM"
+  },
+  {
+    "Name": "Decline Bench Press",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Hard",
+    "Description": [
+      "Start by securing your feet into a decline bench set up and secure the upper back ",
+      "and hips to the bench (similar to the flat bench press). ",
+      "Unrack the weight and pull the load downwards toward the sternum while keeping ",
+      "the shoulder blades pulled together. Press through the barbell to lock out the elbows. ",
+      "Be sure not to allow the elbows to flare excessively out in the movement."
+    ],
+    "PictureResourceUrl": "https://i.ytimg.com/vi/oIgci8aNsG0/maxresdefault.jpg",
+    "VideoResourceUrl": "https://www.youtube.com/embed/NM5lbuq92Aw"
+  },
+  {
+    "Name": "Incline Bench Press",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Medium",
+    "Description": [
+      "Adjust a workout bench so it is at 45 degrees and set up similar to that ",
+      "of the flat bench press. Unrack the loaded barbell and begin to pull the load ",
+      "downwards to line with the upper chest (a few inches below the clavicle). ",
+      "With the shoulder blades pulled together and elbows angled at about 45 degrees. ",
+      "Push the barbell upward."
+    ],
+    "PictureResourceUrl": "https://thumbs.dreamstime.com/z/exercising-press-bar-lying-incline-bench-bodybuilding-target-muscles-marked-red-initial-final-steps-43639232.jpg",
+    "VideoResourceUrl": "https://www.youtube.com/embed/SrqOu55lrYU"
+  },
+  {
+    "Name": "Barbell Flat Bench Press",
+    "MuscleGroup": "Chest",
+    "Difficulty": "Easy",
+    "Description": [
+      "Lay back down on a bench, arch your lower back slightly,",
+      " and plant your feet on the floor. Pull your shoulder blades together to enhance",
+      " stability and upper back strength. Grab the bar (varying grips) and squeeze the hand",
+      " hard to flex the arm and grip muscles maximally. With the load unracked, think about pulling",
+      " the barbell to the body to touch the sternum/base of the chest. Press the weight upwards,",
+      " making sure to keep your back tight, and shoulder blades pulled together."
+    ],
+    "PictureResourceUrl": "https://image.shutterstock.com/z/stock-photo-close-grip-barbell-bench-press-d-illustration-430936051.jpg",
+    "VideoResourceUrl": "https://www.youtube.com/embed/jt1CbdLvGE4"
+  },
+  {
+    "Name": "Deadlift",
+    "MuscleGroup": "Back",
+    "Difficulty": "Hard",
+    "Description": [
+      "Stand in front of a loaded barbell with your feet shoulder-width apart,",
+      " hips back, and back flat. The knees should be bent slightly to allow you to grip",
+      " the bar tightly slightly wider than shoulder-width. Keeping your back flat and chest up,",
+      " tighten the back muscles, and straighten the arms as you load the pull. With everything locked,",
+      " aggressively push your legs into the floor as you simultaneously pull your chest and shoulders upwards,",
+      " lifting the bar to the hip."
+    ],
+    "PictureResourceUrl": "https://www.crossfit.com/wp-content/uploads/2019/10/17100559/Sumo-Deadlift-Jackson.png",
+    "VideoResourceUrl": "https://www.youtube.com/embed/1ZXobu7JvvE"
+  },
+  {
+    "Name": "Pull-up",
+    "MuscleGroup": "Back",
+    "Difficulty": "Hard",
+    "Description": [
+      "Assume an overhead grip on the bar, slightly wider than shoulder-width.",
+      " With the arms relaxed and shoulders elevated up to the ears,",
+      " contract the core and upper back as you initiate the pull-up.",
+      " Aim to pull your chin to or above the bar level, driving your shoulders away from the ears."
+    ],
+    "PictureResourceUrl": "https://i.ytimg.com/vi/HRV5YKKaeVw/maxresdefault.jpg",
+    "VideoResourceUrl": "https://www.youtube.com/embed/iUNoLR0pYjY"
+  },
+  {
+    "Name": "Bent-Over Row",
+    "MuscleGroup": "Back",
+    "Difficulty": "Medium",
+    "Description": [
+      "Set up as you would for your deadlift by standing feet shoulder-width apart ",
+      "in front of a loaded barbell. Hinge at the hips until your torso is about parallel",
+      " to the floor. Grab the barbell with a grip that’s a bit wider than your typical deadlift grip.",
+      " Lean back, so your weight is on your heels, and row the barbell,",
+      " leading the pull with your elbow until it touches around your belly button."
+    ],
+    "PictureResourceUrl": "https://i.ytimg.com/vi/HRV5YKKaeVw/maxresdefault.jpg",
+    "VideoResourceUrl": "https://www.youtube.com/embed/FWJR5Ve8bnQ"
+  },
+  {
+    "Name": "Single-Arm Row",
+    "MuscleGroup": "Back",
+    "Difficulty": "Medium",
+    "Description": [
+      "Stand next to a bench so that it’s parallel to you.",
+      " Place the same-side hand and knee on it, and firmly plant your other foot onto the floor.",
+      " Reach down with your free hand and grab a dumbbell.",
+      " Keep your back flat and your head in a neutral position.",
+      " Row the dumbbell to your side until your elbow passes your torso.",
+      " Complete all of your reps on one side and then switch."
+    ],
+    "PictureResourceUrl": "https://i.pinimg.com/originals/1f/35/fa/1f35fac2d07aab4bd9d69b1efdbf1b36.png",
+    "VideoResourceUrl": "https://www.youtube.com/embed/dFzUjzfih7k"
+  },
+  {
+    "Name": "Lat Pulldown",
+    "MuscleGroup": "Back",
+    "Difficulty": "Easy",
+    "Description": [
+      "Set yourself up with your legs under the pad and hands grasping the bar attachment",
+      " slightly wider than shoulder-width with a pronated (palms facing away) grip.",
+      " With the core tight and the torso upright — or even a little arched — pull the bar down to your chin,",
+      " thinking to drive your shoulder blades together at the end.",
+      " Slowly resist the weight as you return to the starting position."
+    ],
+    "PictureResourceUrl": "https://cdn.shopify.com/s/files/1/1075/8446/files/exercise-33.jpg?1951",
+    "VideoResourceUrl": "https://www.youtube.com/embed/AOpi-p0cJkc"
+  },
+  {
+    "Name": "Seated Cable Row (for Lats)",
+    "MuscleGroup": "Back",
+    "Difficulty": "Easy",
+    "Description": [
+      "Set yourself up in the cable row, with your feet on the foot platform ",
+      "and the hands grasping the attachment with a neutral grip. With the core tight ",
+      "and the torso slightly leaned forward at the hip (do not round the back),",
+      " pull the attachment toward the top of the abdomen. Slowly resist the weight as you return back",
+      " to the starting position."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/ucaLi5L70Ds"
+  },
+  {
+    "Name": "Seated Cable Row (for Upper Back)",
+    "MuscleGroup": "Back",
+    "Difficulty": "Easy",
+    "Description": [
+      "Set yourself up in the cable rowing area, with your feet on the foot platform ",
+      "and the hands grasping the attachment with an overhand grip. ",
+      "With the core tight and the torso upright — or slightly leaned back ",
+      "at the hip — pull the attachment toward the top of the chest, extending the arms back behind you.",
+      " Slowly resist the weight as you return back to the starting position."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/ufPdC5o_vp0"
+  },
+  {
+    "Name": "Straight-Arm Pulldown",
+    "MuscleGroup": "Back",
+    "Difficulty": "Medium",
+    "Description": [
+      "Attach a rope handle, straight bar, or EZ-bar to a cable pulley set at the highest setting.",
+      " (The rope is a popular option.) Take enough steps back so that you can hinge your ",
+      "torso forward 45 degrees and straighten your arms without any slack in the cable.",
+      " Slightly bend your elbows and then pull the rope to the tops of your thighs.",
+      " You shouldn’t feel your triceps engage at all."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/aD-mosukbIQ"
+  },
+  {
+    "Name": "Back Hyperextension",
+    "MuscleGroup": "Back",
+    "Difficulty": "Easy",
+    "Description": [
+      "Place your things against the pads of a back extension machine,",
+      " and ensure that your achilles tendon is right under the ankle pad.",
+      " Cross your arms.Slowly hinge forward until your body forms a 90-degree angle.",
+      " Contract your glutes and hamstrings to come back to the starting position."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/ph3pddpKzzw"
+  },
+  {
+    "Name": "Face Pull",
+    "MuscleGroup": "Back",
+    "Difficulty": "Easy",
+    "Description": [
+      "Clip a rope attachment to a cable pulley set to the highest setting.",
+      " Grab the rope with both hands, palms facing each other.",
+      " Take a few steps back so there’s tension in the rope.",
+      " Raise your hands so the rope is level with your face.",
+      " Simultaneously pull the rope toward your face and flare your elbows out and back."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/V8dZ3pyiCBo"
+  },
+  {
+    "Name": "Barbell Overhead Press",
+    "MuscleGroup": "Shoulder",
+    "Difficulty": "Hard",
+    "Description": [
+      "With the bar right in front of you, place your hands just outside your shoulders. ",
+      "Your elbows and forearms should be in a vertical position, stacked upon each other. ",
+      "If your elbows are pointing out or in, your grip is either too narrow or too wide. ",
+      "Please adjust accordingly.",
+      "Put the bar on the heel of your palm because this is where you’ll generate the most force from.",
+      "Press overhead until lockout and slowly lower down to the starting position and repeat."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/2yjwXTZQDDI"
+  },
+  {
+    "Name": "Half-Kneeling Landmine Press",
+    "MuscleGroup": "Shoulder",
+    "Difficulty": "Medium",
+    "Description": [
+      "Get into a half-kneeling position in front of the barbell, knee underneath hip and ankle underneath the knee.",
+      "Hold the barbell at shoulder height in hand nearest your back leg and actively grip the barbell. ",
+      "Press up at about 45 degrees and reach towards the ceiling at the end of the lockout. Slowly lower down under control and repeat."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/PY9HorHANhc"
+  },
+  {
+    "Name": "Arnold Press",
+    "MuscleGroup": "Shoulder",
+    "Difficulty": "Hard",
+    "Description": [
+      "In a seated position, kick dumbbells up to a traditional starting position ",
+      "and rotate your hands until your palms are facing towards you, ",
+      "like the top of a biceps curl. In one motion, press the dumbbells and rotate your palms to face forward. ",
+      "Continue lifting until your biceps are by or behind your ears.",
+      "Pause and reverse the move slowly and repeat."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/3ml7BH7mNwQ"
+  },
+  {
+    "Name": "Push Press",
+    "MuscleGroup": "Shoulder",
+    "Difficulty": "Easy",
+    "Description": [
+      "Set up the same as you would for the barbell overhead press. ",
+      "Assume an upright torso and dip downward four to six inches, knees over toes. ",
+      "Then push your torso and chest upwards through the barbell, and using the legs, forcefully drive yourself and the barbell up.",
+      "Continue to push through the barbell until lockout. Slowly return to the starting position and repeat."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/iaBVSJm78ko"
+  },
+  {
+    "Name": "Wide-Grip Seated Row",
+    "MuscleGroup": "Shoulder",
+    "Difficulty": "Medium",
+    "Description": [
+      "Set up like you would for your regular seated row but use a straight bar attachment. ",
+      "Take an overhand wide grip until your upper arms are about 45 degrees to your torso. ",
+      "Keeping an upright torso, row the bar to your sternum until you feel a strong contraction in your upper back. ",
+      "Slowly return to the starting position and repeat."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/BvtD3znOqao"
+  },
+  {
+    "Name": "Leaning Lateral Raise",
+    "MuscleGroup": "Shoulder",
+    "Difficulty": "Easy",
+    "Description": [
+      "Hold a power rack or a pole and bring your feet close to or under your hands. ",
+      "With the dumbbell resting on your outer thigh, raise the dumbbell away from you ",
+      "until you feel a strong contraction in your shoulders and slowly lower down and repeat."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/WxAKPTOmYSw"
+  },
+  {
+    "Name": "Incline Y Raise",
+    "MuscleGroup": "Shoulder",
+    "Difficulty": "Medium",
+    "Description": [
+      "Set up the bench at a 45-degree incline. Lie face down with your knees slightly bent. ",
+      "Hold the weights with an overhand grip. Extend your arms to hang straight under your shoulders. ",
+      "Keep your shoulders down and chest up. Activate your posterior delts to raise the weights up and out. ",
+      "Keep your arms straight until they are fully extended. A soft bend in your elbows is okay. ",
+      "Slowly lower back to the starting position. Reset and repeat"
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/Wz1C8NzWg5A"
+  },
+  {
+    "Name": "Seated Dumbbell Shoulder Press",
+    "MuscleGroup": "Shoulder",
+    "Difficulty": "Hard",
+    "Description": [
+      "Clean the dumbbells so they are sitting on your shoulders. ",
+      "Sit upright on an incline bench. Keep your shoulders away from your ears. Sit tall. ",
+      "Brace your core. Find your preferred pressing angle. Press both dumbbells overhead until your elbows lock out. ",
+      "Carefully lower the dumbbells. Reset and repeat."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/b8cNbFvBTgE"
+  },
+  {
+    "Name": "Single-Arm Push Press",
+    "MuscleGroup": "Shoulder",
+    "Difficulty": "Medium",
+    "Description": [
+      "Clean one dumbbell to the top of your shoulder. ",
+      "Pack your shoulders down and away from your ears. Brace your core. ",
+      "Bend your knees to dip down about four to six inches. Track your knees over your toes. ",
+      "Use this momentum to press the dumbbell overhead in a seamless movement. ",
+      "Lock out the dumbbell overhead. Lower with control. Reset and repeat."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/tKAv1fxIvts"
+  },
+  {
+    "Name": "Barbell Curl",
+    "MuscleGroup": "Biceps",
+    "Difficulty": "Medium",
+    "Description": [
+      "Grab a barbell with an underhand grip, slightly wider than the shoulders. ",
+      "With the chest up and shoulder blades pulled tightly together, expose the front of your biceps by pulling the shoulders back into the socket. ",
+      "The elbows should reside under the shoulder joint, or slightly in front by the ribs. ",
+      "Curl the barbell up using the biceps, making sure not to let the torso lean forward, ",
+      "shoulder collapse forward, or the elbows slide backward to the side of the body (they should stay slightly in front of the shoulders)."
+    ],
+    "PictureResourceUrl": "https://barbend.com/wp-content/uploads/2019/04/best-biceps-exercises-barbell-curl.jpg"
+  },
+  {
+    "Name": "EZ-Bar Preacher Curl",
+    "MuscleGroup": "Biceps",
+    "Difficulty": "Easy",
+    "Description": [
+      "Sit down on a preacher bench and rest the back of your triceps on the pad. ",
+      "Set your body in the same position as the standard barbell biceps curl (chest up, shoulders back, and elbows slightly forward). ",
+      "Grasp the EZ-bar handle on the inner angled pieces. ",
+      "This will place your hands slightly narrower than shoulder-width and on a semi-supinated angle. ",
+      "With the body locked in place, curl the bar upwards as you flex the biceps, ",
+      "briefly pausing at the top of the curl to flex the biceps. Lower the weight under control."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/I7PoPjFF2Ww"
+  },
+  {
+    "Name": "Hammer Curl",
+    "MuscleGroup": "Biceps",
+    "Difficulty": "Medium",
+    "Description": [
+      "Hold a dumbbell in each hand while standing. ",
+      "Turn your wrists so that they’re facing each other. ",
+      "Keep your arms tucked in at your sides ",
+      "and flex your elbows to curl the dumbbells up towards your shoulders. ",
+      "Lower them back down with control."
+    ],
+    "PictureResourceUrl": "https://barbend.com/wp-content/uploads/2019/04/best-biceps-exercises-hammer-curl.jpg"
+  },
+  {
+    "Name": "Incline Dumbbell Curl",
+    "MuscleGroup": "Biceps",
+    "Difficulty": "Hard",
+    "Description": [
+      "Lay back on an incline bench, angled at about 60 degrees, with a dumbbell in each hand. ",
+      "Let your arms hang so they’re fully extended. Without moving your shoulders, ",
+      "curl the weight up to your shoulders. Hold the top of the movement for about a second, ",
+      "and then slowly lower the dumbbells with control."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/soxrZlIl35U"
+  },
+  {
+    "Name": "Cable Curl",
+    "MuscleGroup": "Biceps",
+    "Difficulty": "Easy",
+    "Description": [
+      "Attach the desired handle to the pulley of a cable machine set to the lowest height. ",
+      "Grab the handle in both hands and take a few steps back so there’s constant tension on the cable ",
+      "(the weight stack should be elevated the entire time). Curl the bar up to your chest and then slowly lower it back down."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/NFzTWp2qpiE"
+  },
+  {
+    "Name": "Concentration Curl",
+    "MuscleGroup": "Biceps",
+    "Difficulty": "Easy",
+    "Description": [
+      "Sit on a bench with your feet set wide enough to allow your arm to hang in the middle,",
+      " with your elbow resting on the inside of the thigh. With a dumbbell in hand, ",
+      "slowly curl the dumbbell upward at a controlled tempo, concentrating on contracting the biceps to move the load. ",
+      "At the top of the movement, flex as hard as possible, then slowly lower the load. ",
+      "The key is not to lose tension on the biceps at any point in the range of motion."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/0AUGkch3tzc"
+  },
+  {
+    "Name": "High Cable Curl",
+    "MuscleGroup": "Biceps",
+    "Difficulty": "Medium",
+    "Description": [
+      "Set a cable pulley to about shoulder height and attach D-handles to each cable pulley. ",
+      "Grab the bar with a supinated grip (palm facing up). Keep tension on the biceps all the way to the top of the movement, ",
+      "then slowly lower the load back to the starting position. The key to this exercise is maintaining your shoulder ",
+      "position throughout the range of motion, not allowing your elbows to dip — making it easier. ",
+      "Maintaining tension in the upper back will help keep shoulders stable and arm position constant, driving up tension in the biceps."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/Okl64XegSu0"
+  },
+  {
+    "Name": "Cable Rope Supinating Curl",
+    "MuscleGroup": "Biceps",
+    "Difficulty": "Easy",
+    "Description": [
+      "Stand in front of a single cable on a functional trainer or cable tower. ",
+      "Set the cable to a lower setting with each side of the rope attachment in your hands (palms facing each other). ",
+      "To complete the curling motion, start by flexing your elbows (bringing the hands up toward the shoulders), ",
+      "and around one-third of the way up, rotate (supinate) your hands to face up as you continue to curl up. ",
+      "The key to increasing the challenge of supination of this exercise is waiting to supinate until you’re a third the way ",
+      "into the rep — this ensures the muscles responsible for supination can kick in while the resistance is on them."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/wW-lmxnc2vs"
+  },
+  {
+    "Name": "Close-Grip Barbell Bench Press",
+    "MuscleGroup": "Triceps",
+    "Difficulty": "Hard",
+    "Description": [
+      "Set yourself up similar to a flat bench press, with your hands set inside shoulder-width ",
+      "and your elbows tucked into the body. Pull the bar out of the rack and stabilize it over your chest. ",
+      "Pull the elbows inwards as the bar descends to the chest. Once you have touched the chest, press through the palms, ",
+      "feel the triceps engage, and lift the weight back up."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/vEUyEOVn3yM"
+  },
+  {
+    "Name": "Triceps Pushdown",
+    "MuscleGroup": "Triceps",
+    "Difficulty": "Easy",
+    "Description": [
+      "Set the cables or band at a high anchor point. ",
+      "With your body facing the band, place your feet together and elbows to your sides (by your ribs). ",
+      "The chest should be up, and the back flat, with the hips angled slightly forward. ",
+      "Grab the handles or band and fully extend the elbows to push the handles or band down, ",
+      "making sure to keep the elbows slightly in front of the shoulders."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/2-LAMcpzODU"
+  },
+  {
+    "Name": "Skull Crusher",
+    "MuscleGroup": "Triceps",
+    "Difficulty": "Hard",
+    "Description": [
+      "Start by lying back down on a bench, with the hands supporting a weight ",
+      "(a barbell, dumbbells, or various cable attachments) at the top of the bench pressing position. ",
+      "The back and hips should be set up identical to a bench press. Pull the elbows back slightly so that they ",
+      "are pointing behind you (rather than directly vertical) as you bend the elbow joint, ",
+      "lowering the bar handle or loads towards your head. The bar should nearly make contact with the forehead. ",
+      "When done correctly, you should feel the stretch on the triceps and partially on the lats. Push the bar back up."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/kOXVmFFTcio"
+  },
+  {
+    "Name": "Decline Bench Cable Extension",
+    "MuscleGroup": "Triceps",
+    "Difficulty": "Medium",
+    "Description": [
+      "Set a decline workout bench about a foot in front of a cable pulley machine. ",
+      "Set the cable pulley to low and attach a straight or ez-bar handle. ",
+      "Lay back on the bench and grab the handle with both hands. ",
+      "(It may be easier to have someone hand you the bar.) Now, perform a standard skull crusher."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/lz6GorNZYNU"
+  },
+  {
+    "Name": "Dumbbell Kickbacks",
+    "MuscleGroup": "Triceps",
+    "Difficulty": "Easy",
+    "Description": [
+      "Grab a light dumbbell with one hand and place your other hand on a stable surface.",
+      "Lean forward until your torso is almost parallel to the floor and stagger your feet.",
+      "Take the arm that is holding the weight and pull the upper arm up to torso level, keeping it pressed to your side.",
+      "Keeping the elbow in that position, extend your forearm behind you, focusing on contracting the triceps.",
+      "Lower the forearm down to about 90 degrees and repeat for 1-3 sets of 8-16 reps.",
+      "Focus on keeping the upper arm stationary against the body throughout the exercise."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/jxYMhEjrQsM"
+  },
+  {
+    "Name": "Back Squat",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Hard",
+    "Description": [
+      "Set a barbell in a power rack to shoulder height, ",
+      "loaded with an appropriate amount of weight. Get under the barbell, ",
+      "set the bar across your upper traps, or set the bar across your shoulder ",
+      "blades if you’re performing low-bar squats. Brace your core and lift the weight out of the rack.",
+      " Take small steps back one foot at a time to get yourself into position. With your chest up, squat ",
+      "down until the bottoms of your thighs are parallel to the floor. Now, drive back up by pushing your feet ",
+      "through the floor."
+
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/3tn-xqyUUkQ"
+  },
+  {
+    "Name": "Front Squat",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Hard",
+    "Description": [
+      "Set a barbell in a power rack to shoulder height, loaded with an appropriate weight. ",
+      "Extend your arms directly out in front of you so that your hands are touching the bar. ",
+      "Place your middle three fingers on the bar, and then drive your palms up. Bring your elbows ",
+      "underneath the bar so that they’re pointing straight forward. The bar should be resting across your upper chest. ",
+      "For lifters who lack the mobility to get into this position, another alternative starting position is to rest the ",
+      "bar on your collarbone (which hurts, yes) and cross your arms so they’re touching the opposite shoulder. ",
+      "This position is called the genie rack position. Step back, so the bar is out of the rack, and keep your elbows ",
+      "pointing forward. With your chest up, squat down until the bottoms of your thighs are parallel to the floor and ",
+      "drive through the floor with your feet to the top."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/v-mQm_droHg"
+  },
+  {
+    "Name": "Bulgarian Split Squat",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Hard",
+    "Description": [
+      "Hold a dumbbell in each hand and stand about a foot in front of a bench. ",
+      "Place one foot, laces down, on a bench. Brace your core and squat down until ",
+      "both of your legs bend to 90 degrees. You can squat down a little further, ",
+      "but don’t let your knee touch the floor. Hold this down position for a beat and then drive back up."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/_Mf2n71dNZ8"
+  },
+  {
+    "Name": "Leg Press",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Medium",
+    "Description": [
+      "Sit in the leg press seat, and place your feet in the middle of the sled,",
+      " about shoulder-width apart. Press the sled out of the rack, lower the safety bars, ",
+      "and then slowly lower the sled towards your chest until your thighs break 90 degrees. ",
+      "Press the sled back up but do not lock out your knees. If your lower back or hips lift off ",
+      "the seat as you drive the weight back up, you’re going too far down."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/CHPHn-OnTqE"
+  },
+  {
+    "Name": "Hack Squat",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Medium",
+    "Description": [
+      "Your stance on the foot platform will closely mimic that of your back squat stance. ",
+      "You want your feet slightly outside shoulder width with feet angled slightly ",
+      "outward — they should be in line with the knee as it tracks forward during the descent. ",
+      "Your torso should be stable with your abdominals engaged and your lower back flat on the back pad. ",
+      "Maintain a neutral head position as you lower your body until the bottoms of your thighs are parallel ",
+      "to the foot platform and drive through your feet to the top."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/4cxt_Tldugw"
+  },
+  {
+    "Name": "Romanian Deadlift",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Medium",
+    "Description": [
+      "Load a barbell up with less weight than you would for a traditional deadlift, ",
+      "but get in the same deadlift position — feet shoulder-width apart and hands gripping ",
+      "the bar just outside the knees. Raise your chest up and then drop your hips and pull-up ",
+      "on the bar until your hips are fully locked out. Now, push your hips back and lower the bar ",
+      "until it’s in the middle of your shins. You should feel a stretch in your hamstrings. ",
+      "Finish by driving your hips forward, bringing the weight back up to the starting position."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/CQp5I9KgdXI"
+  },
+  {
+    "Name": "Reverse Lunge",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Medium",
+    "Description": [
+      "Stand with your feet together, and keep your hands at your sides or on your hips. ",
+      "Take a step back with one leg until it’s behind you and your knee is an inch or so above the floor. ",
+      "Your front leg should bend at a 90-degree angle as well. Keep your chest up and facing forward. Now, ",
+      "drive through the balls of your front foot and stand back up with control."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/_DLAdo2Pvjs"
+  },
+  {
+    "Name": "Leg Extension",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Easy",
+    "Description": [
+      "Adjust the back pad on the machine and line your knee up with the axis of rotation ",
+      "(signified by a dot or marker on the machine) and adjust the ankle pad, ",
+      "so it rests on your shoelaces to touch just above the shoe. Extend the knee to move the ankle pad, ",
+      "then accelerate into the rep until you reach the end range of the knee extension. Ensure your ankle ",
+      "is in dorsiflexion — toes pointed straight ahead or slightly up. Lower weight back down with control."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/KjDtUM6v9dk"
+  },
+  {
+    "Name": "Seated Leg Curl",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Easy",
+    "Description": [
+      "Adjust the back pad on the machine and line your knee up with the axis of rotation ",
+      "(signified by a dot or marker on the machine). Adjust the thigh pad to touch just above the knee. ",
+      "The lower leg pad should be just above the shoe on the back of the leg. Start the movement by flexing ",
+      "at the knee. Continue the repetition until you reach the end position. Ensure your ankle is in ",
+      "dorsiflexion — toes pointed straight ahead or slightly up. Control the weight as you return to the ",
+      "starting position."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/oFxEDkppbSQ"
+  },
+  {
+    "Name": "Lying Leg Curl",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Easy",
+    "Description": [
+      "Adjust the leg pad on the machine and line your knee up with the axis of rotation ",
+      "(signified by a dot or marker on the machine) and adjust the ankle pad to touch just behind the ankle. ",
+      "Engage the hamstrings and bring your heels to your butt. Ensure your ankle is in dorsiflexion — toes pointed ",
+      "straight ahead or slightly up. Control the weight as you return to the starting position."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/vl5nUdE9mWM"
+  },
+  {
+    "Name": "Standing Calf Raise",
+    "MuscleGroup": "Legs",
+    "Difficulty": "Easy",
+    "Description": [
+      "Stand up straight with your legs extended (slight bend at the knee) ",
+      "with the balls of your feet on the step and the load atop the shoulders. ",
+      "Unrack the weight and slowly lower your heels as far as possible to the floor. ",
+      "Then lift your heels as far as possible, squeezing your calves at the top of the movement. ",
+      "Slowly lower down and repeat."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/-qsRtp_PbVM"
+  },
+  {
+    "Name": "Ab Rollout",
+    "MuscleGroup": "Abs",
+    "Difficulty": "Hard",
+    "Description": [
+      "Get on your knees and grip your equipment of choice with hands shoulder-width apart. ",
+      "Extend your hips towards the floor and let your chest sink forward toward the ground ",
+      "without overarching your lower back. The longer range of motion, the harder the exercise, ",
+      "so shorten your ROM if you’re new to the exercise. Squeeze the lat muscles and pull yourself ",
+      "back to the starting position."
+    ],
+    "VideoResourceUrl": "https://www.youtube.com/embed/yBg4UoOXxLo"
+  },
+  {
+    "Name": "Hanging Knee Raise",
+    "MuscleGroup": "Abs",
+    "Difficulty": "Medium",
+    "PictureResourceUrl": "https://www.bodybuilding.com/images/2021/april/hanging-knee-raise-header-830x467.jpg"
+  },
+  {
+    "Name": "Machine Crunch",
+    "MuscleGroup": "Abs",
+    "Difficulty": "Easy",
+    "PictureResourceUrl": "https://www.bodybuilding.com/images/2021/april/machine-crunch-header-830x467.jpg"
+  },
+  {
+    "Name": "Cable Crunch",
+    "MuscleGroup": "Abs",
+    "Difficulty": "Medium",
+    "PictureResourceUrl": "https://www.bodybuilding.com/images/2021/april/cable-crunch-header-830x467.jpg"
+  },
+  {
+    "Name": "Decline Crunch",
+    "MuscleGroup": "Abs",
+    "Difficulty": "Easy",
+    "PictureResourceUrl": "https://www.bodybuilding.com/images/2021/april/decline-crunch-header-830x467.jpg"
+  },
+  {
+    "Name": "Russian Twist",
+    "MuscleGroup": "Abs",
+    "Difficulty": "Medium",
+    "PictureResourceUrl": "https://www.bodybuilding.com/images/2021/april/russian-twist-header-830x467.jpg"
+  },
+  {
+    "Name": "Skip rope",
+    "MuscleGroup": "Cardio",
+    "Difficulty": "Medium",
+    "PictureResourceUrl": "https://www.jumpropedudes.com/wp-content/uploads/2019/09/jrd-jump-rugged.jpg"
+  },
+  {
+    "Name": "Exercise bike",
+    "MuscleGroup": "Cardio",
+    "Difficulty": "Easy",
+    "PictureResourceUrl": "https://www.jtxfitness.com/media/catalog/product/cache/aea7ede9c4f8eec24074fda02ef96ae3/i/n/indoor_exercise_bike_by_jtx_fitness_1.jpg"
+  },
+  {
+    "Name": "Treadmill",
+    "MuscleGroup": "Cardio",
+    "Difficulty": "Easy",
+    "PictureResourceUrl": "https://www.ubuy.vn/productimg/?image=aHR0cHM6Ly9pNS53YWxtYXJ0aW1hZ2VzLmNvbS9hc3IvYjZlNDgyNzktMmE0NS00NjU3LWFhOTgtMGMxYjEzOTJkZjQzLjBlOTc4ZGI5NTVhODdhNmJjNGQ5YzVlNjM4NzI4MzA5LmpwZWc.jpg"
+  },
+  {
+    "Name": "Treadmill",
+    "MuscleGroup": "Cardio",
+    "Difficulty": "Easy",
+    "PictureResourceUrl": "https://www.ubuy.vn/productimg/?image=aHR0cHM6Ly9pNS53YWxtYXJ0aW1hZ2VzLmNvbS9hc3IvYjZlNDgyNzktMmE0NS00NjU3LWFhOTgtMGMxYjEzOTJkZjQzLjBlOTc4ZGI5NTVhODdhNmJjNGQ5YzVlNjM4NzI4MzA5LmpwZWc.jpg"
+  },
+  {
+    "Name": "Rowing machine",
+    "MuscleGroup": "Cardio",
+    "Difficulty": "Medium",
+    "VideoResourceUrl": "https://www.youtube.com/embed/ZN0J6qKCIrI"
+  }
+
+]
+
+//public string Name { get; set; }
+//        public MuscleGroup MuscleGroup { get; set; }
+//        public Difficulty Difficulty { get; set; }
+//        public string? Description { get; set; }
+//        public string? PictureResourceUrl { get; set; }
+//        public string? VideoResourceUrl { get; set; }
