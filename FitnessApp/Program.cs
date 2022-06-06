@@ -3,7 +3,7 @@ using FitnessApp.Models;
 using FitnessApp.Models.Repositories;
 using FitnessApp.Repositories;
 using FitnessApp.Seeding;
-using FitnessApp.Services;
+using FitnessApp.Services.Data;
 using FitnessApp.Services.Security;
 using FitnessApp.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -24,6 +24,7 @@ builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeleta
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
 builder.Services.AddTransient<IUsersService, UsersService>();
+builder.Services.AddTransient<IWorkoutsService, WorkoutsService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
 
 
