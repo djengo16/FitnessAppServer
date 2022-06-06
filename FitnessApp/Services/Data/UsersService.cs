@@ -1,4 +1,4 @@
-﻿namespace FitnessApp.Services
+﻿namespace FitnessApp.Services.Data
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
@@ -25,15 +25,15 @@
         public async Task DeleteUserAsync(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
-            this.usersRepository.Delete(user);
-            await this.usersRepository.SaveChangesAsync();
+            usersRepository.Delete(user);
+            await usersRepository.SaveChangesAsync();
         }
 
         public IEnumerable<UserDTO> GetUsers()
         {
             var users = usersRepository
                 .AllAsNoTracking()
-                .ProjectTo<UserDTO>(this.mapper.ConfigurationProvider)
+                .ProjectTo<UserDTO>(mapper.ConfigurationProvider)
                 .ToList();
 
             return users;

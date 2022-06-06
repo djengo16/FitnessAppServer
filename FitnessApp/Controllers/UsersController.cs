@@ -2,7 +2,7 @@
 {
     using FitnessApp.Dto.Users;
     using FitnessApp.Models;
-    using FitnessApp.Services;
+    using FitnessApp.Services.Data;
     using FitnessApp.Services.Security;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
