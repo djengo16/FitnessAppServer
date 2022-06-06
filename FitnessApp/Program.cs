@@ -2,6 +2,7 @@ using FitnessApp.Data;
 using FitnessApp.Models;
 using FitnessApp.Models.Repositories;
 using FitnessApp.Repositories;
+using FitnessApp.Seeding;
 using FitnessApp.Services;
 using FitnessApp.Services.Security;
 using FitnessApp.Settings;
@@ -70,6 +71,14 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+ //Seed data on application startup
+using (var serviceScope = app.Services.CreateScope())
+{
+    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

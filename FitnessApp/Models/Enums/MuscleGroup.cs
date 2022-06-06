@@ -10,5 +10,6 @@
         Legs = 6,
         Abs = 7,
         Traps = 8,
+        Cardio = 9,
     }
 }

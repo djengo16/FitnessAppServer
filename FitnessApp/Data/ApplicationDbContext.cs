@@ -17,10 +17,10 @@
         {
         }
 
-        DbSet<Exercise> Exercises { get; set; }
-        DbSet<ExerciseInWorkoutDay> ExercisesInWorkoutDays { get; set; }
-        DbSet<WorkoutDay> WorkoutDays { get; set; }
-        DbSet<WorkoutPlan> WorkoutPlans { get; set; }
+        public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<ExerciseInWorkoutDay> ExercisesInWorkoutDays { get; set; }
+        public DbSet<WorkoutDay> WorkoutDays { get; set; }
+        public DbSet<WorkoutPlan> WorkoutPlans { get; set; }
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -34,6 +34,26 @@
         {
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
+
+            //Entities
+            builder.Entity<ExerciseInWorkoutDay>()
+                .HasKey(ew => new { ew.ExerciseId, ew.WorkoutDayId });
+
+            builder.Entity<ExerciseInWorkoutDay>()
+                .HasOne(e => e.Exercise)
+                .WithMany(w => w.ExerciseInWorkoutDay)
+                .HasForeignKey(e => e.ExerciseId);
+
+            builder.Entity<ExerciseInWorkoutDay>()
+                .HasOne(w => w.WorkoutDay)
+                .WithMany(e => e.ExercisesInWorkoutDays)
+                .HasForeignKey(w => w.WorkoutDayId);
+
+            //builder.Entity<WorkoutPlan>()
+            //    .HasOne(w => w.User)
+            //    .WithOne(u => u.WorkoutPlan)
+            //    .HasForeignKey(w => w.UserId)
+
 
             var entityTypes = builder.Model.GetEntityTypes().ToList();
 

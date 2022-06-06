@@ -20,7 +20,8 @@
         public MuscleGroup MuscleGroup { get; set; }
         public Difficulty Difficulty { get; set; }
         public string? Description { get; set; }
-        public string? PictureUrl { get; set; }
+        public string? PictureResourceUrl { get; set; }
+        public string? VideoResourceUrl { get; set; }
         public virtual ICollection<ExerciseInWorkoutDay> ExerciseInWorkoutDay { get; set; }
     }
 }
