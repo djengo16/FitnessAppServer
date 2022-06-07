@@ -22,7 +22,7 @@
         public DateTime? DeletedOn { get; set; }
 
         [ForeignKey(nameof(WorkoutPlan))]
-        public string WorkoutPlanId { get; set; }
+        public string? WorkoutPlanId { get; set; }
         public WorkoutPlan WorkoutPlan { get; set; }
     }
 }

@@ -39,6 +39,34 @@
             {
                 CreateWorkoutDay(split, inputModel);
             }
+
+            if (inputModel.Goal == Goal.LoseWeight)
+            {
+                AddCardioToLeastBusyDay(workoutPlan.WorkoutDays, inputModel.Difficulty);
+            }
+        }
+
+        private void AddCardioToLeastBusyDay(ICollection<WorkoutDay> workoutDays, Difficulty difficulty)
+        {
+            var cardioExercises = _exercises
+                .AllAsNoTracking()
+                .Where(x => x.Difficulty == difficulty && x.MuscleGroup == MuscleGroup.Cardio)
+                .ToList();
+
+
+            var cardioExercise = new ExerciseInWorkoutDay()
+            {
+                ExerciseId = cardioExercises.OrderBy(x => Guid.NewGuid()).Take(1).FirstOrDefault().Id,
+                Sets = 1,
+                MinReps = 20,
+                MaxReps = 30,
+            };
+
+            workoutDays
+                .OrderBy(x => x.ExercisesInWorkoutDays.Count)
+                .FirstOrDefault()
+                .ExercisesInWorkoutDays
+                .Add(cardioExercise);
         }
 
         /* Create workout day considering totalWorkoutDays, user (goal, experience)
@@ -72,40 +100,85 @@
             WorkoutGenerationInputModel inputModel, 
             List<MuscleGroup> muscles)
         {
-            throw new NotImplementedException();
+            List<ExerciseInWorkoutDay> firtMuscleGroupExercises = GetExercisesForSeparateMuscleForWorkoutDay(
+                inputModel,
+                muscles.Count,
+                muscles[0]);
+            List<ExerciseInWorkoutDay> secondMuscleGroupExercises = GetExercisesForSeparateMuscleForWorkoutDay(
+                inputModel,
+                muscles.Count,
+                muscles[0]);
+            List<ExerciseInWorkoutDay> thirdMuscleGroupExercises = GetExercisesForSeparateMuscleForWorkoutDay(
+                inputModel,
+                muscles.Count,
+                muscles[0]);
+
+            // Something like joining the lists
+            firtMuscleGroupExercises.AddRange(secondMuscleGroupExercises);
+            firtMuscleGroupExercises.AddRange(thirdMuscleGroupExercises);
+
+            return firtMuscleGroupExercises;
         }
 
         private ICollection<ExerciseInWorkoutDay> CreateSplitOfTwoMusclesDay(
             WorkoutGenerationInputModel inputModel, 
-            List<MuscleGroup> value)
+            List<MuscleGroup> muscles)
         {
-            throw new NotImplementedException();
+            List<ExerciseInWorkoutDay> firtMuscleGroupExercises = GetExercisesForSeparateMuscleForWorkoutDay(
+                inputModel,
+                muscles.Count,
+                muscles[0]);
+            List<ExerciseInWorkoutDay> secondMuscleGroupExercises = GetExercisesForSeparateMuscleForWorkoutDay(
+                inputModel,
+                muscles.Count,
+                muscles[0]);
+
+            // Something like joining the lists
+            firtMuscleGroupExercises.AddRange(secondMuscleGroupExercises);
+
+            return firtMuscleGroupExercises;
         }
 
         private ICollection<ExerciseInWorkoutDay> CreateSeparateMuscleDay(
             WorkoutGenerationInputModel inputModel,
-            List<MuscleGroup> value)
+            List<MuscleGroup> muscles)
         {
             List<ExerciseInWorkoutDay> exercises = GetExercisesForSeparateMuscleForWorkoutDay(
                 inputModel,
-                value[0]);
+                muscles.Count,
+                muscles[0]);
 
             return exercises;
-
-
         }
+
+
         /* We know that the minimum exercise count for separata muscle day is 5
-         */
+        */
         private List<ExerciseInWorkoutDay> GetExercisesForSeparateMuscleForWorkoutDay(
             WorkoutGenerationInputModel inputModel,
+            int totalMusclesForTheDay,
             MuscleGroup muscleGroup)
         {
             LoadExerciseDefaultValues();
+            int offset = CalculateOffset(totalMusclesForTheDay);
             ConfigureExercise(inputModel);
 
             List<ExerciseInWorkoutDay> exercisesInWorkoutDay = new List<ExerciseInWorkoutDay>();
 
-            return GenerateExercisesForCurrentWorkoutDay(muscleGroup, exercisesInWorkoutDay, inputModel);
+            return GenerateExercisesForCurrentWorkoutDay(muscleGroup, exercisesInWorkoutDay, inputModel, offset);
+        }
+
+        private int CalculateOffset(int totalMusclesForTheDay)
+        {
+            switch (totalMusclesForTheDay)
+            {
+                case 2:
+                    return -1;
+                case 3:
+                    return -2;
+                default:
+                    return 0;
+            }
         }
 
         private List<ExerciseInWorkoutDay> GenerateExercisesForCurrentWorkoutDay(
@@ -114,23 +187,23 @@
             WorkoutGenerationInputModel inputModel,
             int offset = 0)
         {
-            int exercisesCount = 3 + offset;
+            int exercisesCount = WorkoutConstants.AvgExercisePerMuscle + offset;
 
             List<Exercise> currBodyPartEasyExercises = _exercises
                 .AllAsNoTracking()
-                .Where(x => x.MuscleGroup == muscleGroup ||
+                .Where(x => x.MuscleGroup == muscleGroup &&
                 x.Difficulty == Difficulty.Easy)
                 .ToList();
 
             List<Exercise> currBodyPartMediumExercises = _exercises
                 .AllAsNoTracking()
-                .Where(x => x.MuscleGroup == muscleGroup ||
+                .Where(x => x.MuscleGroup == muscleGroup &&
                 x.Difficulty == Difficulty.Medium)
                 .ToList();
 
             List<Exercise> currBodyPartHardExercises = _exercises
                 .AllAsNoTracking()
-                .Where(x => x.MuscleGroup == muscleGroup ||
+                .Where(x => x.MuscleGroup == muscleGroup &&
                 x.Difficulty == Difficulty.Hard)
                 .ToList();
 
@@ -190,7 +263,7 @@
                 ExerciseId = x.Id,
                 Sets = sets,
                 MinReps = minReps,
-                MaxRepos = maxReps,
+                MaxReps = maxReps,
             }).ToList();
         }
     }
