@@ -15,10 +15,10 @@
             this.workoutsService = workoutsService;
         }
 
-        [HttpPost("generate")]
-        public async Task<IActionResult> Generate(WorkoutGenerationInputModel userInput)
+        [HttpPost("personalize")]
+        public async Task<IActionResult> Personalize(WorkoutGenerationInputModel userInput)
         {
-            workoutsService.GenerateWorkoutPlan(userInput);
+            workoutsService.GenerateWorkoutPlans(userInput);
             return NoContent();
         }
     }

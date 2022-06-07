@@ -3,6 +3,8 @@
     using FitnessApp.Dto.Workouts;
     public interface IWorkoutsService
     {
-        void GenerateWorkoutPlan(WorkoutGenerationInputModel inputModel);
+        void GenerateWorkoutPlans(WorkoutGenerationInputModel inputModel);
+
+        Task<string> SaveWorkoutPlanAsync(string workoutPlanId);
     }
 }

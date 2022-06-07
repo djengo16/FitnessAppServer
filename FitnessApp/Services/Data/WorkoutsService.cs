@@ -1,5 +1,8 @@
 ﻿namespace FitnessApp.Services.Data
 {
+    using AutoMapper;
+    using FitnessApp.Dto.ExerciseInWorkoutDay;
+    using FitnessApp.Dto.WorkoutDays;
     using FitnessApp.Dto.Workouts;
     using FitnessApp.Models;
     using FitnessApp.Models.Enums;
@@ -11,18 +14,72 @@
     {
         private IDictionary<DayOfWeek, List<MuscleGroup>> workoutSplit;
         private IDeletableEntityRepository<Exercise> _exercises;
+        private readonly IDeletableEntityRepository<WorkoutPlan> workoutPlansStorage;
+        private readonly IWorkoutDaysService workoutDaysService;
+        private readonly IExerciseInWorkoutDayService exerciseInWorkoutDayService;
+        private readonly IMapper mapper;
+        private ICollection<WorkoutPlan> generatedWorkoutPlans;
         private WorkoutPlan workoutPlan;
         private WorkoutSplitFactory workoutSplitFactory = new WorkoutSplitFactory();
+
         private int sets;
         private int minReps;
         private int maxReps;
-        public WorkoutsService(IDeletableEntityRepository<Exercise> exercises)
+        public WorkoutsService(
+            IDeletableEntityRepository<Exercise> exercises, 
+            IDeletableEntityRepository<WorkoutPlan> workoutPlansStorage,
+            IWorkoutDaysService workoutDaysService,
+            IExerciseInWorkoutDayService exerciseInWorkoutDayService,
+            IMapper mapper)
         {
             _exercises = exercises;
+            this.workoutPlansStorage = workoutPlansStorage;
+
+            this.workoutDaysService = workoutDaysService;
+            this.exerciseInWorkoutDayService = exerciseInWorkoutDayService;
+            this.mapper = mapper;
+            this.generatedWorkoutPlans = new List<WorkoutPlan>();
+
             workoutSplit = new Dictionary<DayOfWeek, List<MuscleGroup>>();
             workoutPlan = new WorkoutPlan();
         }
+        public async Task<string> SaveWorkoutPlanAsync(string workoutPlanId)
+        {
+            var currWorkoutPlan = new WorkoutPlan(workoutPlanId)
+            {
+                UserId = workoutPlan.UserId,
+                Difficulty = workoutPlan.Difficulty,
+                Goal = workoutPlan.Goal,
+            };
 
+            await workoutPlansStorage.AddAsync(currWorkoutPlan);
+            await workoutPlansStorage.SaveChangesAsync();
+
+
+            foreach (var workoutday in workoutPlan.WorkoutDays)
+            {
+                var workoutDay = new WorkoutDayDTO()
+                {
+                    WorkoutPlanId = currWorkoutPlan.Id,
+                    Day = workoutday.Day,
+                };
+
+                var workoutDayId = await workoutDaysService.AddAsync(workoutDay);
+                
+                foreach (var exerciseInWorkoutDay in workoutday.ExercisesInWorkoutDays)
+                {
+                    await exerciseInWorkoutDayService.AddAsync(new ExerciseInWorkoutDayDTO()
+                    {
+                        ExerciseId = exerciseInWorkoutDay.ExerciseId,
+                        WorkoutDayId = workoutDayId,
+                        MinReps = exerciseInWorkoutDay.MinReps,
+                        MaxReps = exerciseInWorkoutDay.MaxReps,
+                        Sets = exerciseInWorkoutDay.Sets
+                    });
+                }
+            }
+            return currWorkoutPlan.Id;
+        }
         private void LoadExerciseDefaultValues()
         {
             sets = WorkoutConstants.AvgExerciseSet;
@@ -31,18 +88,24 @@
         }
 
 
-        public void GenerateWorkoutPlan(WorkoutGenerationInputModel inputModel)
+        public void GenerateWorkoutPlans(WorkoutGenerationInputModel inputModel)
         {
-            workoutSplit = workoutSplitFactory.CreateSplits(inputModel.Days);
-
-            foreach (var split in workoutSplit)
+            for (int i = 0; i < inputModel.Count; i++)
             {
-                CreateWorkoutDay(split, inputModel);
-            }
+                workoutSplit = workoutSplitFactory.CreateSplits(inputModel.Days);
+                workoutPlan.UserId = inputModel.UserId;
 
-            if (inputModel.Goal == Goal.LoseWeight)
-            {
-                AddCardioToLeastBusyDay(workoutPlan.WorkoutDays, inputModel.Difficulty);
+                foreach (var split in workoutSplit)
+                {
+                    CreateWorkoutDay(split, inputModel);
+                }
+
+                if (inputModel.Goal == Goal.LoseWeight)
+                {
+                    AddCardioToLeastBusyDay(workoutPlan.WorkoutDays, inputModel.Difficulty);
+                }
+                generatedWorkoutPlans.Add(workoutPlan);
+                workoutPlan = new WorkoutPlan();
             }
         }
 
