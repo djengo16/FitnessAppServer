@@ -6,11 +6,11 @@
 
     public class WorkoutDaysService : IWorkoutDaysService
     {
-        private readonly IRepository<WorkoutDay> workoutDays;
+        private readonly IRepository<WorkoutDay> workoutDaysStorage;
 
         public WorkoutDaysService(IRepository<WorkoutDay> workoutDays)
         {
-            this.workoutDays = workoutDays;
+            this.workoutDaysStorage = workoutDays;
         }
         public async Task<string> AddAsync(WorkoutDayDTO workoutDay)
         {
@@ -20,7 +20,9 @@
                 WorkoutPlanId = workoutDay.WorkoutPlanId,
             };
 
-            await workoutDays.AddAsync(currWorkoutDay);
+            await workoutDaysStorage.AddAsync(currWorkoutDay);
+            await workoutDaysStorage.SaveChangesAsync();
+
             return currWorkoutDay.Id;
         }
     }

@@ -9,6 +9,7 @@
     using FitnessApp.Models.Repositories;
     using FitnessApp.Services.Factories;
     using FitnessApp.Services.ServiceConstants;
+    using System.Linq;
 
     public class WorkoutsService : IWorkoutsService
     {
@@ -26,7 +27,7 @@
         private int minReps;
         private int maxReps;
         public WorkoutsService(
-            IDeletableEntityRepository<Exercise> exercises, 
+            IDeletableEntityRepository<Exercise> exercises,
             IDeletableEntityRepository<WorkoutPlan> workoutPlansStorage,
             IWorkoutDaysService workoutDaysService,
             IExerciseInWorkoutDayService exerciseInWorkoutDayService,
@@ -43,29 +44,43 @@
             workoutSplit = new Dictionary<DayOfWeek, List<MuscleGroup>>();
             workoutPlan = new WorkoutPlan();
         }
-        public async Task<string> SaveWorkoutPlanAsync(string workoutPlanId)
+        public ICollection<GeneratedWorkoutPlanDTO> GetGeneratedWorkoutPlans()
         {
-            var currWorkoutPlan = new WorkoutPlan(workoutPlanId)
+            List<GeneratedWorkoutPlanDTO> plans = new List<GeneratedWorkoutPlanDTO>();
+
+
+            foreach (var plan in generatedWorkoutPlans)
             {
-                UserId = workoutPlan.UserId,
-                Difficulty = workoutPlan.Difficulty,
-                Goal = workoutPlan.Goal,
+                plans.Add(mapper.Map<GeneratedWorkoutPlanDTO>(plan));
+            }
+
+            return plans;
+        }
+        public async Task<string> SaveWorkoutPlanAsync(GeneratedWorkoutPlanDTO chosenWorkoutPlan)
+        {
+            var userId = chosenWorkoutPlan.UserId;
+
+            var currWorkoutPlan = new WorkoutPlan(chosenWorkoutPlan.Id)
+            {
+                UserId = userId,
+                Difficulty = chosenWorkoutPlan.Difficulty,
+                Goal = chosenWorkoutPlan.Goal,
             };
 
             await workoutPlansStorage.AddAsync(currWorkoutPlan);
             await workoutPlansStorage.SaveChangesAsync();
 
 
-            foreach (var workoutday in workoutPlan.WorkoutDays)
+            foreach (var workoutday in chosenWorkoutPlan.WorkoutDays)
             {
                 var workoutDay = new WorkoutDayDTO()
                 {
-                    WorkoutPlanId = currWorkoutPlan.Id,
+                    WorkoutPlanId = chosenWorkoutPlan.Id,
                     Day = workoutday.Day,
                 };
 
                 var workoutDayId = await workoutDaysService.AddAsync(workoutDay);
-                
+
                 foreach (var exerciseInWorkoutDay in workoutday.ExercisesInWorkoutDays)
                 {
                     await exerciseInWorkoutDayService.AddAsync(new ExerciseInWorkoutDayDTO()
@@ -78,7 +93,7 @@
                     });
                 }
             }
-            return currWorkoutPlan.Id;
+            return chosenWorkoutPlan.Id;
         }
         private void LoadExerciseDefaultValues()
         {
@@ -94,6 +109,8 @@
             {
                 workoutSplit = workoutSplitFactory.CreateSplits(inputModel.Days);
                 workoutPlan.UserId = inputModel.UserId;
+                workoutPlan.Difficulty = inputModel.Difficulty;
+                workoutPlan.Goal = inputModel.Goal;
 
                 foreach (var split in workoutSplit)
                 {
@@ -116,10 +133,12 @@
                 .Where(x => x.Difficulty == difficulty && x.MuscleGroup == MuscleGroup.Cardio)
                 .ToList();
 
+            var randomCardio = cardioExercises.OrderBy(x => Guid.NewGuid()).Take(1).FirstOrDefault();
 
             var cardioExercise = new ExerciseInWorkoutDay()
             {
-                ExerciseId = cardioExercises.OrderBy(x => Guid.NewGuid()).Take(1).FirstOrDefault().Id,
+                ExerciseId = randomCardio.Id,
+                Exercise = randomCardio,
                 Sets = 1,
                 MinReps = 20,
                 MaxReps = 30,
@@ -160,7 +179,7 @@
         }
 
         private ICollection<ExerciseInWorkoutDay> CreateSplitOfThreeMusclesDay(
-            WorkoutGenerationInputModel inputModel, 
+            WorkoutGenerationInputModel inputModel,
             List<MuscleGroup> muscles)
         {
             List<ExerciseInWorkoutDay> firtMuscleGroupExercises = GetExercisesForSeparateMuscleForWorkoutDay(
@@ -170,21 +189,23 @@
             List<ExerciseInWorkoutDay> secondMuscleGroupExercises = GetExercisesForSeparateMuscleForWorkoutDay(
                 inputModel,
                 muscles.Count,
-                muscles[0]);
+                muscles[1]);
             List<ExerciseInWorkoutDay> thirdMuscleGroupExercises = GetExercisesForSeparateMuscleForWorkoutDay(
                 inputModel,
                 muscles.Count,
-                muscles[0]);
+                muscles[2]);
 
             // Something like joining the lists
             firtMuscleGroupExercises.AddRange(secondMuscleGroupExercises);
             firtMuscleGroupExercises.AddRange(thirdMuscleGroupExercises);
 
-            return firtMuscleGroupExercises;
+            return firtMuscleGroupExercises
+                .OrderByDescending(x => x.Exercise.Difficulty)
+                .ToList();
         }
 
         private ICollection<ExerciseInWorkoutDay> CreateSplitOfTwoMusclesDay(
-            WorkoutGenerationInputModel inputModel, 
+            WorkoutGenerationInputModel inputModel,
             List<MuscleGroup> muscles)
         {
             List<ExerciseInWorkoutDay> firtMuscleGroupExercises = GetExercisesForSeparateMuscleForWorkoutDay(
@@ -194,12 +215,14 @@
             List<ExerciseInWorkoutDay> secondMuscleGroupExercises = GetExercisesForSeparateMuscleForWorkoutDay(
                 inputModel,
                 muscles.Count,
-                muscles[0]);
+                muscles[1]);
 
             // Something like joining the lists
             firtMuscleGroupExercises.AddRange(secondMuscleGroupExercises);
 
-            return firtMuscleGroupExercises;
+            return firtMuscleGroupExercises
+                .OrderByDescending(x => x.Exercise.Difficulty)
+                .ToList();
         }
 
         private ICollection<ExerciseInWorkoutDay> CreateSeparateMuscleDay(
@@ -211,7 +234,9 @@
                 muscles.Count,
                 muscles[0]);
 
-            return exercises;
+            return exercises
+                .OrderByDescending(x => x.Exercise.Difficulty)
+                .ToList();
         }
 
 
@@ -292,7 +317,7 @@
             return exercisesInWorkoutDay;
         }
 
-        private void ConfigureExercise(WorkoutGenerationInputModel inputModel )
+        private void ConfigureExercise(WorkoutGenerationInputModel inputModel)
         {
             // More reps with lighter weights for losing weight
 
@@ -315,19 +340,38 @@
         }
 
         private List<ExerciseInWorkoutDay> GetSpecificExercisesForWorkoutDay(
-            List<Exercise> exercises, 
+            List<Exercise> exercises,
             int count,
             int sets,
             int minReps,
             int maxReps)
         {
-            return exercises.OrderBy(x => Guid.NewGuid()).Take(count).Select(x => new ExerciseInWorkoutDay
+            List<ExerciseInWorkoutDay> exercisesResult = new List<ExerciseInWorkoutDay>();
+
+            for (int i = 0; i < count; i++)
             {
-                ExerciseId = x.Id,
-                Sets = sets,
-                MinReps = minReps,
-                MaxReps = maxReps,
-            }).ToList();
+                var current = exercises
+                    .OrderBy(exercises => Guid.NewGuid())
+                    .FirstOrDefault();
+
+                // if we run out of exercises => prevent null reference error
+                if(current == null)
+                {
+                    break;
+                }
+
+                exercisesResult.Add(new ExerciseInWorkoutDay
+                {
+                    ExerciseId = current.Id,
+                    Exercise = current,
+                    Sets = sets,
+                    MinReps = minReps,
+                    MaxReps = maxReps,
+                });
+                exercises.Remove(current);
+            }
+
+            return exercisesResult;
         }
     }
 }
