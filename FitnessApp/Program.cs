@@ -25,6 +25,8 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
 builder.Services.AddTransient<IUsersService, UsersService>();
 builder.Services.AddTransient<IWorkoutsService, WorkoutsService>();
+builder.Services.AddTransient<IWorkoutDaysService, WorkoutDaysService>();
+builder.Services.AddTransient<IExerciseInWorkoutDayService, ExerciseInWorkoutDayService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
 
 
