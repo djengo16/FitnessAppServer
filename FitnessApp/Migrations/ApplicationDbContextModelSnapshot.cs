@@ -93,7 +93,6 @@ namespace FitnessApp.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("WorkoutPlanId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -107,7 +106,8 @@ namespace FitnessApp.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("WorkoutPlanId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[WorkoutPlanId] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -159,7 +159,7 @@ namespace FitnessApp.Migrations
                     b.Property<string>("WorkoutDayId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("MaxRepos")
+                    b.Property<int>("MaxReps")
                         .HasColumnType("int");
 
                     b.Property<int>("MinReps")
@@ -184,7 +184,6 @@ namespace FitnessApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("WorkoutPlanId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -218,7 +217,6 @@ namespace FitnessApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -363,9 +361,7 @@ namespace FitnessApp.Migrations
                 {
                     b.HasOne("FitnessApp.Models.WorkoutPlan", "WorkoutPlan")
                         .WithOne("User")
-                        .HasForeignKey("FitnessApp.Models.ApplicationUser", "WorkoutPlanId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("FitnessApp.Models.ApplicationUser", "WorkoutPlanId");
 
                     b.Navigation("WorkoutPlan");
                 });
@@ -393,9 +389,7 @@ namespace FitnessApp.Migrations
                 {
                     b.HasOne("FitnessApp.Models.WorkoutPlan", "WorkoutPlan")
                         .WithMany("WorkoutDays")
-                        .HasForeignKey("WorkoutPlanId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("WorkoutPlanId");
 
                     b.Navigation("WorkoutPlan");
                 });
@@ -463,8 +457,7 @@ namespace FitnessApp.Migrations
 
             modelBuilder.Entity("FitnessApp.Models.WorkoutPlan", b =>
                 {
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("User");
 
                     b.Navigation("WorkoutDays");
                 });

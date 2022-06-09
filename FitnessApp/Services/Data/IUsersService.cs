@@ -1,4 +1,4 @@
-﻿namespace FitnessApp.Services
+﻿namespace FitnessApp.Services.Data
 {
     using FitnessApp.Dto.Users;
     using FitnessApp.Models;
