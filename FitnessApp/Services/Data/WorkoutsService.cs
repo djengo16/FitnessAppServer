@@ -53,6 +53,9 @@
             {
                 plans.Add(mapper.Map<GeneratedWorkoutPlanDTO>(plan));
             }
+        //public Goal Goal { get; set; }
+        //public Difficulty Difficulty { get; set; }
+        //public int DaysInWeek => WorkoutDays.Count;
 
             return plans;
         }
@@ -102,6 +105,7 @@
             maxReps = WorkoutConstants.AvgExerciseMaxReps;
         }
 
+        
 
         public void GenerateWorkoutPlans(WorkoutGenerationInputModel inputModel)
         {
@@ -109,6 +113,7 @@
             {
                 workoutSplit = workoutSplitFactory.CreateSplits(inputModel.Days);
                 workoutPlan.UserId = inputModel.UserId;
+            workoutPlan.Goal = inputModel.Goal;
                 workoutPlan.Difficulty = inputModel.Difficulty;
                 workoutPlan.Goal = inputModel.Goal;
 
