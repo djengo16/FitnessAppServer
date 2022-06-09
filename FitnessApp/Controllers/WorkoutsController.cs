@@ -1,5 +1,6 @@
 ﻿namespace FitnessApp.Controllers
 {
+    using FitnessApp.Dto.Users;
     using FitnessApp.Dto.Workouts;
     using FitnessApp.Services.Data;
     using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,21 @@
             this.workoutsService = workoutsService;
         }
 
-        [HttpPost("generate")]
-        public async Task<IActionResult> Generate(WorkoutGenerationInputModel userInput)
+        [HttpPost("personalize")]
+        public async Task<IActionResult> Personalize(WorkoutGenerationInputModel userInput)
         {
-            workoutsService.GenerateWorkoutPlan(userInput);
-            return NoContent();
+            workoutsService.GenerateWorkoutPlans(userInput);
+
+            var workouts = workoutsService.GetGeneratedWorkoutPlans();
+
+            return Ok(workouts);
+        }
+
+        [HttpPost("personalize/assign")]
+        public async Task<IActionResult> AssignWorkout(GeneratedWorkoutPlanDTO generatedWorkoutPlanDTO)
+        {
+            var planId = await workoutsService.SaveWorkoutPlanAsync(generatedWorkoutPlanDTO);
+            return Ok(planId);
         }
     }
 }

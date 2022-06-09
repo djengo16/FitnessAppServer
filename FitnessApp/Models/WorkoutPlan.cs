@@ -11,6 +11,11 @@
             Id = Guid.NewGuid().ToString();
             WorkoutDays = new HashSet<WorkoutDay>();
         }
+        public WorkoutPlan(string id)
+        {
+            Id = id;
+            WorkoutDays = new HashSet<WorkoutDay>();
+        }
         public Goal Goal { get; set; }
         public Difficulty Difficulty { get; set; }
         public int DaysInWeek => WorkoutDays.Count;
