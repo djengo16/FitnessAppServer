@@ -1,6 +1,5 @@
 ﻿namespace FitnessApp.Services.Data
 {
-    using FitnessApp.Dto.Users;
     using FitnessApp.Dto.Workouts;
 
     public interface IWorkoutsService
@@ -10,7 +9,7 @@
         Task<string> SaveWorkoutPlanAsync(GeneratedWorkoutPlanDTO generatedWorkoutPlan);
 
         ICollection<GeneratedWorkoutPlanDTO> GetGeneratedWorkoutPlans();
-        GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId);
 
+        GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId);
     }
 }
