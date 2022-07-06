@@ -10,5 +10,7 @@
         Task<string> SaveWorkoutPlanAsync(GeneratedWorkoutPlanDTO generatedWorkoutPlan);
 
         ICollection<GeneratedWorkoutPlanDTO> GetGeneratedWorkoutPlans();
+        GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId);
+
     }
 }

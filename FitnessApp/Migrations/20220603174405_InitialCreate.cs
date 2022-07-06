@@ -232,7 +232,7 @@ namespace FitnessApp.Migrations
                     WorkoutDayId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Sets = table.Column<int>(type: "int", nullable: false),
                     MinReps = table.Column<int>(type: "int", nullable: false),
-                    MaxRepos = table.Column<int>(type: "int", nullable: false)
+                    MaxReps = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

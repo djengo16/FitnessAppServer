@@ -23,6 +23,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
+builder.Services.AddTransient<ISeeder, UsersWithWorkoutPlanSeeder>();
 builder.Services.AddTransient<IUsersService, UsersService>();
 builder.Services.AddTransient<IWorkoutsService, WorkoutsService>();
 builder.Services.AddTransient<IWorkoutDaysService, WorkoutDaysService>();
