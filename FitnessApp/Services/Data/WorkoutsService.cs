@@ -53,9 +53,6 @@
             {
                 plans.Add(mapper.Map<GeneratedWorkoutPlanDTO>(plan));
             }
-        //public Goal Goal { get; set; }
-        //public Difficulty Difficulty { get; set; }
-        //public int DaysInWeek => WorkoutDays.Count;
 
             return plans;
         }
@@ -105,7 +102,7 @@
             maxReps = WorkoutConstants.AvgExerciseMaxReps;
         }
 
-        
+
 
         public void GenerateWorkoutPlans(WorkoutGenerationInputModel inputModel)
         {
@@ -113,9 +110,8 @@
             {
                 workoutSplit = workoutSplitFactory.CreateSplits(inputModel.Days);
                 workoutPlan.UserId = inputModel.UserId;
-            workoutPlan.Goal = inputModel.Goal;
-                workoutPlan.Difficulty = inputModel.Difficulty;
                 workoutPlan.Goal = inputModel.Goal;
+                workoutPlan.Difficulty = inputModel.Difficulty;
 
                 foreach (var split in workoutSplit)
                 {
@@ -204,9 +200,7 @@
             firtMuscleGroupExercises.AddRange(secondMuscleGroupExercises);
             firtMuscleGroupExercises.AddRange(thirdMuscleGroupExercises);
 
-            return firtMuscleGroupExercises
-                .OrderByDescending(x => x.Exercise.Difficulty)
-                .ToList();
+            return firtMuscleGroupExercises;
         }
 
         private ICollection<ExerciseInWorkoutDay> CreateSplitOfTwoMusclesDay(
@@ -225,9 +219,7 @@
             // Something like joining the lists
             firtMuscleGroupExercises.AddRange(secondMuscleGroupExercises);
 
-            return firtMuscleGroupExercises
-                .OrderByDescending(x => x.Exercise.Difficulty)
-                .ToList();
+            return firtMuscleGroupExercises;
         }
 
         private ICollection<ExerciseInWorkoutDay> CreateSeparateMuscleDay(
@@ -239,9 +231,7 @@
                 muscles.Count,
                 muscles[0]);
 
-            return exercises
-                .OrderByDescending(x => x.Exercise.Difficulty)
-                .ToList();
+            return exercises;
         }
 
 
@@ -302,22 +292,37 @@
 
             /* Easy program => 5 _exercises | Medium = 6 | Hard = 7
              * firstly create 3 easy and 2 medium for begginers then + 1 hard for intermediate & + 2 hard for advanced
+             * Making medium and hard exercise repetitions less
              */
-            exercisesInWorkoutDay
-                .AddRange(GetSpecificExercisesForWorkoutDay(currBodyPartEasyExercises, exercisesCount, sets, minReps, maxReps));
-            exercisesInWorkoutDay
-                .AddRange(GetSpecificExercisesForWorkoutDay(currBodyPartMediumExercises, exercisesCount - 1, sets, minReps, maxReps));
+            int minRepsMediumExercise = minReps - 1;
+            int maxRepsMediumExercise = maxReps - 1;
+            int minRepsHardExercise = minReps - 2;
+            int maxRepsHardExercise = maxReps - 2;
 
-            if (inputModel.Difficulty == Difficulty.Medium)
-            {
-                exercisesInWorkoutDay
-                    .AddRange(GetSpecificExercisesForWorkoutDay(currBodyPartHardExercises, exercisesCount - 2, sets, minReps, maxReps));
-            }
+            // Adding the exercises from hardest to easiest
             if (inputModel.Difficulty == Difficulty.Hard)
             {
                 exercisesInWorkoutDay
-                    .AddRange(GetSpecificExercisesForWorkoutDay(currBodyPartHardExercises, exercisesCount - 1, sets, minReps, maxReps));
+                    .AddRange(GetSpecificExercisesForWorkoutDay(
+                        currBodyPartHardExercises, exercisesCount - 1,
+                        sets, minRepsHardExercise, minRepsMediumExercise));
             }
+            if (inputModel.Difficulty == Difficulty.Medium)
+            {
+                exercisesInWorkoutDay
+                    .AddRange(GetSpecificExercisesForWorkoutDay(
+                        currBodyPartMediumExercises, exercisesCount - 2,
+                        sets, minRepsMediumExercise, maxRepsMediumExercise));
+            }
+
+            exercisesInWorkoutDay
+                .AddRange(GetSpecificExercisesForWorkoutDay(
+                    currBodyPartMediumExercises, exercisesCount - 1,
+                    sets, minRepsMediumExercise, maxRepsMediumExercise));
+            exercisesInWorkoutDay
+                .AddRange(GetSpecificExercisesForWorkoutDay(
+                    currBodyPartEasyExercises, exercisesCount,
+                    sets, minReps, maxReps));
 
             return exercisesInWorkoutDay;
         }
@@ -325,6 +330,7 @@
         private void ConfigureExercise(WorkoutGenerationInputModel inputModel)
         {
             // More reps with lighter weights for losing weight
+            // And less reps with more kgs for muscle gain
 
             sets = CalculateSetsByDifficulty(inputModel);
 
@@ -332,6 +338,11 @@
             {
                 minReps = 12;
                 maxReps = 16;
+            }
+            else if (inputModel.Goal == Goal.GainMuscle)
+            {
+                minReps = 6;
+                maxReps = 10;
             }
         }
         private int CalculateSetsByDifficulty(WorkoutGenerationInputModel inputModel)
@@ -360,7 +371,7 @@
                     .FirstOrDefault();
 
                 // if we run out of exercises => prevent null reference error
-                if(current == null)
+                if (current == null)
                 {
                     break;
                 }
