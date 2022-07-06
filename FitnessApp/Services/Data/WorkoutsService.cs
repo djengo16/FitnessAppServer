@@ -389,5 +389,19 @@
 
             return exercisesResult;
         }
+
+        public GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId)
+        {
+            var workoutPlan = workoutPlansStorage
+                .AllAsNoTracking()
+                .FirstOrDefault(x => x.UserId == userId);
+
+            if(workoutPlan != null)
+            {
+                throw new ArgumentException(ErrorMessages.TrainingProgramIsNotAssigned);
+            }
+
+            return mapper.Map<GeneratedWorkoutPlanDTO>(workoutPlan);
+        }
     }
 }
