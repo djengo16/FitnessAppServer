@@ -1,6 +1,8 @@
 ﻿namespace FitnessApp.Services.Data
 {
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using FitnessApp.Data;
     using FitnessApp.Dto.ExerciseInWorkoutDay;
     using FitnessApp.Dto.WorkoutDays;
     using FitnessApp.Dto.Workouts;
@@ -393,15 +395,17 @@
         public GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId)
         {
             var workoutPlan = workoutPlansStorage
-                .AllAsNoTracking()
-                .FirstOrDefault(x => x.UserId == userId);
+                .All()
+                .Where(x => x.UserId == userId)
+                .ProjectTo<GeneratedWorkoutPlanDTO>(this.mapper.ConfigurationProvider)
+                .FirstOrDefault();
 
-            if(workoutPlan != null)
+            if(workoutPlan == null)
             {
                 throw new ArgumentException(ErrorMessages.TrainingProgramIsNotAssigned);
             }
 
-            return mapper.Map<GeneratedWorkoutPlanDTO>(workoutPlan);
+            return workoutPlan;
         }
     }
 }

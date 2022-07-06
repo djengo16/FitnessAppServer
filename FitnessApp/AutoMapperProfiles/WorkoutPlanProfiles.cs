@@ -9,6 +9,7 @@
         public WorkoutPlanProfiles()
         {
             CreateMap<WorkoutPlan, GeneratedWorkoutPlanDTO>()
+                .ForMember(x => x.WorkoutDays,y => y.MapFrom(t => t.WorkoutDays))
                 .ForMember(x => x.DaysInWeek, y => y.MapFrom(t => t.WorkoutDays.Count));
         }
     }
