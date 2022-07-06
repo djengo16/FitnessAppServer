@@ -21,6 +21,7 @@
             var seeders = new List<ISeeder>
                           {
                               new ExercisesSeeder(),
+                              new UsersWithWorkoutPlanSeeder(),
                           };
 
             foreach (var seeder in seeders)

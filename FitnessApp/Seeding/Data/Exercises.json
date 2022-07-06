@@ -273,7 +273,7 @@
   },
   {
     "Name": "Barbell Overhead Press",
-    "MuscleGroup": "Shoulder",
+    "MuscleGroup": "Shoulders",
     "Difficulty": "Hard",
     "Description": [
       "With the bar right in front of you, place your hands just outside your shoulders. ",
@@ -287,7 +287,7 @@
   },
   {
     "Name": "Half-Kneeling Landmine Press",
-    "MuscleGroup": "Shoulder",
+    "MuscleGroup": "Shoulders",
     "Difficulty": "Medium",
     "Description": [
       "Get into a half-kneeling position in front of the barbell, knee underneath hip and ankle underneath the knee.",
@@ -298,7 +298,7 @@
   },
   {
     "Name": "Arnold Press",
-    "MuscleGroup": "Shoulder",
+    "MuscleGroup": "Shoulders",
     "Difficulty": "Hard",
     "Description": [
       "In a seated position, kick dumbbells up to a traditional starting position ",
@@ -311,7 +311,7 @@
   },
   {
     "Name": "Push Press",
-    "MuscleGroup": "Shoulder",
+    "MuscleGroup": "Shoulders",
     "Difficulty": "Easy",
     "Description": [
       "Set up the same as you would for the barbell overhead press. ",
@@ -323,7 +323,7 @@
   },
   {
     "Name": "Wide-Grip Seated Row",
-    "MuscleGroup": "Shoulder",
+    "MuscleGroup": "Shoulders",
     "Difficulty": "Medium",
     "Description": [
       "Set up like you would for your regular seated row but use a straight bar attachment. ",
@@ -335,7 +335,7 @@
   },
   {
     "Name": "Leaning Lateral Raise",
-    "MuscleGroup": "Shoulder",
+    "MuscleGroup": "Shoulders",
     "Difficulty": "Easy",
     "Description": [
       "Hold a power rack or a pole and bring your feet close to or under your hands. ",
@@ -346,7 +346,7 @@
   },
   {
     "Name": "Incline Y Raise",
-    "MuscleGroup": "Shoulder",
+    "MuscleGroup": "Shoulders",
     "Difficulty": "Medium",
     "Description": [
       "Set up the bench at a 45-degree incline. Lie face down with your knees slightly bent. ",
@@ -359,7 +359,7 @@
   },
   {
     "Name": "Seated Dumbbell Shoulder Press",
-    "MuscleGroup": "Shoulder",
+    "MuscleGroup": "Shoulders",
     "Difficulty": "Hard",
     "Description": [
       "Clean the dumbbells so they are sitting on your shoulders. ",
@@ -371,7 +371,7 @@
   },
   {
     "Name": "Single-Arm Push Press",
-    "MuscleGroup": "Shoulder",
+    "MuscleGroup": "Shoulders",
     "Difficulty": "Medium",
     "Description": [
       "Clean one dumbbell to the top of your shoulder. ",
@@ -764,15 +764,8 @@
   {
     "Name": "Rowing machine",
     "MuscleGroup": "Cardio",
-    "Difficulty": "Medium",
+    "Difficulty": "Hard",
     "VideoResourceUrl": "https://www.youtube.com/embed/ZN0J6qKCIrI"
   }
 
 ]
-
-//public string Name { get; set; }
-//        public MuscleGroup MuscleGroup { get; set; }
-//        public Difficulty Difficulty { get; set; }
-//        public string? Description { get; set; }
-//        public string? PictureResourceUrl { get; set; }
-//        public string? VideoResourceUrl { get; set; }
