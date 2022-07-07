@@ -22,6 +22,7 @@
                           {
                               new ExercisesSeeder(),
                               new UsersWithWorkoutPlanSeeder(),
+                              new RolesSeeder(),
                           };
 
             foreach (var seeder in seeders)
