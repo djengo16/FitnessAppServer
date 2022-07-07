@@ -23,5 +23,8 @@
         public string? PictureResourceUrl { get; set; }
         public string? VideoResourceUrl { get; set; }
         public virtual ICollection<ExerciseInWorkoutDay> ExerciseInWorkoutDay { get; set; }
+        bool IDeletableEntity.IsDeleted { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        DateTime? IDeletableEntity.DeletedOn { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        string IDeletableEntity.WorkoutPlanId { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }
