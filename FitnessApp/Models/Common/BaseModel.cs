@@ -10,6 +10,5 @@ namespace FitnessApp.Models.Common
         public DateTime CreatedOn { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
-        public abstract string WorkoutPlanId { get; set; }
     }
 }

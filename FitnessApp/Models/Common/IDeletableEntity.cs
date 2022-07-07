@@ -6,6 +6,5 @@
         bool IsDeleted { get; set; }
 
         DateTime? DeletedOn { get; set; }
-        string WorkoutPlanId { get; set; }
     }
 }
