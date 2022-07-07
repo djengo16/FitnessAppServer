@@ -7,6 +7,7 @@
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
+#nullable enable
         public string? ProfilePicture { get; set; }
 
         public string? Description { get; set; }
@@ -23,6 +24,6 @@
 
         [ForeignKey(nameof(WorkoutPlan))]
         public string? WorkoutPlanId { get; set; }
-        public WorkoutPlan WorkoutPlan { get; set; }
+        public WorkoutPlan? WorkoutPlan { get; set; }
     }
 }
