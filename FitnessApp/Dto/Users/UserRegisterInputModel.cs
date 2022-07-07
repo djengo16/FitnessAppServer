@@ -5,7 +5,7 @@
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = "";
 
         [Required]
         [StringLength(100, ErrorMessage = "Username should be at least 6 characters long!", MinimumLength = 6)]
@@ -14,7 +14,7 @@
         [Required]
         [DataType(DataType.Password)]
         [StringLength(200, ErrorMessage = "Password should be at least 6 characters long!", MinimumLength = 6)]
-        public string? Password { get; set; }
+        public string Password { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
