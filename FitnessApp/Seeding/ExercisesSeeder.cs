@@ -7,6 +7,8 @@
 
     public class ExercisesSeeder : ISeeder
     {
+        private const string ExercisesFileName = "Exercises.json";
+        private string ExercisesDataPath = Path.Combine(Environment.CurrentDirectory, @"Seeding\Data\", ExercisesFileName);
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             if (dbContext.Exercises.Any())
@@ -16,8 +18,7 @@
 
             ImportExerciseDTO[] importedExercises = JsonConvert
                 .DeserializeObject<ImportExerciseDTO[]>
-                (File.ReadAllText(@"D:\Diploma work\FitnessApp\FitnessApp\Seeding\Data\Exercises.json"));
-
+                (File.ReadAllText(ExercisesDataPath));
             List<Exercise> exercises = new List<Exercise>();
 
             foreach (var importedExercise in importedExercises)

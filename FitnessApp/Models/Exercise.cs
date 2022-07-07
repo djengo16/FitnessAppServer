@@ -6,6 +6,7 @@
 
     public class Exercise : IDeletableEntity
     {
+#nullable enable
         public Exercise()
         {
             ExerciseInWorkoutDay = new HashSet<ExerciseInWorkoutDay>();
@@ -14,7 +15,7 @@
 
         [Required]
         [MaxLength(200)]
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         public bool IsDeleted { get; set; }
         public DateTime? DeletedOn { get; set; }
         public MuscleGroup MuscleGroup { get; set; }
