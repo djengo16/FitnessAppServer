@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace FitnessApp.Models
+﻿namespace FitnessApp.Models
 {
     public class WorkoutDay
     {
