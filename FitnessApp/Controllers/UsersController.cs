@@ -1,5 +1,6 @@
 ﻿namespace FitnessApp.Controllers
 {
+    using FitnessApp.Common;
     using FitnessApp.Dto.Users;
     using FitnessApp.Models;
     using FitnessApp.Services.Data;
@@ -51,16 +52,18 @@
         public async Task<IActionResult> Login(UserLoginInputModel userLoginModel)
         {
             var user = await userManager.FindByEmailAsync(userLoginModel.Email);
+            var isInAdminRole = await userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+
             if (!(user != null && await userManager.CheckPasswordAsync(user, userLoginModel.Password)))
             {
                 return Unauthorized();
             }
 
-            var token = jwtService.GenerateToken(user);
-
+            var token = jwtService.GenerateToken(user, isInAdminRole);
+            var tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(new
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
+                tokenAsString,
                 expiration = token.ValidTo
             });
         }

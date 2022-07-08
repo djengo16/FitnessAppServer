@@ -5,6 +5,6 @@ namespace FitnessApp.Services.Security
 {
     public interface IJwtService
     {
-        SecurityToken GenerateToken(ApplicationUser user);
+        SecurityToken GenerateToken(ApplicationUser user, bool isInAdminRole);
     }
 }
