@@ -1,4 +1,5 @@
-﻿using FitnessApp.Models;
+﻿using FitnessApp.Common;
+using FitnessApp.Models;
 using FitnessApp.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -16,7 +17,7 @@ namespace FitnessApp.Services.Security
             this.jwtSettings = jwtSettings;
         }
 
-        public SecurityToken GenerateToken(ApplicationUser user)
+        public SecurityToken GenerateToken(ApplicationUser user, bool isInAdminRole)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(this.jwtSettings.Value.Secret);
@@ -30,8 +31,13 @@ namespace FitnessApp.Services.Security
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(
                                  new SymmetricSecurityKey(key),
-                                 SecurityAlgorithms.HmacSha256Signature)
+                                 SecurityAlgorithms.HmacSha512Signature)
             };
+
+            if (isInAdminRole)
+            {
+                tokenDescriptor.Subject.AddClaim(new Claim(ClaimTypes.Role, GlobalConstants.AdministratorRoleName));
+            }
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 

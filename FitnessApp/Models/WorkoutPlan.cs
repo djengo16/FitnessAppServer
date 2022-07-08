@@ -25,21 +25,5 @@
         public ApplicationUser User { get; set; }
 
         public virtual ICollection<WorkoutDay> WorkoutDays { get; set; }
-        public override string WorkoutPlanId { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
-        }
     }
 }
