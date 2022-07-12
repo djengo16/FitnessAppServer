@@ -15,14 +15,17 @@
     public class UsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IUsersService usersService;
         private readonly IJwtService jwtService;
         public UsersController(
             UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             IUsersService usersService,
             IJwtService JwtService)
         {
             this.userManager = userManager;
+            this.signInManager = signInManager;
             this.usersService = usersService;
             this.jwtService = JwtService;
         }
@@ -59,6 +62,7 @@
             }
 
             var isInAdminRole = await userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+            
             var token = jwtService.GenerateToken(user, isInAdminRole);
             var tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(new
