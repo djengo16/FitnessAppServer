@@ -56,20 +56,13 @@
         {
             var user = await userManager.FindByEmailAsync(userLoginModel.Email);
 
-            var result = await signInManager
-                .PasswordSignInAsync(userLoginModel.Email, userLoginModel.Password, false, false);
-
-            if(!result.Succeeded)
-            {
-               return NotFound("Wrong password or email address!");
-            }
-            var isInAdminRole = await userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
-
             if (!(user != null && await userManager.CheckPasswordAsync(user, userLoginModel.Password)))
             {
-                return Unauthorized();
+                return Unauthorized("User with this password or email does not exists!");
             }
 
+            var isInAdminRole = await userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+            
             var token = jwtService.GenerateToken(user, isInAdminRole);
             var tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(new
