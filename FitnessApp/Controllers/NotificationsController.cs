@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
-    [Route("controller")]
+    [Route("[controller]")]
     public class NotificationsController : ControllerBase
     {
         private readonly INotificationsService notificationsService;
@@ -15,9 +15,9 @@
         }
 
         [HttpGet]
-        public IActionResult Get(string userId)
+        public IActionResult Get(string id)
         {
-            return Ok(notificationsService.IsTrainingDayNotification(userId));
+            return Ok(notificationsService.IsTrainingDayNotification(id));
         }
 
     }

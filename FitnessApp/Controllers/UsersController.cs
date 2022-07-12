@@ -1,5 +1,6 @@
 ﻿namespace FitnessApp.Controllers
 {
+    using FitnessApp.Common;
     using FitnessApp.Dto.Users;
     using FitnessApp.Models;
     using FitnessApp.Services.Data;
@@ -14,14 +15,17 @@
     public class UsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IUsersService usersService;
         private readonly IJwtService jwtService;
         public UsersController(
             UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             IUsersService usersService,
             IJwtService JwtService)
         {
             this.userManager = userManager;
+            this.signInManager = signInManager;
             this.usersService = usersService;
             this.jwtService = JwtService;
         }
@@ -51,16 +55,26 @@
         public async Task<IActionResult> Login(UserLoginInputModel userLoginModel)
         {
             var user = await userManager.FindByEmailAsync(userLoginModel.Email);
+
+            var result = await signInManager
+                .PasswordSignInAsync(userLoginModel.Email, userLoginModel.Password, false, false);
+
+            if(!result.Succeeded)
+            {
+               return NotFound("Wrong password or email address!");
+            }
+            var isInAdminRole = await userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+
             if (!(user != null && await userManager.CheckPasswordAsync(user, userLoginModel.Password)))
             {
                 return Unauthorized();
             }
 
-            var token = jwtService.GenerateToken(user);
-
+            var token = jwtService.GenerateToken(user, isInAdminRole);
+            var tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(new
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
+                tokenAsString,
                 expiration = token.ValidTo
             });
         }
