@@ -44,7 +44,7 @@
             var user = new ApplicationUser()
             {
                 Email = userInput.Email,
-                UserName = userInput.Username
+                UserName = userInput.Email
             };
 
             var result = await this.userManager.CreateAsync(user, userInput.Password);
