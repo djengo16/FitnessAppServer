@@ -41,8 +41,6 @@
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegisterInputModel userInput)
         {
-            Console.WriteLine("Test revert!!!!");
-
             var user = new ApplicationUser()
             {
                 Email = userInput.Email,
