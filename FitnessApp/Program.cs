@@ -100,9 +100,13 @@ builder.Services.AddSwaggerGen(options => {
 });
 
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
- //Seed data on application startup
+app.MapHealthChecks("/healthz");
+
+//Seed data on application startup
 using (var serviceScope = app.Services.CreateScope())
 {
     var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();

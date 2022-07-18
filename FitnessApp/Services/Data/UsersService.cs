@@ -29,6 +29,12 @@
             await usersRepository.SaveChangesAsync();
         }
 
+        public async Task<UserDetailsDTO> GetUserByIdAsync(string id)
+        {
+            var user =  await userManager.FindByIdAsync(id);
+            return mapper.Map<UserDetailsDTO>(user);
+        }
+
         public IEnumerable<UserDTO> GetUsers()
         {
             var users = usersRepository

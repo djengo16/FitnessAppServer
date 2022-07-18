@@ -9,6 +9,7 @@
         public UserProfiles()
         {
             CreateMap<ApplicationUser, UserDTO>();
+            CreateMap<ApplicationUser, UserDetailsDTO>();
         }
     }
 }
