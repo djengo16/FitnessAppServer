@@ -2,7 +2,10 @@
 {
     using FitnessApp.Dto.Users;
     using FitnessApp.Dto.Workouts;
+    using FitnessApp.Models;
     using FitnessApp.Services.Data;
+    using FitnessApp.Services.ServiceConstants;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
@@ -10,6 +13,12 @@
     public class WorkoutsController : ControllerBase
     {
         private readonly IWorkoutsService workoutsService;
+        private readonly UserManager<ApplicationUser> userManager;
+
+        public WorkoutsController(UserManager<ApplicationUser> userManager)
+        {
+            this.userManager = userManager;
+        }
 
         public WorkoutsController(IWorkoutsService workoutsService)
         {
@@ -19,6 +28,11 @@
         [HttpPost("personalize")]
         public async Task<IActionResult> Personalize(WorkoutGenerationInputModel userInput)
         {
+            var user = await userManager.FindByIdAsync(userInput.UserId);
+            if(user == null)
+            {
+                throw new ArgumentException(ErrorMessages.UserWithIdDoNoNotExists);
+            }
             workoutsService.GenerateWorkoutPlans(userInput);
 
             var workouts = workoutsService.GetGeneratedWorkoutPlans();
