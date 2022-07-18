@@ -37,6 +37,12 @@
 
             return users;
         }
+        [HttpGet("{id}")]
+        public async Task<UserDetailsDTO> UserDetails(string id)
+        {
+            var user =  await usersService.GetUserByIdAsync(id);
+            return user;
+        }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegisterInputModel userInput)
