@@ -6,6 +6,7 @@
     public interface IUsersService
     {
         IEnumerable<UserDTO> GetUsers();
+        Task<UserDetailsDTO> GetUserByIdAsync(string id);
 
         Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model, string userId);
 
