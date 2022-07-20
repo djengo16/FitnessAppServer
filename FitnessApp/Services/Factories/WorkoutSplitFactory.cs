@@ -1,12 +1,22 @@
 ﻿namespace FitnessApp.Services.Factories
 {
     using FitnessApp.Models.Enums;
+    using FitnessApp.Services.ServiceConstants;
 
     public class WorkoutSplitFactory
     {
         private IDictionary<DayOfWeek, List<MuscleGroup>> workoutSplit;
         public IDictionary<DayOfWeek, List<MuscleGroup>> CreateSplits(int days)
         {
+            if (days > 7 || days < 1)
+            {
+                throw new ArgumentException(ErrorMessages.InvalidDaysOfWeek);
+            }
+            if (!(days >= 3 && days <= 5))
+            {
+                throw new ArgumentException(ErrorMessages.WorkoutPlanDaysNotInRange);
+            }
+
             workoutSplit = new Dictionary<DayOfWeek, List<MuscleGroup>>();
             switch (days)
             {
