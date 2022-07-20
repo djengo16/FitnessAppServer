@@ -9,6 +9,7 @@
         public const string InvalidWorkoutPlanGoal = "Invalid workout plan goal!";
         public const string WorkoutPlansCountNotInRange = "Please choose between 0 and 10 plans to be generated!";
         public const string UserWithIdDoNoNotExists= "User with the given id do not exist!";
+        public const string InvalidDaysOfWeek = "Invalid days of week!";
 
     }
 }
