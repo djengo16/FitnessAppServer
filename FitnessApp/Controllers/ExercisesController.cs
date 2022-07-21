@@ -16,7 +16,21 @@ namespace FitnessApp.Controllers
         {
             this.exercisesService = exercisesService;
         }
+        [HttpGet]
+        public ExercisesPageDTO Exercises(string search, int page, int count)
+        {
+            int skip = page != 1 ? (page - 1) * count : 0;
+            var exercises = exercisesService.GetExercises(search, take: count, skip);
 
+            var dto = new ExercisesPageDTO()
+            {
+                Exercises = exercises.ToList(),
+                PagesCount = search != null
+                    ? exercisesService.GetCountBySearchParams(search)
+                    : exercisesService.GetCount()
+            };
+            return dto;
+        }
         [HttpGet("{id:int}")]
         [Authorize]
         public async Task<ActionResult<GetExerciseDetailsDTO>> Get(int id)

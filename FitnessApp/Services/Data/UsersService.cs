@@ -41,10 +41,6 @@
                 .All().Where(x => !string.IsNullOrEmpty(searchParams) 
                 ? x.Email.Contains(searchParams) : true);
 
-            //if (!string.IsNullOrEmpty(searchParams))
-            //{
-            //    usersQueryModel = usersQueryModel.Where(entity => entity.Email.Contains(searchParams));
-            //}
             if (usersQueryModel.Count() < take)
             {
                 take = usersQueryModel.Count();
@@ -56,12 +52,12 @@
             return usersQueryModel.ProjectTo<UserDTO>(mapper.ConfigurationProvider).ToList();
         }
 
-        public int GetUsersCount()
+        public int GetCount()
         {
             return this.usersRepository.All().Count();
         }
 
-        public int GetUsersCountBySearchParams(string searchParams)
+        public int GetCountBySearchParams(string searchParams)
         {
             return this.usersRepository.All().Where(entityt => entityt.Email.Contains(searchParams)).Count();
         }

@@ -1,8 +1,7 @@
 ﻿namespace FitnessApp.Dto.Users
 {
-    public class UsersPageDTO
+    public class UsersPageDTO : Pageable
     {
         public ICollection<UserDTO> Users { get; set; }
-        public int PagesCount { get; set; }
     }
 }

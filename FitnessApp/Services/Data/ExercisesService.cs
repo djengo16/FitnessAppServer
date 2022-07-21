@@ -4,7 +4,9 @@
     using AutoMapper.QueryableExtensions;
     using FitnessApp.Dto.Exercises;
     using FitnessApp.Models;
+    using FitnessApp.Models.Enums;
     using FitnessApp.Models.Repositories;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class ExercisesService : IExercisesService
@@ -44,6 +46,57 @@
                 .FirstOrDefault();
 
             return exercise;
+        }
+
+        public IEnumerable<ExerciseInListDTO> GetExercises(string searchParams, int? take = null, int skip = 0)
+        {
+            var muscleGroup = FindMuscleGroup(searchParams);
+
+            var exercisesQueryModel = exercisesStorage
+            .All().Where(x => !string.IsNullOrEmpty(searchParams)
+                             ? (x.Name.Contains(searchParams) 
+                             || (int)x.MuscleGroup == muscleGroup)
+                             : true);
+
+            if (exercisesQueryModel.Count() < take)
+            {
+                take = exercisesQueryModel.Count();
+            }
+
+            exercisesQueryModel =
+                take.HasValue ? exercisesQueryModel.Skip(skip).Take(take.Value) : exercisesQueryModel.Skip(skip);
+
+            return exercisesQueryModel.ProjectTo<ExerciseInListDTO>(mapper.ConfigurationProvider).ToList();
+        }
+        private int FindMuscleGroup(string keywords)
+        {
+            if (keywords == null)
+                return -1;
+            foreach (string name in Enum.GetNames(typeof(MuscleGroup)))
+            {
+                if (name.ToUpper().Contains(keywords.ToUpper()))
+                {
+                    return (int)Enum.Parse(typeof(MuscleGroup), name);
+                }
+            }
+            return -1;
+        }
+
+        public int GetCount()
+        {
+            return this.exercisesStorage.AllAsNoTracking().Count();
+        }
+
+        public int GetCountBySearchParams(string searchParams)
+        {
+            var muscleGroup = FindMuscleGroup(searchParams);
+            return this.exercisesStorage
+                .AllAsNoTracking()
+                .Where(x => !string.IsNullOrEmpty(searchParams)
+                             ? (x.Name.Contains(searchParams)
+                             || (int)x.MuscleGroup == muscleGroup)
+                             : true)
+                .Count();
         }
 
         public async Task UpdateExerciseAsync(int exerciseId, CreateOrUpdateExerciseDTO exerciseDTO)
