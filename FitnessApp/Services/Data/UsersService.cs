@@ -35,14 +35,35 @@
             return mapper.Map<UserDetailsDTO>(user);
         }
 
-        public IEnumerable<UserDTO> GetUsers()
+        public IEnumerable<UserDTO> GetUsers(string searchParams, int? take = null, int skip = 0)
         {
-            var users = usersRepository
-                .AllAsNoTracking()
-                .ProjectTo<UserDTO>(mapper.ConfigurationProvider)
-                .ToList();
+            var usersQueryModel = usersRepository
+                .All().Where(x => !string.IsNullOrEmpty(searchParams) 
+                ? x.Email.Contains(searchParams) : true);
 
-            return users;
+            //if (!string.IsNullOrEmpty(searchParams))
+            //{
+            //    usersQueryModel = usersQueryModel.Where(entity => entity.Email.Contains(searchParams));
+            //}
+            if (usersQueryModel.Count() < take)
+            {
+                take = usersQueryModel.Count();
+            }
+
+            usersQueryModel = 
+                take.HasValue? usersQueryModel.Skip(skip).Take(take.Value) : usersQueryModel.Skip(skip);
+
+            return usersQueryModel.ProjectTo<UserDTO>(mapper.ConfigurationProvider).ToList();
+        }
+
+        public int GetUsersCount()
+        {
+            return this.usersRepository.All().Count();
+        }
+
+        public int GetUsersCountBySearchParams(string searchParams)
+        {
+            return this.usersRepository.All().Where(entityt => entityt.Email.Contains(searchParams)).Count();
         }
 
         public async Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model, string userId)
