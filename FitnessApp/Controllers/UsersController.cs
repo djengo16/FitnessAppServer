@@ -15,27 +15,38 @@
     public class UsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IUsersService usersService;
         private readonly IJwtService jwtService;
         public UsersController(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
             IUsersService usersService,
             IJwtService JwtService)
         {
             this.userManager = userManager;
-            this.signInManager = signInManager;
             this.usersService = usersService;
             this.jwtService = JwtService;
         }
-
+        /**
+         * @params (search -> seach parameter, page -> current page, count -> data per page)
+         */
         [HttpGet]
-        public IEnumerable<UserDTO> Users()
+        public UsersPageDTO Users(string search, int page, int count)
         {
-            var users = usersService.GetUsers();
+            // GetUsers(string searchParams, int? take = null, int skip = 0)
+            // If we are on page 2 we should skip page - 1's data * data (count per page)
+            int skip = page != 1 ? (page - 1) * count : 0;
 
-            return users;
+            var users = usersService.GetUsers(search, take:count, skip);
+
+            var dto = new UsersPageDTO()
+            {
+                Users = users.ToList(),
+                PagesCount = search != null
+                ? usersService.GetUsersCountBySearchParams(search)
+                : usersService.GetUsersCount()
+            };
+
+            return dto;
         }
         [HttpGet("{id}")]
         public async Task<UserDetailsDTO> UserDetails(string id)
