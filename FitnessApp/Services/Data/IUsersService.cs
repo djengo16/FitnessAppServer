@@ -7,6 +7,7 @@
     {
         IEnumerable<UserDTO> GetUsers(string searchParams, int? take = null, int skip = 0);
         int GetCount();
+        string GetActiveWorkoutPlanId(string userId);
         int GetCountBySearchParams(string searchParams);
         Task<UserDetailsDTO> GetUserByIdAsync(string id);
 

@@ -15,14 +15,17 @@
         private readonly IWorkoutsService workoutsService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public WorkoutsController(UserManager<ApplicationUser> userManager)
+        public WorkoutsController(UserManager<ApplicationUser> userManager, IWorkoutsService workoutsService)
         {
             this.userManager = userManager;
+            this.workoutsService = workoutsService;
         }
 
-        public WorkoutsController(IWorkoutsService workoutsService)
+        [HttpGet("myplans")]
+        public ICollection<UserWorkoutPlanInAllUserPlansDTO> MyPlans(string userId)
         {
-            this.workoutsService = workoutsService;
+            var plans = workoutsService.GetUserWorkoutPlans(userId);
+            return plans;
         }
 
         [HttpPost("personalize")]
