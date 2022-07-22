@@ -8,6 +8,7 @@
     using FitnessApp.Models.Repositories;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using FitnessApp.Helper;
 
     public class ExercisesService : IExercisesService
     {
@@ -50,23 +51,17 @@
 
         public IEnumerable<ExerciseInListDTO> GetExercises(string searchParams, int? take = null, int skip = 0)
         {
-            var muscleGroup = FindMuscleGroup(searchParams);
+            var exerciseQueryBuilder = new ExerciseQueryBuilder(exercisesStorage.All());
 
-            var exercisesQueryModel = exercisesStorage
-            .All().Where(x => !string.IsNullOrEmpty(searchParams)
-                             ? (x.Name.Contains(searchParams) 
-                             || (int)x.MuscleGroup == muscleGroup)
-                             : true);
+            take = exerciseQueryBuilder.ApplySearch(searchParams).GetCount(take);
 
-            if (exercisesQueryModel.Count() < take)
-            {
-                take = exercisesQueryModel.Count();
-            }
+            var currentQuery =
+            exerciseQueryBuilder
+                .ApplySearch(searchParams)
+                .ApplyPagination(take, skip)
+                .Build();
 
-            exercisesQueryModel =
-                take.HasValue ? exercisesQueryModel.Skip(skip).Take(take.Value) : exercisesQueryModel.Skip(skip);
-
-            return exercisesQueryModel.ProjectTo<ExerciseInListDTO>(mapper.ConfigurationProvider).ToList();
+            return currentQuery.ProjectTo<ExerciseInListDTO>(mapper.ConfigurationProvider).ToList();
         }
 
         public int GetCount()
@@ -76,7 +71,7 @@
 
         public int GetCountBySearchParams(string searchParams)
         {
-            var muscleGroup = FindMuscleGroup(searchParams);
+            var muscleGroup = MuscleGroupFinder.FindMuscleGroup(searchParams);
             return this.exercisesStorage
                 .AllAsNoTracking()
                 .Where(x => !string.IsNullOrEmpty(searchParams)
@@ -98,19 +93,6 @@
             exercise.VideoResourceUrl = exerciseDTO.VideoResourceUrl;
 
             await this.exercisesStorage.SaveChangesAsync();
-        }
-        private int FindMuscleGroup(string keywords)
-        {
-            if (keywords == null)
-                return -1;
-            foreach (string name in Enum.GetNames(typeof(MuscleGroup)))
-            {
-                if (name.ToUpper().Contains(keywords.ToUpper()))
-                {
-                    return (int)Enum.Parse(typeof(MuscleGroup), name);
-                }
-            }
-            return -1;
         }
     }
 }
