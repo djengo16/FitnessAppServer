@@ -53,11 +53,13 @@
         }
 
         public int GetCount()
+
         {
             return this.usersRepository.All().Count();
         }
 
         public int GetCountBySearchParams(string searchParams)
+
         {
             return this.usersRepository.All().Where(entityt => entityt.Email.Contains(searchParams)).Count();
         }
