@@ -42,8 +42,8 @@
             {
                 Users = users.ToList(),
                 PagesCount = search != null
-                ? usersService.GetUsersCountBySearchParams(search)
-                : usersService.GetUsersCount()
+                ? usersService.GetCountBySearchParams(search)
+                : usersService.GetCount()
             };
 
             return dto;

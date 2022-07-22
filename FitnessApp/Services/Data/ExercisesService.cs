@@ -4,8 +4,11 @@
     using AutoMapper.QueryableExtensions;
     using FitnessApp.Dto.Exercises;
     using FitnessApp.Models;
+    using FitnessApp.Models.Enums;
     using FitnessApp.Models.Repositories;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
+    using FitnessApp.Helper;
 
     public class ExercisesService : IExercisesService
     {
@@ -44,6 +47,38 @@
                 .FirstOrDefault();
 
             return exercise;
+        }
+
+        public IEnumerable<ExerciseInListDTO> GetExercises(string searchParams, int? take = null, int skip = 0)
+        {
+            var exerciseQueryBuilder = new ExerciseQueryBuilder(exercisesStorage.All());
+
+            take = exerciseQueryBuilder.ApplySearch(searchParams).GetCount(take);
+
+            var currentQuery =
+            exerciseQueryBuilder
+                .ApplySearch(searchParams)
+                .ApplyPagination(take, skip)
+                .Build();
+
+            return currentQuery.ProjectTo<ExerciseInListDTO>(mapper.ConfigurationProvider).ToList();
+        }
+
+        public int GetCount()
+        {
+            return this.exercisesStorage.AllAsNoTracking().Count();
+        }
+
+        public int GetCountBySearchParams(string searchParams)
+        {
+            var muscleGroup = MuscleGroupFinder.FindMuscleGroup(searchParams);
+            return this.exercisesStorage
+                .AllAsNoTracking()
+                .Where(x => !string.IsNullOrEmpty(searchParams)
+                             ? (x.Name.Contains(searchParams)
+                             || (int)x.MuscleGroup == muscleGroup)
+                             : true)
+                .Count();
         }
 
         public async Task UpdateExerciseAsync(int exerciseId, CreateOrUpdateExerciseDTO exerciseDTO)
