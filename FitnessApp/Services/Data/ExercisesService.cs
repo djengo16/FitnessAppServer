@@ -68,19 +68,6 @@
 
             return exercisesQueryModel.ProjectTo<ExerciseInListDTO>(mapper.ConfigurationProvider).ToList();
         }
-        private int FindMuscleGroup(string keywords)
-        {
-            if (keywords == null)
-                return -1;
-            foreach (string name in Enum.GetNames(typeof(MuscleGroup)))
-            {
-                if (name.ToUpper().Contains(keywords.ToUpper()))
-                {
-                    return (int)Enum.Parse(typeof(MuscleGroup), name);
-                }
-            }
-            return -1;
-        }
 
         public int GetCount()
         {
@@ -111,6 +98,19 @@
             exercise.VideoResourceUrl = exerciseDTO.VideoResourceUrl;
 
             await this.exercisesStorage.SaveChangesAsync();
+        }
+        private int FindMuscleGroup(string keywords)
+        {
+            if (keywords == null)
+                return -1;
+            foreach (string name in Enum.GetNames(typeof(MuscleGroup)))
+            {
+                if (name.ToUpper().Contains(keywords.ToUpper()))
+                {
+                    return (int)Enum.Parse(typeof(MuscleGroup), name);
+                }
+            }
+            return -1;
         }
     }
 }
