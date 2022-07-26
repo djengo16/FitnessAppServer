@@ -72,5 +72,12 @@ namespace FitnessApp.Controllers
                 return BadRequest(this.ModelState.Select(x => x.Value.Errors).ToList());
             }
         }
+        [HttpDelete("{id}")]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await exercisesService.Delete(id);
+            return Ok();
+        }
     }
 }

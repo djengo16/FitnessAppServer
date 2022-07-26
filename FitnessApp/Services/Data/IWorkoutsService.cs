@@ -11,5 +11,6 @@
         ICollection<GeneratedWorkoutPlanDTO> GetGeneratedWorkoutPlans();
 
         GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId);
+        ICollection<UserWorkoutPlanInAllUserPlansDTO> GetUserWorkoutPlans(string userId);
     }
 }

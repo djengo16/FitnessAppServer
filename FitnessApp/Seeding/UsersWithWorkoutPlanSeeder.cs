@@ -53,15 +53,19 @@
                     UserId = user.Id,
                 });
 
-
                 /**
                  * Since we generate and store training programs in WorkoutsService collection field
                  * we should get the one generated for the current user with [userCounter - 1]
                  * because we don't clear the collection
                  * */
-                await workoutsService.SaveWorkoutPlanAsync(
+                var workoutId = await workoutsService.SaveWorkoutPlanAsync(
                     workoutsService.GetGeneratedWorkoutPlans().ToList()[userCounter - 1]);
 
+                //add plan to user
+                var createdUser = dbContext.Users.FirstOrDefault(x => x.Id == user.Id);
+                createdUser.WorkoutPlanId = workoutId;
+                dbContext.Update(createdUser);
+                await dbContext.SaveChangesAsync();
 
                 userCounter++;
             }

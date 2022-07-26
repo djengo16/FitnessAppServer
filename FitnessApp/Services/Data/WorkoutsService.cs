@@ -21,6 +21,7 @@
         private readonly IWorkoutDaysService workoutDaysService;
         private readonly IExerciseInWorkoutDayService exerciseInWorkoutDayService;
         private readonly IMapper mapper;
+        private readonly IUsersService usersService;
         private ICollection<WorkoutPlan> generatedWorkoutPlans;
         private WorkoutPlan workoutPlan;
         private WorkoutSplitFactory workoutSplitFactory = new WorkoutSplitFactory();
@@ -33,7 +34,8 @@
             IDeletableEntityRepository<WorkoutPlan> workoutPlansStorage,
             IWorkoutDaysService workoutDaysService,
             IExerciseInWorkoutDayService exerciseInWorkoutDayService,
-            IMapper mapper)
+            IMapper mapper,
+            IUsersService usersService)
         {
             _exercises = exercises;
             this.workoutPlansStorage = workoutPlansStorage;
@@ -41,6 +43,7 @@
             this.workoutDaysService = workoutDaysService;
             this.exerciseInWorkoutDayService = exerciseInWorkoutDayService;
             this.mapper = mapper;
+            this.usersService = usersService;
             this.generatedWorkoutPlans = new List<WorkoutPlan>();
 
             workoutSplit = new Dictionary<DayOfWeek, List<MuscleGroup>>();
@@ -406,6 +409,33 @@
             }
 
             return workoutPlan;
+        }
+
+        public ICollection<UserWorkoutPlanInAllUserPlansDTO> GetUserWorkoutPlans(string userId)
+        {
+            string activePlanId = usersService.GetActiveWorkoutPlanId(userId);
+
+            //User don't have workout plans
+            if(activePlanId == null)
+            {
+                return null;
+            }
+
+            var workoutPlans = workoutPlansStorage
+                .All()
+                .Where(x => x.UserId == userId)
+                .ProjectTo<UserWorkoutPlanInAllUserPlansDTO>(this.mapper.ConfigurationProvider)
+                .ToList();
+             
+            foreach (var plan in workoutPlans)
+            {
+                if(activePlanId == plan.Id)
+                {
+                    plan.IsActive = true;
+                }
+            }
+
+            return workoutPlans;
         }
     }
 }
