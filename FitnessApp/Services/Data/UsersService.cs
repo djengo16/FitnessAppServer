@@ -5,6 +5,7 @@
     using FitnessApp.Dto.Users;
     using FitnessApp.Models;
     using FitnessApp.Models.Repositories;
+    using FitnessApp.Services.ServiceConstants;
     using Microsoft.AspNetCore.Identity;
 
     public class UsersService : IUsersService
@@ -77,6 +78,11 @@
             await userManager.UpdateAsync(user);
 
             return userId;
+        }
+
+        public string GetActiveWorkoutPlanId(string userId)
+        {
+            return this.usersRepository.All().FirstOrDefault(x => x.Id == userId).WorkoutPlanId;
         }
     }
 }

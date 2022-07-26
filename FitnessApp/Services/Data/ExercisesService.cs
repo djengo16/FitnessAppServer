@@ -9,6 +9,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using FitnessApp.Helper;
+    using FitnessApp.Services.ServiceConstants;
 
     public class ExercisesService : IExercisesService
     {
@@ -83,7 +84,7 @@
 
         public async Task UpdateExerciseAsync(int exerciseId, CreateOrUpdateExerciseDTO exerciseDTO)
         {
-            var exercise = this.exercisesStorage.All().FirstOrDefault(x => x.Id == exerciseId);
+            var exercise = this.GetById(exerciseId);
 
             exercise.Name = exerciseDTO.Name;
             exercise.Description = exerciseDTO.Description;
@@ -94,5 +95,21 @@
 
             await this.exercisesStorage.SaveChangesAsync();
         }
+
+        public async Task Delete(int id)
+        {
+            var exercise = GetById(id);
+
+            if(exercise == null)
+            {
+                throw new ArgumentException(ErrorMessages.ExerciseNotFound);
+            }
+
+            this.exercisesStorage.Delete(exercise);
+
+            await this.exercisesStorage.SaveChangesAsync();
+        }
+
+        public Exercise GetById(int id) => this.exercisesStorage.All().FirstOrDefault(x => x.Id == id);
     }
 }

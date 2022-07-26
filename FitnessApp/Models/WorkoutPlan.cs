@@ -18,7 +18,6 @@
         }
         public Goal Goal { get; set; }
         public Difficulty Difficulty { get; set; }
-        public int DaysInWeek => WorkoutDays.Count;
 
         [ForeignKey(nameof(ApplicationUser))]
         public string UserId { get; set; }
