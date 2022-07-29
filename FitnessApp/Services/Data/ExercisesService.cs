@@ -24,27 +24,12 @@
             this.mapper = mapper;
         }
 
-        public async Task CreateExerciseAsync(CreateOrUpdateExerciseDTO exerciseDTO)
-        {
-            var exercise = new Exercise
-            {
-                Name = exerciseDTO.Name,
-                MuscleGroup = exerciseDTO.MuscleGroup,
-                Difficulty = exerciseDTO.Difficulty,
-                Description = exerciseDTO.Description,
-                PictureResourceUrl = exerciseDTO.PictureResourceUrl,
-                VideoResourceUrl = exerciseDTO.VideoResourceUrl
-            };
-            await exercisesStorage.AddAsync(exercise);
-            await exercisesStorage.SaveChangesAsync();
-        }
-
-        public GetExerciseDetailsDTO GetExerciseDetails(int exerciseId)
+        public ExerciseDTО GetExerciseDetails(int exerciseId)
         {
             var exercise = exercisesStorage
                 .All()
                 .Where(x => x.Id == exerciseId)
-                .ProjectTo<GetExerciseDetailsDTO>(this.mapper.ConfigurationProvider)
+                .ProjectTo<ExerciseDTО>(this.mapper.ConfigurationProvider)
                 .FirstOrDefault();
 
             return exercise;
@@ -82,20 +67,6 @@
                 .Count();
         }
 
-        public async Task UpdateExerciseAsync(int exerciseId, CreateOrUpdateExerciseDTO exerciseDTO)
-        {
-            var exercise = this.GetById(exerciseId);
-
-            exercise.Name = exerciseDTO.Name;
-            exercise.Description = exerciseDTO.Description;
-            exercise.MuscleGroup = exerciseDTO.MuscleGroup;
-            exercise.Difficulty = exerciseDTO.Difficulty;
-            exercise.PictureResourceUrl = exerciseDTO.PictureResourceUrl;
-            exercise.VideoResourceUrl = exerciseDTO.VideoResourceUrl;
-
-            await this.exercisesStorage.SaveChangesAsync();
-        }
-
         public async Task Delete(int id)
         {
             var exercise = GetById(id);
@@ -111,5 +82,38 @@
         }
 
         public Exercise GetById(int id) => this.exercisesStorage.All().FirstOrDefault(x => x.Id == id);
+
+        public async Task CreateAsync(ExerciseInputDTO exerciseInput)
+        {
+            var exercise = new Exercise()
+            {
+                Name = exerciseInput.Name,
+                PictureResourceUrl = exerciseInput.PictureResourceUrl,
+                VideoResourceUrl = exerciseInput.VideoResourceUrl,
+                Difficulty = Enum.Parse<Difficulty>(exerciseInput.Difficulty),
+                MuscleGroup = Enum.Parse<MuscleGroup>(exerciseInput.MuscleGroup),
+                Description = exerciseInput.Description
+            };
+
+            await this.exercisesStorage.AddAsync(exercise);
+            await this.exercisesStorage.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(ExerciseUpdateDTO exerciseInput)
+        {
+            var exercise = GetById(exerciseInput.Id);
+
+
+            exercise.Name = exerciseInput.Name;
+            exercise.PictureResourceUrl = exerciseInput.PictureResourceUrl;
+            exercise.VideoResourceUrl = exerciseInput.VideoResourceUrl;
+            exercise.Difficulty = Enum.Parse<Difficulty>(exerciseInput.Difficulty);
+            exercise.MuscleGroup = Enum.Parse<MuscleGroup>(exerciseInput.MuscleGroup);
+            exercise.Description = exerciseInput.Description;
+
+
+            this.exercisesStorage.Update(exercise);
+            await this.exercisesStorage.SaveChangesAsync();
+        }
     }
 }
