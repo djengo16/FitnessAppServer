@@ -5,5 +5,6 @@ namespace FitnessApp.Services.Data
     public interface IExerciseInWorkoutDayService
     {
         Task AddAsync(ExerciseInWorkoutDayDTO exerciseInWorkoutDayDTO);
+        Task DeleteAllWithExerciseId(int exerciseId);
     }
 }
