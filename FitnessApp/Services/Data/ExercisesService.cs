@@ -15,13 +15,16 @@
     {
         private readonly IDeletableEntityRepository<Exercise> exercisesStorage;
         private readonly IMapper mapper;
+        private readonly IExerciseInWorkoutDayService exerciseInWorkoutDayService;
 
         public ExercisesService(
             IDeletableEntityRepository<Exercise> exercisesStorage,
-            IMapper mapper)
+            IMapper mapper,
+            IExerciseInWorkoutDayService exerciseInWorkoutDayService)
         {
             this.exercisesStorage = exercisesStorage;
             this.mapper = mapper;
+            this.exerciseInWorkoutDayService = exerciseInWorkoutDayService;
         }
 
         public ExerciseDTО GetExerciseDetails(int exerciseId)
@@ -67,6 +70,11 @@
                 .Count();
         }
 
+
+        /***
+         * First (soft) deletes all ExerciseInWorkoutDay entities
+         * with the given exercise id then (soft) deletes the specific Exercise.
+         */
         public async Task Delete(int id)
         {
             var exercise = GetById(id);
@@ -75,6 +83,8 @@
             {
                 throw new ArgumentException(ErrorMessages.ExerciseNotFound);
             }
+
+            await this.exerciseInWorkoutDayService.DeleteAllWithExerciseId(id);
 
             this.exercisesStorage.Delete(exercise);
 
