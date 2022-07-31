@@ -12,6 +12,8 @@
         public const string InvalidDaysOfWeek = "Invalid days of week!";
         public const string ExerciseNotFound = "Exercise not found!";
         public const string PlanIsNotAssignedToUser = "Workout plan is not assigned to this user!";
+        public const string UserWithPasswordOrEmailNotExists = "User with this password or email does not exists!";
+        public const string UserWithEmailAlreadyExists = "User with this email already exists!";
 
     }
 }

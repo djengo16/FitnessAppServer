@@ -5,6 +5,7 @@
     using FitnessApp.Models;
     using FitnessApp.Services.Data;
     using FitnessApp.Services.Security;
+    using FitnessApp.Services.ServiceConstants;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System.IdentityModel.Tokens.Jwt;
@@ -58,6 +59,12 @@
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegisterInputModel userInput)
         {
+            var existingUser = await userManager.FindByEmailAsync(userInput.Email);
+            if(existingUser != null)
+            {
+                return Unauthorized(ErrorMessages.UserWithEmailAlreadyExists);
+            }
+
             var user = new ApplicationUser()
             {
                 Email = userInput.Email,
@@ -75,7 +82,7 @@
 
             if (!(user != null && await userManager.CheckPasswordAsync(user, userLoginModel.Password)))
             {
-                return Unauthorized("User with this password or email does not exists!");
+                return Unauthorized(ErrorMessages.UserWithPasswordOrEmailNotExists);
             }
 
             var isInAdminRole = await userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
