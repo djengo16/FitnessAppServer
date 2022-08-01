@@ -8,7 +8,9 @@
     {
         public ExerciseProfiles()
         {
-            CreateMap<Exercise, GetExerciseDetailsDTO>();
+            CreateMap<Exercise, ExerciseDTО>()
+                .ForMember(dest => dest.MuscleGroup, opt => opt.MapFrom(src => src.MuscleGroup.ToString()))
+                .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => src.Difficulty.ToString()));
             CreateMap<Exercise, ExerciseInListDTO>()
                 .ForMember(dest => dest.MuscleGroup, opt => opt.MapFrom(src => src.MuscleGroup.ToString()));
         }

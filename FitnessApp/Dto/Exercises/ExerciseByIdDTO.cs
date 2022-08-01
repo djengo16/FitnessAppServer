@@ -1,10 +1,15 @@
-﻿namespace FitnessApp.Dto.Exercises
+﻿using FitnessApp.Models.Enums;
+using System.ComponentModel.DataAnnotations;
+
+namespace FitnessApp.Dto.Exercises
 {
-    using FitnessApp.Models.Enums;
-    public class GetExerciseDetailsDTO
+    public class ExerciseByIdDTO
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+
+        [Required]
+        [MaxLength(200)]
+        public string Name { get; set; } = "";
         public MuscleGroup MuscleGroup { get; set; }
         public Difficulty Difficulty { get; set; }
         public string Description { get; set; }
