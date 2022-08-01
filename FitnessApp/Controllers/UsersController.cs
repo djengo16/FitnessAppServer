@@ -41,7 +41,7 @@
             var dto = new UsersPageDTO()
             {
                 Users = users.ToList(),
-                PagesCount = search != null
+                TotalData = search != null
                 ? usersService.GetCountBySearchParams(search)
                 : usersService.GetCount()
             };

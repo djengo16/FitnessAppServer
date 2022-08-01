@@ -2,6 +2,6 @@
 {
     public abstract class Pageable
     {
-        public int PagesCount { get; set; }
+        public int TotalData { get; set; }
     }
 }
