@@ -64,7 +64,6 @@
         public async Task<string> SaveWorkoutPlanAsync(GeneratedWorkoutPlanDTO chosenWorkoutPlan)
         {
             var userId = chosenWorkoutPlan.UserId;
-
             var currWorkoutPlan = new WorkoutPlan(chosenWorkoutPlan.Id)
             {
                 UserId = userId,
@@ -98,6 +97,8 @@
                     });
                 }
             }
+
+            await usersService.AssignTrainingProgramToUser(chosenWorkoutPlan.Id, userId);
             return chosenWorkoutPlan.Id;
         }
         private void LoadExerciseDefaultValues()
