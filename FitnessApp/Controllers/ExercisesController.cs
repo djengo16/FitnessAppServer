@@ -26,7 +26,7 @@ namespace FitnessApp.Controllers
             var dto = new ExercisesPageDTO()
             {
                 Exercises = exercises.ToList(),
-                PagesCount = search != null
+                TotalData = search != null
                     ? exercisesService.GetCountBySearchParams(search)
                     : exercisesService.GetCount()
             };
