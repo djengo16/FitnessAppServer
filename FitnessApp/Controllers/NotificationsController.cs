@@ -15,9 +15,9 @@
         }
 
         [HttpGet]
-        public IActionResult Get(string id)
+        public IActionResult Get(string userId, string planId)
         {
-            return Ok(notificationsService.IsTrainingDayNotification(id));
+            return Ok(notificationsService.IsTrainingDayNotification(userId, planId));
         }
 
     }

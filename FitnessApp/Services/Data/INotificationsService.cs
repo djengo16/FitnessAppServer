@@ -2,6 +2,6 @@
 {
     public interface INotificationsService
     {
-        bool IsTrainingDayNotification(string userId);
+        bool IsTrainingDayNotification(string userId, string planId);
     }
 }

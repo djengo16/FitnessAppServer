@@ -1,6 +1,5 @@
 ﻿namespace FitnessApp.Controllers
 {
-    using FitnessApp.Dto.Users;
     using FitnessApp.Dto.Workouts;
     using FitnessApp.Models;
     using FitnessApp.Services.Data;
@@ -34,7 +33,7 @@
         public async Task<IActionResult> Personalize(WorkoutGenerationInputModel userInput)
         {
             var user = await userManager.FindByIdAsync(userInput.UserId);
-            if(user == null)
+            if (user == null)
             {
                 throw new ArgumentException(ErrorMessages.UserWithIdDoNoNotExists);
             }
