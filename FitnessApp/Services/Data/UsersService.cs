@@ -84,5 +84,12 @@
         {
             return this.usersRepository.All().FirstOrDefault(x => x.Id == userId).WorkoutPlanId;
         }
+
+        public async Task AssignTrainingProgramToUser(string programId, string userId)
+        {
+
+             this.usersRepository.All().FirstOrDefault(x => x.Id == userId).WorkoutPlanId = programId;
+             await this.usersRepository.SaveChangesAsync();
+        }
     }
 }

@@ -14,5 +14,6 @@
         Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model, string userId);
 
         Task DeleteUserAsync(string userId);
+        Task AssignTrainingProgramToUser(string programId, string userId);
     }
 }
