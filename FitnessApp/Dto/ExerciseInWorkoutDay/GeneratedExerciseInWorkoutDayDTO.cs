@@ -10,5 +10,8 @@
         public int Sets { get; set; }
         public int MinReps { get; set; }
         public int MaxReps { get; set; }
+        public string Description { get; set; }
+        public string PictureResourceUrl { get; set; }
+        public string VideoResourceUrl { get; set; }
     }
 }

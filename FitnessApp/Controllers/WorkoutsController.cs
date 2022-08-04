@@ -5,6 +5,7 @@
     using FitnessApp.Models;
     using FitnessApp.Services.Data;
     using FitnessApp.Services.ServiceConstants;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,7 @@
         }
 
         [HttpPost("personalize")]
+        [Authorize]
         public async Task<IActionResult> Personalize(WorkoutGenerationInputModel userInput)
         {
             var user = await userManager.FindByIdAsync(userInput.UserId);
