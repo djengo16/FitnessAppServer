@@ -18,14 +18,18 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUsersService usersService;
         private readonly IJwtService jwtService;
+        private readonly IWorkoutsService workoutsService;
+
         public UsersController(
             UserManager<ApplicationUser> userManager,
             IUsersService usersService,
-            IJwtService JwtService)
+            IJwtService JwtService, 
+            IWorkoutsService workoutsService)
         {
             this.userManager = userManager;
             this.usersService = usersService;
             this.jwtService = JwtService;
+            this.workoutsService = workoutsService;
         }
         /**
          * @params (search -> seach parameter, page -> current page, count -> data per page)
@@ -54,6 +58,22 @@
         {
             var user =  await usersService.GetUserByIdAsync(id);
             return user;
+        }
+        
+        [HttpGet("/Users/workoutPlan")]
+        public IActionResult GetUserWorkoutPlanDetails(string userId, string planId)
+        {
+            string activeUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string activeUserRole = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (activeUserId != userId && activeUserRole != GlobalConstants.AdministratorRoleName)
+            {
+                return Unauthorized(ErrorMessages.AccesToPlanDenied);
+            }
+
+            var workout = workoutsService.GetUserWorkoutPlan(userId, planId);
+
+            return Ok(workout);
         }
 
         [HttpPost("register")]
