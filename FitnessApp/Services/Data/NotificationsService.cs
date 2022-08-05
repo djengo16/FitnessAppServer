@@ -10,9 +10,9 @@
             this.workoutsService = workoutsService;
         }
 
-        public bool IsTrainingDayNotification(string userId)
+        public bool IsTrainingDayNotification(string userId, string planId)
         {
-            var workoutPlan =  workoutsService.GetUserWorkoutPlan(userId);
+            var workoutPlan =  workoutsService.GetUserWorkoutPlan(userId, planId);
 
             foreach (var day in workoutPlan.WorkoutDays)
             {
