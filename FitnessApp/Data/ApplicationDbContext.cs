@@ -21,6 +21,7 @@
         public DbSet<ExerciseInWorkoutDay> ExercisesInWorkoutDays { get; set; }
         public DbSet<WorkoutDay> WorkoutDays { get; set; }
         public DbSet<WorkoutPlan> WorkoutPlans { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -30,6 +31,13 @@
         }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
             this.SaveChangesAsync(true, cancellationToken);
+        public override Task<int> SaveChangesAsync(
+            bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = default)
+        {
+            this.ApplyAuditInfoRules();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             // Needed for Identity models configuration
@@ -48,11 +56,6 @@
                 .HasOne(w => w.WorkoutDay)
                 .WithMany(e => e.ExercisesInWorkoutDays)
                 .HasForeignKey(w => w.WorkoutDayId);
-
-            //builder.Entity<WorkoutPlan>()
-            //    .HasOne(w => w.User)
-            //    .WithOne(u => u.WorkoutPlan)
-            //    .HasForeignKey(w => w.UserId)
 
 
             var entityTypes = builder.Model.GetEntityTypes().ToList();
