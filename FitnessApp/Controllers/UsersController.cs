@@ -6,6 +6,7 @@
     using FitnessApp.Services.Data;
     using FitnessApp.Services.Security;
     using FitnessApp.Services.ServiceConstants;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System.IdentityModel.Tokens.Jwt;
@@ -60,7 +61,7 @@
             return user;
         }
         
-        [HttpGet("/Users/workoutPlan")]
+        [HttpGet("workoutPlan")]
         public IActionResult GetUserWorkoutPlanDetails(string userId, string planId)
         {
             string activeUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -74,6 +75,15 @@
             var workout = workoutsService.GetUserWorkoutPlan(userId, planId);
 
             return Ok(workout);
+        }
+
+        [HttpGet("activePlanId")]
+        [Authorize]
+        public IActionResult GetUserActivePlanId(string userId)
+        {
+            var workoutId = usersService.GetActiveWorkoutPlanId(userId);
+
+            return Ok(workoutId);
         }
 
         [HttpPost("register")]
