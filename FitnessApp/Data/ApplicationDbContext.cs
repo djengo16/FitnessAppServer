@@ -97,11 +97,11 @@
                 var entity = (IAuditInfo)entry.Entity;
                 if (entry.State == EntityState.Added && entity.CreatedOn == default)
                 {
-                    entity.CreatedOn = DateTime.UtcNow;
+                    entity.CreatedOn = DateTime.Now;
                 }
                 else
                 {
-                    entity.ModifiedOn = DateTime.UtcNow;
+                    entity.ModifiedOn = DateTime.Now;
                 }
             }
         }
