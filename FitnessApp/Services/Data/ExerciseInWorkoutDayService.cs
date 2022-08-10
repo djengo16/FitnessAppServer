@@ -26,9 +26,6 @@ namespace FitnessApp.Services.Data
             await exerciseInWorkoutDayStorage.AddAsync(exercise);
             await exerciseInWorkoutDayStorage.SaveChangesAsync();
         }
-<<<<<<< Updated upstream
-=======
-
         public async Task DeleteAllWithExerciseId(int id)
         {
             var entities = exerciseInWorkoutDayStorage.All().Where(x => x.ExerciseId == id).ToList();
@@ -46,6 +43,6 @@ namespace FitnessApp.Services.Data
             exerciseInWorkoutDayStorage.Delete(exerciseToDelete);
             await exerciseInWorkoutDayStorage.SaveChangesAsync();
         }
->>>>>>> Stashed changes
+
     }
 }

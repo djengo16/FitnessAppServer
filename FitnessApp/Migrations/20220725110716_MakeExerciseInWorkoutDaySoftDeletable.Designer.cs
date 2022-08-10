@@ -4,6 +4,7 @@ using FitnessApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220725110716_MakeExerciseInWorkoutDaySoftDeletable")]
+    partial class MakeExerciseInWorkoutDaySoftDeletable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,42 +181,6 @@ namespace FitnessApp.Migrations
                     b.HasIndex("WorkoutDayId");
 
                     b.ToTable("ExercisesInWorkoutDays");
-                });
-
-            modelBuilder.Entity("FitnessApp.Models.Notification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Body")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsViewed")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RecepientId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecepientId");
-
-                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("FitnessApp.Models.WorkoutDay", b =>
@@ -425,15 +391,6 @@ namespace FitnessApp.Migrations
                     b.Navigation("Exercise");
 
                     b.Navigation("WorkoutDay");
-                });
-
-            modelBuilder.Entity("FitnessApp.Models.Notification", b =>
-                {
-                    b.HasOne("FitnessApp.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("RecepientId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FitnessApp.Models.WorkoutDay", b =>

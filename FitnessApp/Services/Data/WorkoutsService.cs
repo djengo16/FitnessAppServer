@@ -396,11 +396,11 @@
             return exercisesResult;
         }
 
-        public GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId)
+        public GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId, string planId)
         {
             var workoutPlan = workoutPlansStorage
                 .All()
-                .Where(x => x.UserId == userId)
+                .Where(x => x.Id == planId && x.UserId == userId)
                 .ProjectTo<GeneratedWorkoutPlanDTO>(this.mapper.ConfigurationProvider)
                 .FirstOrDefault();
 

@@ -18,6 +18,12 @@ namespace FitnessApp.Repositories
         protected ApplicationDbContext Context { get; set; }
 
         public virtual IQueryable<TEntity> All() => this.DbSet;
+        public virtual TEntity GetById(object id)
+        {
+            var item = this.DbSet.Find(id);
+
+            return item;
+        }
 
         public virtual IQueryable<TEntity> AllAsNoTracking() => this.DbSet.AsNoTracking();
 
