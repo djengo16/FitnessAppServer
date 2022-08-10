@@ -26,5 +26,26 @@ namespace FitnessApp.Services.Data
             await exerciseInWorkoutDayStorage.AddAsync(exercise);
             await exerciseInWorkoutDayStorage.SaveChangesAsync();
         }
+<<<<<<< Updated upstream
+=======
+
+        public async Task DeleteAllWithExerciseId(int id)
+        {
+            var entities = exerciseInWorkoutDayStorage.All().Where(x => x.ExerciseId == id).ToList();
+            entities.ForEach(x => exerciseInWorkoutDayStorage.Delete(x));
+
+            await exerciseInWorkoutDayStorage.SaveChangesAsync();
+        }
+
+        public async Task DeleteExerciseInWorkoutDay(int exerciseId, string workoutId)
+        {
+            var exerciseToDelete = exerciseInWorkoutDayStorage
+                .All()
+                .FirstOrDefault(x => x.ExerciseId == exerciseId && x.WorkoutDayId == workoutId);
+
+            exerciseInWorkoutDayStorage.Delete(exerciseToDelete);
+            await exerciseInWorkoutDayStorage.SaveChangesAsync();
+        }
+>>>>>>> Stashed changes
     }
 }
