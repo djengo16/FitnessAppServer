@@ -13,6 +13,8 @@
                 .ForMember(x => x.Description, y => y.MapFrom(t => t.Exercise.Description))
                 .ForMember(x => x.PictureResourceUrl, y => y.MapFrom(t => t.Exercise.PictureResourceUrl))
                 .ForMember(x => x.VideoResourceUrl, y => y.MapFrom(t => t.Exercise.VideoResourceUrl));
+
+            CreateMap<ExerciseInWorkoutDay, ExerciseInWorkoutDayDTO>();
         }
     }
 }
