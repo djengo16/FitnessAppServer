@@ -18,6 +18,7 @@
             }
             return take;
         }
+        public int GetTotalCount() => this.CurrentQuery.Count();
         public QueryBuilder<T> ApplyPagination(int? take = null, int skip = 0)
         {
             this.CurrentQuery = take.HasValue 

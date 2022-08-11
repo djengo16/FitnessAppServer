@@ -1,5 +1,6 @@
 ﻿using FitnessApp.Common;
 using FitnessApp.Dto.Exercises;
+using FitnessApp.Models.Enums;
 using FitnessApp.Services.Data;
 using FitnessApp.Services.ServiceConstants;
 using Microsoft.AspNetCore.Authorization;
@@ -18,19 +19,12 @@ namespace FitnessApp.Controllers
             this.exercisesService = exercisesService;
         }
         [HttpGet]
-        public ExercisesPageDTO Exercises(string search, int page, int count)
+        public ExercisesPageDTO Exercises(string search, int page, int count, Difficulty difficulty, MuscleGroup muscleGroup)
         {
             int skip = page != 1 ? (page - 1) * count : 0;
-            var exercises = exercisesService.GetExercises(search, take: count, skip);
+            var exercises = exercisesService.GetExercises(search, take: count, skip, difficulty, muscleGroup);
 
-            var dto = new ExercisesPageDTO()
-            {
-                Exercises = exercises.ToList(),
-                TotalData = search != null
-                    ? exercisesService.GetCountBySearchParams(search)
-                    : exercisesService.GetCount()
-            };
-            return dto;
+            return exercises;
         }
         [HttpGet("{id:int}")]
         [Authorize]
