@@ -39,6 +39,7 @@
 
             return Enum.GetValues(enumType)
                                    .Cast<int>()
+                                   .Where(x => x != 0)
                                    .Select(x => new KeyValuePair<int, string>(key: x, value: Enum.GetName(enumType, x)))
                                    .ToList();
         }

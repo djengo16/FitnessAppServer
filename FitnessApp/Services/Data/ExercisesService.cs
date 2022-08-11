@@ -38,19 +38,39 @@
             return exercise;
         }
 
-        public IEnumerable<ExerciseInListDTO> GetExercises(string searchParams, int? take = null, int skip = 0)
+        public ExercisesPageDTO GetExercises(
+            string searchParams, 
+            int? take = null, 
+            int skip = 0, 
+            Difficulty difficulty = 0, 
+            MuscleGroup muscleGroup = 0)
         {
             var exerciseQueryBuilder = new ExerciseQueryBuilder(exercisesStorage.All());
 
-            take = exerciseQueryBuilder.ApplySearch(searchParams).GetCount(take);
+            //take = exerciseQueryBuilder
+            //    .ApplyFilter(muscleGroup, difficulty)
+            //    .ApplySearch(searchParams)
+            //    .GetCount(take);
+
+            int totalCount = exerciseQueryBuilder
+                .ApplyFilter(muscleGroup, difficulty)
+                .ApplySearch(searchParams)
+                .GetTotalCount();
 
             var currentQuery =
             exerciseQueryBuilder
+                .ApplyFilter(muscleGroup, difficulty)
                 .ApplySearch(searchParams)
                 .ApplyPagination(take, skip)
                 .Build();
 
-            return currentQuery.ProjectTo<ExerciseInListDTO>(mapper.ConfigurationProvider).ToList();
+            var dto = new ExercisesPageDTO()
+            {
+                Exercises = currentQuery.ProjectTo<ExerciseInListDTO>(mapper.ConfigurationProvider).ToList(),
+                TotalData = totalCount,
+            };
+
+            return dto;
         }
 
         public int GetCount()

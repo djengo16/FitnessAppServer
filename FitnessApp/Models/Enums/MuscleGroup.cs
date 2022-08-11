@@ -2,6 +2,7 @@
 {
     public enum MuscleGroup
     {
+        Default = 0,
         Chest = 1,
         Back = 2,
         Shoulders = 3,
