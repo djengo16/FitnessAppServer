@@ -1,6 +1,8 @@
 ﻿namespace FitnessApp.Helper
 {
     using FitnessApp.Models;
+    using FitnessApp.Models.Enums;
+    using System.Collections.Generic;
 
     public class ExerciseQueryBuilder : QueryBuilder<Exercise>
     {
@@ -25,6 +27,23 @@
                             ? (x.Name.Contains(searchParams)
                             || (int)x.MuscleGroup == muscleGroup)
                             : true);
+            return this;
+        }
+        public  QueryBuilder<Exercise> ApplyFilter(MuscleGroup muscleGroup, Difficulty difficulty)
+        {
+            // When we get 0, we don't apply this filters, it's default values, so that means the user haven't filtered anything
+            if (muscleGroup != 0)
+            {
+                this.CurrentQuery = CurrentQuery
+                    .Where(x => x.MuscleGroup == muscleGroup);
+            }
+            if (difficulty != 0)
+            {
+                this.CurrentQuery = CurrentQuery
+                .Where(x => x.Difficulty == difficulty);
+                return this;
+            }
+
             return this;
         }
     }
