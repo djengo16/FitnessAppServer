@@ -25,5 +25,17 @@
 
             return currWorkoutDay.Id;
         }
+        public WorkoutDay GetById(string id) => this.workoutDaysStorage.GetById(id);
+
+        public List<int> GetExerciseIdsInWorkoutDay(string id)
+        {
+            return this.workoutDaysStorage
+                .AllAsNoTracking()
+                .Where(day => day.Id == id)
+                .SelectMany(day => day.ExercisesInWorkoutDays)
+                .Select(exercise => exercise.ExerciseId)
+                .ToList();
+                
+        }
     }
 }

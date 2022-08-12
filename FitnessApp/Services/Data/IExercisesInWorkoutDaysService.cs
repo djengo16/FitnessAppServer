@@ -8,5 +8,6 @@ namespace FitnessApp.Services.Data
 
         Task DeleteAllWithExerciseId(int exerciseId);
         Task DeleteExerciseInWorkoutDay(int exerciseId, string workoutId);
+        Task<GeneratedExerciseInWorkoutDayDTO> AddExerciseInWorkoutDayAsync(AddExerciseInWorkoutDayDTO dto);
     }
 }

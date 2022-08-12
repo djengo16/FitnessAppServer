@@ -42,15 +42,10 @@
             string searchParams, 
             int? take = null, 
             int skip = 0, 
-            Difficulty difficulty = 0, 
-            MuscleGroup muscleGroup = 0)
+            Difficulty difficulty = Difficulty.Default, 
+            MuscleGroup muscleGroup = MuscleGroup.Default)
         {
             var exerciseQueryBuilder = new ExerciseQueryBuilder(exercisesStorage.All());
-
-            //take = exerciseQueryBuilder
-            //    .ApplyFilter(muscleGroup, difficulty)
-            //    .ApplySearch(searchParams)
-            //    .GetCount(take);
 
             int totalCount = exerciseQueryBuilder
                 .ApplyFilter(muscleGroup, difficulty)
