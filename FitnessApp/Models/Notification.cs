@@ -15,7 +15,7 @@ namespace FitnessApp.Models
         public DateTime? ModifiedOn { get; set; }
 
         [ForeignKey("User")]
-        public string RecepientId { get; set; }
+        public string RecipientId { get; set; }
         public ApplicationUser User { get; set; }
     }
 }

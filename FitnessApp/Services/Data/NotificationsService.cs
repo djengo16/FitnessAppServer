@@ -32,7 +32,7 @@
 
             var notification = new Notification()
             {
-                RecepientId = userId,
+                RecipientId = userId,
                 Type = NotificationType.TrainingDay,
                 IsViewed = false,
                 Title = "Training day",
@@ -79,7 +79,7 @@
                 return null;
             }
 
-            var notification = notificationsStorage.All().FirstOrDefault(x => x.RecepientId == userId && x.CreatedOn.Date == DateTime.UtcNow.Date);
+            var notification = notificationsStorage.All().FirstOrDefault(x => x.RecipientId == userId && x.CreatedOn.Date == DateTime.UtcNow.Date);
 
             if (notification == null)
             {
