@@ -10,6 +10,6 @@ namespace FitnessApp.Dto.Notification
         public bool IsViewed { get; set; }
         public NotificationType Type { get; set; }
         public DateTime CreatedOn { get; set; }
-        public string RecepientId { get; set; }
+        public string RecipientId { get; set; }
     }
 }

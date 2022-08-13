@@ -2,7 +2,6 @@
 {
     using FitnessApp.Models.Common;
     using Microsoft.AspNetCore.Identity;
-    using System;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
