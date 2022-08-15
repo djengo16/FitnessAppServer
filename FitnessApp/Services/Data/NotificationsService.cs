@@ -72,6 +72,12 @@
         public async Task<NotificationResponseDTO> GetTrainingNotificationAsync(string userId)
         {
             var activePlanId = usersService.GetActiveWorkoutPlanId(userId);
+
+            if(activePlanId == null)
+            {
+                return null;
+            }
+
             var isTrainingDay = this.IsTrainingDayNotification(userId, activePlanId);
 
             if (!isTrainingDay)
