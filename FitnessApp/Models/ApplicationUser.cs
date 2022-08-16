@@ -11,6 +11,9 @@
 
         public string? Description { get; set; }
 
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+
         // Audit info
         public DateTime CreatedOn { get; set; }
 

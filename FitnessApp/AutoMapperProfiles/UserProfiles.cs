@@ -9,7 +9,8 @@
         public UserProfiles()
         {
             CreateMap<ApplicationUser, UserDTO>();
-            CreateMap<ApplicationUser, UserDetailsDTO>();
+            CreateMap<ApplicationUser, UserDetailsDTO>()
+                .ForMember(member => member.RegisteredOn, opt => opt.MapFrom(target => target.CreatedOn.ToShortDateString()));
         }
     }
 }
