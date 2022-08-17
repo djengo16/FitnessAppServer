@@ -149,11 +149,28 @@
         }
 
         [HttpPut("changepassword")]
+        [Authorize]
         public async Task<IActionResult> Put(ChangePasswordInputModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                BadRequest(string.Join(", ", errors));
+            }
+
             var user = await userManager.GetUserAsync(User);
 
-            await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            var changePasswordResult = await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+            if (!changePasswordResult.Succeeded)
+            {
+                List<string> errors = new List<string>();
+                foreach (var error in changePasswordResult.Errors)
+                {
+                    errors.Add(error.Description);
+                }
+                return BadRequest(string.Join(", ", errors));
+            }
 
             return this.Ok();
         }
