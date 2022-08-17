@@ -138,17 +138,41 @@
 
             await usersService.UpdateUserDetailsAsync(user, userId);
             
-            return this.NoContent();
+            return this.Ok();
+        }
+
+        [HttpPut("updatePicture")]
+        public async Task<IActionResult> UpdateProfilePicture(UpdateUserPictureDTO userDto)
+        {
+            await usersService.UpdateProfilePictureAsync(userDto.UserId, userDto.PictureUrl);
+            return this.Ok();
         }
 
         [HttpPut("changepassword")]
+        [Authorize]
         public async Task<IActionResult> Put(ChangePasswordInputModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                BadRequest(string.Join(", ", errors));
+            }
+
             var user = await userManager.GetUserAsync(User);
 
-            await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            var changePasswordResult = await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
 
-            return this.NoContent();
+            if (!changePasswordResult.Succeeded)
+            {
+                List<string> errors = new List<string>();
+                foreach (var error in changePasswordResult.Errors)
+                {
+                    errors.Add(error.Description);
+                }
+                return BadRequest(string.Join(", ", errors));
+            }
+
+            return this.Ok();
         }
 
         [HttpDelete("{id}")]
