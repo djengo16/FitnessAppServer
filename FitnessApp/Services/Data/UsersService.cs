@@ -69,11 +69,11 @@
         {
             var user = await userManager.FindByIdAsync(userId);
 
-            user.UserName = model.Username;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
             user.Email = model.Email;
             user.Description = model.Description;
-            user.ProfilePicture = model.ProfilePictureUrl;
-            user.PhoneNumber = model.PhoneNumber;
+            user.PhoneNumber = model.PhoneNumber.ToString();
 
             await userManager.UpdateAsync(user);
 
@@ -90,6 +90,19 @@
 
              this.usersRepository.All().FirstOrDefault(x => x.Id == userId).WorkoutPlanId = programId;
              await this.usersRepository.SaveChangesAsync();
+        }
+
+        public async Task UpdateProfilePictureAsync(string userId, string pictureUrl)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                throw new ArgumentException(ErrorMessages.UserWithIdDoNoNotExists);
+            }
+
+            user.ProfilePicture = pictureUrl;
+
+            await userManager.UpdateAsync(user);
         }
     }
 }

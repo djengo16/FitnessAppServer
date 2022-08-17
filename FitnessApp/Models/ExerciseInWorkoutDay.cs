@@ -3,7 +3,7 @@ using FitnessApp.Models.Enums;
 
 namespace FitnessApp.Models
 {
-    public class ExerciseInWorkoutDay : IDeletableEntity
+    public class ExerciseInWorkoutDay
     {
         public int ExerciseId { get; set; }
         public virtual Exercise Exercise { get; set; }
@@ -12,7 +12,5 @@ namespace FitnessApp.Models
         public int Sets { get; set; }
         public int MinReps { get; set; }
         public int MaxReps { get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedOn { get; set; }
     }
 }
