@@ -12,6 +12,7 @@
         Task<UserDetailsDTO> GetUserByIdAsync(string id);
 
         Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model, string userId);
+        Task UpdateProfilePictureAsync(string userId, string pictureUrl);
 
         Task DeleteUserAsync(string userId);
         Task AssignTrainingProgramToUser(string programId, string userId);

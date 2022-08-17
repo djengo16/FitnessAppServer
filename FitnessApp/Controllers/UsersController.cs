@@ -138,7 +138,14 @@
 
             await usersService.UpdateUserDetailsAsync(user, userId);
             
-            return this.NoContent();
+            return this.Ok();
+        }
+
+        [HttpPut("updatePicture")]
+        public async Task<IActionResult> UpdateProfilePicture(UpdateUserPictureDTO userDto)
+        {
+            await usersService.UpdateProfilePictureAsync(userDto.UserId, userDto.PictureUrl);
+            return this.Ok();
         }
 
         [HttpPut("changepassword")]
@@ -148,7 +155,7 @@
 
             await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
 
-            return this.NoContent();
+            return this.Ok();
         }
 
         [HttpDelete("{id}")]
