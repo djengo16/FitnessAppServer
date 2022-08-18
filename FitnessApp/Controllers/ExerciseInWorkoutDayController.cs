@@ -2,7 +2,6 @@
 using FitnessApp.Services.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace FitnessApp.Controllers
 {
@@ -16,17 +15,25 @@ namespace FitnessApp.Controllers
         {
             this.exerciseInWorkoutDayservice = exerciseInWorkoutDayservice;
         }
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> Add(AddExerciseInWorkoutDayDTO dto)
         {
-            var result = await exerciseInWorkoutDayservice.AddExerciseInWorkoutDayAsync(dto);
+            var result = await exerciseInWorkoutDayservice.AddAsync(dto);
             return Ok(result);
         }
         [HttpDelete("exercise/{exerciseId}/workoutDay/{workoutdayId}")]
         [Authorize]
         public async Task<IActionResult> Delete(int exerciseId, string workoutdayId)
         {
-            await exerciseInWorkoutDayservice.DeleteExerciseInWorkoutDay(exerciseId, workoutdayId);
+            await exerciseInWorkoutDayservice.DeleteAsync(exerciseId, workoutdayId);
+
+            return Ok();
+        }
+
+        [HttpPut("updateRange")]
+        public async Task<IActionResult> UpdateRange(ICollection<UpdateExerciseInWorkoutDayDTO> dtos)
+        {
+            await exerciseInWorkoutDayservice.UpdateRangeAsync(dtos);
 
             return Ok();
         }

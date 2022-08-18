@@ -99,7 +99,7 @@
                 throw new ArgumentException(ErrorMessages.ExerciseNotFound);
             }
 
-            await this.exerciseInWorkoutDayService.DeleteAllWithExerciseId(id);
+            await this.exerciseInWorkoutDayService.DeleteAllWithExerciseIdAsync(id);
 
             this.exercisesStorage.Delete(exercise);
 
