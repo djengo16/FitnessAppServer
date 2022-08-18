@@ -6,6 +6,7 @@
     using FitnessApp.Models.Enums;
     using FitnessApp.Models.Repositories;
     using FitnessApp.Services.ServiceConstants;
+    using System.Collections.Generic;
 
     public class ExerciseInWorkoutDayService : IExerciseInWorkoutDayService
     {
@@ -40,7 +41,7 @@
             await exerciseInWorkoutDayStorage.SaveChangesAsync();
         }
 
-        public async Task<GeneratedExerciseInWorkoutDayDTO> AddExerciseInWorkoutDayAsync(AddExerciseInWorkoutDayDTO dto)
+        public async Task<GeneratedExerciseInWorkoutDayDTO> AddAsync(AddExerciseInWorkoutDayDTO dto)
         {
             var exerciseIdsInWorkoutDay = this.workoutDaysService.GetExerciseIdsInWorkoutDay(dto.WorkoutDayId);
 
@@ -81,7 +82,7 @@
             };
         }
 
-        public async Task DeleteAllWithExerciseId(int id)
+        public async Task DeleteAllWithExerciseIdAsync(int id)
         {
             var entities = exerciseInWorkoutDayStorage.All().Where(x => x.ExerciseId == id).ToList();
             entities.ForEach(x => exerciseInWorkoutDayStorage.Delete(x));
@@ -89,7 +90,7 @@
             await exerciseInWorkoutDayStorage.SaveChangesAsync();
         }
 
-        public async Task DeleteExerciseInWorkoutDay(int exerciseId, string workoutId)
+        public async Task DeleteAsync(int exerciseId, string workoutId)
         {
             var exerciseToDelete = exerciseInWorkoutDayStorage
                 .All()
@@ -99,5 +100,19 @@
             await exerciseInWorkoutDayStorage.SaveChangesAsync();
         }
 
+        public async Task UpdateRangeAsync(ICollection<UpdateExerciseInWorkoutDayDTO> dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                var exercise = exerciseInWorkoutDayStorage.All()
+                .FirstOrDefault(x => x.ExerciseId == dto.ExerciseId && x.WorkoutDayId == dto.WorkoutDayId);
+
+                exercise.Sets = dto.Sets;
+                exercise.MinReps = dto.MinReps;
+                exercise.MaxReps = dto.MaxReps;
+                exerciseInWorkoutDayStorage.Update(exercise);
+            }
+            await exerciseInWorkoutDayStorage.SaveChangesAsync();
+        }
     }
 }

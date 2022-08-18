@@ -6,8 +6,9 @@ namespace FitnessApp.Services.Data
     {
         Task AddAsync(ExerciseInWorkoutDayDTO exerciseInWorkoutDayDTO);
 
-        Task DeleteAllWithExerciseId(int exerciseId);
-        Task DeleteExerciseInWorkoutDay(int exerciseId, string workoutId);
-        Task<GeneratedExerciseInWorkoutDayDTO> AddExerciseInWorkoutDayAsync(AddExerciseInWorkoutDayDTO dto);
+        Task DeleteAllWithExerciseIdAsync(int exerciseId);
+        Task DeleteAsync(int exerciseId, string workoutId);
+        Task<GeneratedExerciseInWorkoutDayDTO> AddAsync(AddExerciseInWorkoutDayDTO dto);
+        Task UpdateRangeAsync(ICollection<UpdateExerciseInWorkoutDayDTO> dto);
     }
 }
