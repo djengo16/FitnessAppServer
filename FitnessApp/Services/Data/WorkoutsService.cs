@@ -404,10 +404,13 @@
                 .ProjectTo<GeneratedWorkoutPlanDTO>(this.mapper.ConfigurationProvider)
                 .FirstOrDefault();
 
+            var activeId = usersService.GetActiveWorkoutPlanId(userId);
+
+            if(activeId == planId)
+                workoutPlan.IsActive = true;
+
             if(workoutPlan == null)
-            {
                 throw new ArgumentException(ErrorMessages.TrainingProgramIsNotAssigned);
-            }
 
             return workoutPlan;
         }

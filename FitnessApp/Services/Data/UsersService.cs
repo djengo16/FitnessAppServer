@@ -104,5 +104,8 @@
 
             await userManager.UpdateAsync(user);
         }
+
+        public string GetProfilePictureUrl(string userId) =>
+            usersRepository.GetById(userId).ProfilePicture;
     }
 }
