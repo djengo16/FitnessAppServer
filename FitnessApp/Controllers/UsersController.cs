@@ -148,6 +148,13 @@
             return this.Ok();
         }
 
+        [HttpGet("getProfilePicture/{id}")]
+        public string GetProfilePicture(string id)
+        {
+            var url = usersService.GetProfilePictureUrl(id);
+            return url;
+        }
+
         [HttpPut("changepassword")]
         [Authorize]
         public async Task<IActionResult> Put(ChangePasswordInputModel model)

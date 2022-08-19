@@ -13,6 +13,7 @@
 
         Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model, string userId);
         Task UpdateProfilePictureAsync(string userId, string pictureUrl);
+        string GetProfilePictureUrl(string userId);
 
         Task DeleteUserAsync(string userId);
         Task AssignTrainingProgramToUser(string programId, string userId);
