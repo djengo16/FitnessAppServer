@@ -16,6 +16,7 @@
         public const string UserWithEmailAlreadyExists = "User with this email already exists!";
         public const string AccesToPlanDenied = "Access to this workout plan is denied!";
         public const string ExerciseAlreadyInProgram = "This exercise is already in your program!";
+        public const string RoleNotExist = "Role with the given name do not exist!";
 
     }
 }
