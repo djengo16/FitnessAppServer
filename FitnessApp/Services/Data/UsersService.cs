@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using FitnessApp.Common;
     using FitnessApp.Dto.Users;
     using FitnessApp.Models;
     using FitnessApp.Models.Repositories;
@@ -12,14 +13,17 @@
     {
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IMapper mapper;
         public UsersService(
             IDeletableEntityRepository<ApplicationUser> usersRepository,
             UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IMapper mapper)
         {
             this.usersRepository = usersRepository;
             this.userManager = userManager;
+            this.roleManager = roleManager;
             this.mapper = mapper;
         }
 
@@ -36,7 +40,7 @@
             return mapper.Map<UserDetailsDTO>(user);
         }
 
-        public IEnumerable<UserDTO> GetUsers(string searchParams, int? take = null, int skip = 0)
+        public async Task<IEnumerable<UserDTO>> GetUsersAsync(string searchParams, int? take = null, int skip = 0)
         {
             var usersQueryModel = usersRepository
                 .All().Where(x => !string.IsNullOrEmpty(searchParams) 
@@ -50,7 +54,14 @@
             usersQueryModel = 
                 take.HasValue? usersQueryModel.Skip(skip).Take(take.Value) : usersQueryModel.Skip(skip);
 
-            return usersQueryModel.ProjectTo<UserDTO>(mapper.ConfigurationProvider).ToList();
+            var users =  usersQueryModel.ProjectTo<UserDTO>(mapper.ConfigurationProvider).ToList();
+
+            foreach(var user in users)
+            {
+                user.Role = await this.GetRoleNameAsync(user.Id);
+            }
+
+            return users;
         }
 
         public int GetCount()
@@ -107,5 +118,46 @@
 
         public string GetProfilePictureUrl(string userId) =>
             usersRepository.GetById(userId).ProfilePicture;
+
+        public async Task AssignRoleAsync(string userId, string roleName)
+        {
+            var role = await GetRoleAsync(roleName);
+            var user = await userManager.FindByIdAsync(userId);
+
+            await userManager.AddToRoleAsync(user, role.Name);
+        }
+
+        public async Task RemoveFromRoleAsync(string userId, string roleName)
+        {
+            var role = await GetRoleAsync(roleName);
+            var user = await userManager.FindByIdAsync(userId);
+
+            await userManager.RemoveFromRoleAsync(user, role.Name);
+        }
+
+        private async Task<IdentityRole> GetRoleAsync(string roleName)
+        {
+            var role = await roleManager.FindByNameAsync(roleName);
+
+            if(role == null)
+            {
+                throw new ArgumentException(ErrorMessages.RoleNotExist);
+            }
+
+            return role;
+        }
+
+        public async Task<string> GetRoleNameAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            var isAdmin = await userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+
+            if (isAdmin)
+            {
+                return GlobalConstants.AdministratorRoleName;
+            }
+
+            return "User";
+        }
     }
 }
