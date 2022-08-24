@@ -58,6 +58,22 @@
                 .HasForeignKey(w => w.WorkoutDayId);
 
 
+            builder.Entity<ExerciseInWorkoutDay>()
+                .HasKey(ew => new { ew.ExerciseId, ew.WorkoutDayId });
+
+            builder
+                .Entity<Message>()
+                .HasOne(m => m.Recipient)
+                .WithMany(r => r.RecievedMessages)
+                .HasForeignKey(m => m.RecipientId);
+
+            builder
+                .Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany(s => s.SentMessages)
+                .HasForeignKey(m => m.SenderId);
+
+
             var entityTypes = builder.Model.GetEntityTypes().ToList();
 
             // Set global query filter for not deleted entities only
