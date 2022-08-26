@@ -9,8 +9,6 @@
         public ConversationProfiles()
         {
             CreateMap<Conversation, ConversationDetailsDTO>();
-                //.ForMember(dest => dest.MuscleGroup, opt => opt.MapFrom(src => src.MuscleGroup.ToString()))
-                //.ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => src.Difficulty.ToString()));
         }
     }
 }
