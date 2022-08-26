@@ -22,6 +22,10 @@
         public DbSet<WorkoutDay> WorkoutDays { get; set; }
         public DbSet<WorkoutPlan> WorkoutPlans { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<UserConversations> UserConversations { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -72,6 +76,22 @@
                 .HasOne(m => m.Sender)
                 .WithMany(s => s.SentMessages)
                 .HasForeignKey(m => m.SenderId);
+
+            builder
+                .Entity<UserConversations>()
+                .HasKey(uc => new { uc.UserId, uc.ConversationId });
+
+            builder
+                .Entity<UserConversations>()
+                .HasOne(uc => uc.User)
+                .WithMany(u => u.UserConversations)
+                .HasForeignKey(uc => uc.UserId);
+
+            builder
+                .Entity<UserConversations>()
+                .HasOne(uc => uc.Conversation)
+                .WithMany(c => c.UserConversations)
+                .HasForeignKey(uc => uc.ConversationId);
 
 
             var entityTypes = builder.Model.GetEntityTypes().ToList();

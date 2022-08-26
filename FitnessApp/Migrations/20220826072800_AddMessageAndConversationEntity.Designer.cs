@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220824163501_AddMessageEntity")]
-    partial class AddMessageEntity
+    [Migration("20220826072800_AddMessageAndConversationEntity")]
+    partial class AddMessageAndConversationEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -120,6 +120,16 @@ namespace FitnessApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("FitnessApp.Models.Conversation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Conversations");
+                });
+
             modelBuilder.Entity("FitnessApp.Models.Exercise", b =>
                 {
                     b.Property<int>("Id")
@@ -195,8 +205,15 @@ namespace FitnessApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ConversationId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -211,11 +228,13 @@ namespace FitnessApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ConversationId");
+
                     b.HasIndex("RecipientId");
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Message");
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("FitnessApp.Models.Notification", b =>
@@ -252,6 +271,21 @@ namespace FitnessApp.Migrations
                     b.HasIndex("RecipientId");
 
                     b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.UserConversations", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConversationId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "ConversationId");
+
+                    b.HasIndex("ConversationId");
+
+                    b.ToTable("UserConversations");
                 });
 
             modelBuilder.Entity("FitnessApp.Models.WorkoutDay", b =>
@@ -466,6 +500,12 @@ namespace FitnessApp.Migrations
 
             modelBuilder.Entity("FitnessApp.Models.Message", b =>
                 {
+                    b.HasOne("FitnessApp.Models.Conversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("FitnessApp.Models.ApplicationUser", "Recipient")
                         .WithMany("RecievedMessages")
                         .HasForeignKey("RecipientId")
@@ -478,6 +518,8 @@ namespace FitnessApp.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Conversation");
+
                     b.Navigation("Recipient");
 
                     b.Navigation("Sender");
@@ -488,6 +530,25 @@ namespace FitnessApp.Migrations
                     b.HasOne("FitnessApp.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("RecipientId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.UserConversations", b =>
+                {
+                    b.HasOne("FitnessApp.Models.Conversation", "Conversation")
+                        .WithMany("UserConversations")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FitnessApp.Models.ApplicationUser", "User")
+                        .WithMany("UserConversations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
 
                     b.Navigation("User");
                 });
@@ -557,6 +618,15 @@ namespace FitnessApp.Migrations
                     b.Navigation("RecievedMessages");
 
                     b.Navigation("SentMessages");
+
+                    b.Navigation("UserConversations");
+                });
+
+            modelBuilder.Entity("FitnessApp.Models.Conversation", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("UserConversations");
                 });
 
             modelBuilder.Entity("FitnessApp.Models.Exercise", b =>

@@ -29,7 +29,6 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="Repositories\" />
-    <Folder Include="Services\Socket\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,7 +5,9 @@ using FitnessApp.Repositories;
 using FitnessApp.Seeding;
 using FitnessApp.Services.Data;
 using FitnessApp.Services.Security;
+using FitnessApp.Services.SocketService;
 using FitnessApp.Settings;
+using FitnessApp.Socket;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -38,12 +40,15 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
+builder.Services.AddSingleton<IWebSocketService, WebSocketService>();
+
 builder.Services.AddTransient<IUsersService, UsersService>();
 builder.Services.AddTransient<IWorkoutsService, WorkoutsService>();
 builder.Services.AddTransient<IWorkoutDaysService, WorkoutDaysService>();
 builder.Services.AddTransient<IExerciseInWorkoutDayService, ExerciseInWorkoutDayService>();
 builder.Services.AddTransient<INotificationsService, NotificationsService>();
 builder.Services.AddTransient<IExercisesService, ExercisesService>();
+builder.Services.AddTransient<IConversationService, ConversationService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
 
 
@@ -121,6 +126,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
+app.UseWebSockets(webSocketOptions);
 
 app.UseHttpsRedirection();
 app.UseCors(MyAllowSpecificOrigins);

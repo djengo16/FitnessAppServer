@@ -14,6 +14,13 @@ namespace FitnessApp.Models
         public ApplicationUser Recipient { get; set; }
 
         [Required]
+        public string ConversationId { get; set; }
+        public Conversation Conversation { get; set; }
+
+        public bool IsRead { get; set; } = false;
+
+        [Required]
         public string Body { get; set; }
     }
 }
+// Messages -> wher
