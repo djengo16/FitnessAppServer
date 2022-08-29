@@ -36,13 +36,13 @@
          * @params (search -> seach parameter, page -> current page, count -> data per page)
          */
         [HttpGet]
-        public UsersPageDTO Users(string search, int page, int count)
+        public async Task<UsersPageDTO> Users(string search, int page, int count)
         {
-            // GetUsers(string searchParams, int? take = null, int skip = 0)
+            // GetUsersAsync(string searchParams, int? take = null, int skip = 0)
             // If we are on page 2 we should skip page - 1's data * data (count per page)
             int skip = page != 1 ? (page - 1) * count : 0;
 
-            var users = usersService.GetUsers(search, take:count, skip);
+            var users = await usersService.GetUsersAsync(search, take:count, skip);
 
             var dto = new UsersPageDTO()
             {
@@ -139,6 +139,24 @@
             await usersService.UpdateUserDetailsAsync(user, userId);
             
             return this.Ok();
+        }
+
+        [HttpPut("assignToRole")]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> AssignToRole(UserUpdateRoleDTO user)
+        {
+            await usersService.AssignRoleAsync(user.UserId, user.Role);
+
+            return Ok();
+        }
+
+        [HttpPut("removeFromRole")]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> RemoveFrom(UserUpdateRoleDTO user)
+        {
+            await usersService.RemoveFromRoleAsync(user.UserId, user.Role);
+
+            return Ok();
         }
 
         [HttpPut("updatePicture")]

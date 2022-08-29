@@ -158,7 +158,7 @@
                 .Add(cardioExercise);
         }
 
-        /* Create workout day considering totalWorkoutDays, user (goal, experience)
+        /* CreateAsync workout day considering totalWorkoutDays, user (goal, experience)
          * Avg exercise count per muscle is 4 by my opinion (after looking at several programs)
          * we can manipulate this considering input data
          * 

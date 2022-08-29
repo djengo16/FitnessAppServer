@@ -1,11 +1,10 @@
 ﻿namespace FitnessApp.Services.Data
 {
     using FitnessApp.Dto.Users;
-    using FitnessApp.Models;
 
     public interface IUsersService
     {
-        IEnumerable<UserDTO> GetUsers(string searchParams, int? take = null, int skip = 0);
+        Task<IEnumerable<UserDTO>> GetUsersAsync(string searchParams, int? take = null, int skip = 0);
         int GetCount();
         string GetActiveWorkoutPlanId(string userId);
         int GetCountBySearchParams(string searchParams);
@@ -17,5 +16,8 @@
 
         Task DeleteUserAsync(string userId);
         Task AssignTrainingProgramToUser(string programId, string userId);
+        Task AssignRoleAsync(string userId, string roleName);
+        Task RemoveFromRoleAsync(string userId, string roleName);
+        Task<string> GetRoleNameAsync(string userId);
     }
 }
