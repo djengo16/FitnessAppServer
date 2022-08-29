@@ -7,7 +7,6 @@ using FitnessApp.Services.Data;
 using FitnessApp.Services.Security;
 using FitnessApp.Services.SocketService;
 using FitnessApp.Settings;
-using FitnessApp.Socket;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +48,7 @@ builder.Services.AddTransient<IExerciseInWorkoutDayService, ExerciseInWorkoutDay
 builder.Services.AddTransient<INotificationsService, NotificationsService>();
 builder.Services.AddTransient<IExercisesService, ExercisesService>();
 builder.Services.AddTransient<IConversationService, ConversationService>();
+builder.Services.AddTransient<IMessagesService, MessagesService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
 
 
