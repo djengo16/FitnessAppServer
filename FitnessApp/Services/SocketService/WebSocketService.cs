@@ -9,13 +9,13 @@
 
     public class WebSocketService : IWebSocketService
     {
-        private readonly IMessagesService messagesService;
+        private readonly IServiceProvider serviceProvider;
         private ConcurrentDictionary<string, List<WebSocket>> _sockets;
 
-        public WebSocketService(IMessagesService messagesService)
+        public WebSocketService(IServiceProvider serviceProvider)
         {
             _sockets = new ConcurrentDictionary<string,List<WebSocket>>();
-            this.messagesService = messagesService;
+            this.serviceProvider = serviceProvider;
         }
 
         public async Task OnConnect(string socketId, WebSocket socket)
@@ -48,11 +48,18 @@
 
             while (!receiveResult.CloseStatus.HasValue)
             {
+                //foreach the socket list with socketId key
                 foreach (var socket in _sockets[socketId])
                 {
                     //from byte array -> json -> to c# object
                     var message = DeserializeMessage(buffer, receiveResult.Count);
-                    await messagesService.CreateAsync(message);
+
+                    using (var scope = serviceProvider.CreateScope())
+                    {
+                        var messagesService = scope.ServiceProvider.GetRequiredService<IMessagesService>();
+                        await messagesService.CreateAsync(message);
+                    }
+                   
 
                     await socket.SendAsync(
                         new ArraySegment<byte>(buffer, 0, receiveResult.Count),
