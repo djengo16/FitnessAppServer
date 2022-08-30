@@ -72,10 +72,8 @@
                     new ArraySegment<byte>(buffer), CancellationToken.None);
             }
 
-            await webSocket.CloseAsync(
-                receiveResult.CloseStatus.Value,
-                receiveResult.CloseStatusDescription,
-                CancellationToken.None);
+            //Remove socket from the list and close the connection
+            await OnClose(socketId, webSocket, receiveResult);
         }
 
         private MessageResponseDTO DeserializeMessage(byte[] buffer, int resultCount)
@@ -87,6 +85,16 @@
 
             MessageResponseDTO messageData = JsonConvert.DeserializeObject<MessageResponseDTO>(json);
             return messageData;
+        }
+
+        private async Task OnClose(string socketId, WebSocket webSocket, WebSocketReceiveResult receiveResult) 
+        {
+            _sockets[socketId].Remove(webSocket);
+
+            await webSocket.CloseAsync(
+                receiveResult.CloseStatus.Value,
+                receiveResult.CloseStatusDescription,
+                CancellationToken.None);
         }
     }
 }
