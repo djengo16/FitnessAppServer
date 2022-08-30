@@ -48,19 +48,13 @@
 
             while (!receiveResult.CloseStatus.HasValue)
             {
+
+                //from byte array -> json -> to c# object     
+                var message = DeserializeMessage(buffer, receiveResult.Count);
+
                 //foreach the socket list with socketId key
                 foreach (var socket in _sockets[socketId])
-                {
-                    //from byte array -> json -> to c# object
-                    var message = DeserializeMessage(buffer, receiveResult.Count);
-
-                    using (var scope = serviceProvider.CreateScope())
-                    {
-                        var messagesService = scope.ServiceProvider.GetRequiredService<IMessagesService>();
-                        await messagesService.CreateAsync(message);
-                    }
-                   
-
+                {        
                     await socket.SendAsync(
                         new ArraySegment<byte>(buffer, 0, receiveResult.Count),
                         receiveResult.MessageType,
@@ -68,6 +62,15 @@
                         CancellationToken.None);
                 }
 
+                //After sending the message to all the subscribed participants
+                //we save the message to the db
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    var messagesService = scope.ServiceProvider.GetRequiredService<IMessagesService>();
+                    await messagesService.CreateAsync(message);
+                }
+
+                //Waiting for a new message to continue the while cycle
                 receiveResult = await webSocket.ReceiveAsync(
                     new ArraySegment<byte>(buffer), CancellationToken.None);
             }
