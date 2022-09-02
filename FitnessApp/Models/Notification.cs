@@ -14,8 +14,15 @@ namespace FitnessApp.Models
         public DateTime CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
 
-        [ForeignKey("User")]
+        /// <summary>
+        /// Optional property, in case we need it for some page redirection.
+        /// Example: We got a notification for unread message from random User,
+        /// we need this id to redirect the current user to messages page with the user from whom we received the messages
+        /// </summary>
+        public string RedirectId { get; set; }
+
+        [ForeignKey("Recipient")]
         public string RecipientId { get; set; }
-        public ApplicationUser User { get; set; }
+        public ApplicationUser Recipient { get; set; }
     }
 }

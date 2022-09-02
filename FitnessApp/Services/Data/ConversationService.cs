@@ -27,7 +27,7 @@ namespace FitnessApp.Services.Data
         public async Task<ConversationDetailsDTO> GetOrCreateAsync(string currentParticipantId, string targetParticipantId)
         {
             // Gets the conversation where the current and target user participates
-            var convo = conversationStorage
+            var conversation = conversationStorage
                 .All()
                 .Where(x => 
                        x.UserConversations.Any(x => x.UserId == currentParticipantId) 
@@ -35,17 +35,17 @@ namespace FitnessApp.Services.Data
                 .ProjectTo<ConversationDetailsDTO>(this.mapper.ConfigurationProvider)
                 .FirstOrDefault();
             
-            //If the convo is not null -> return it
-            if(convo != null)
+            //If the conversation is not null -> return it
+            if(conversation != null)
             {
-                return convo;
+                return conversation;
             }
 
-            //If the convo is null create a new one -> then return it
+            //If the conversation is null create a new one -> then return it
             string createdConvoId = await this.CreateAsync(currentParticipantId, targetParticipantId);
-            convo = mapper.Map<ConversationDetailsDTO>(GetById(createdConvoId));
+            conversation = mapper.Map<ConversationDetailsDTO>(GetById(createdConvoId));
 
-            return convo;
+            return conversation;
         }
 
         /// <summary>

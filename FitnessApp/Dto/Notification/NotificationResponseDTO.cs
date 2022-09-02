@@ -11,5 +11,6 @@ namespace FitnessApp.Dto.Notification
         public NotificationType Type { get; set; }
         public DateTime CreatedOn { get; set; }
         public string RecipientId { get; set; }
+        public string RedirectId { get; set; }
     }
 }
