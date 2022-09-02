@@ -19,5 +19,6 @@
         Task AssignRoleAsync(string userId, string roleName);
         Task RemoveFromRoleAsync(string userId, string roleName);
         Task<string> GetRoleNameAsync(string userId);
+        Task<string> GetUserEmailAsync(string userId);
     }
 }
