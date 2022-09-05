@@ -159,5 +159,12 @@
 
             return "User";
         }
+
+        public async Task<string> GetUserEmailAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+
+            return user.Email;
+        }
     }
 }
