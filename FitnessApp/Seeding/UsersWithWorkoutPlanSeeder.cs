@@ -13,6 +13,10 @@
         private readonly ICollection<UserTrainingProgramCombinationDTO> combinations;
 
         private const string DefaultPassword = "asd123";
+        private string[] FirstNames = new string[]
+        {"George", "Peter", "Ivan", "Stephan", "Vasil", "Alex", "David", "Teodor", "Metodi", "Hristo"};
+        private string[] LastNames = new string[]
+        {"Ivanov", "Petrov", "Stoqnov", "Stefanov", "Vasilev", "Alexandrov", "Kaloqnov", "Grozev", "Dimitrov", "Iliqnov"};
 
         public UsersWithWorkoutPlanSeeder()
         {
@@ -34,11 +38,14 @@
 
             int userCounter = 1;
 
+            Random rnd = new Random();
             foreach (var combination in combinations)
             {
                 var user = new ApplicationUser()
                 {
                     Email = $"user{userCounter}@sample.com",
+                    FirstName = FirstNames[rnd.Next(0, FirstNames.Length)],
+                    LastName = LastNames[rnd.Next(0, LastNames.Length)],
                     UserName = $"user{userCounter}",
                 };
 

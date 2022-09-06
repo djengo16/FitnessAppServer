@@ -98,7 +98,9 @@
             var user = new ApplicationUser()
             {
                 Email = userInput.Email,
-                UserName = userInput.Email
+                UserName = userInput.Email,
+                FirstName = userInput.FirstName,
+                LastName = userInput.LastName,
             };
 
             var result = await this.userManager.CreateAsync(user, userInput.Password);
