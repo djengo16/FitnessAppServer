@@ -2,7 +2,6 @@
 {
     using FitnessApp.Models;
     using FitnessApp.Models.Enums;
-    using System.Collections.Generic;
 
     public class ExerciseQueryBuilder : QueryBuilder<Exercise>
     {

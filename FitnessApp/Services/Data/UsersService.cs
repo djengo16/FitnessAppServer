@@ -44,7 +44,12 @@
         {
             var usersQueryModel = usersRepository
                 .All().Where(x => !string.IsNullOrEmpty(searchParams) 
-                ? x.Email.Contains(searchParams) : true);
+                ? 
+                 (x.Email.Contains(searchParams) 
+                    || x.FirstName.Contains(searchParams) 
+                    || x.LastName.Contains(searchParams))
+                : 
+                true);
 
             if (usersQueryModel.Count() < take)
             {
@@ -73,7 +78,9 @@
         public int GetCountBySearchParams(string searchParams)
 
         {
-            return this.usersRepository.All().Where(entityt => entityt.Email.Contains(searchParams)).Count();
+            return this.usersRepository.All().Where(x => x.Email.Contains(searchParams)
+                    || x.FirstName.Contains(searchParams)
+                    || x.LastName.Contains(searchParams)).Count();
         }
 
         public async Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model, string userId)
@@ -160,11 +167,18 @@
             return "User";
         }
 
-        public async Task<string> GetUserEmailAsync(string userId)
+        public async Task<string> GetEmailAsync(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
 
             return user.Email;
+        }
+
+        public async Task<string> GetNameAsync(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+
+            return $"{user.FirstName} {user.LastName}";
         }
     }
 }

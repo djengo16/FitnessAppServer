@@ -113,7 +113,7 @@
             }
 
             //Since we passed the checks above and got here, this means that the notification does not
-            //exists neither in the _notifications fields nor in the DB and we have to create one
+            //exists neither in the _notifications field nor in the DB and we have to create one
             
             //Get value if there is entry with this key othervise set null to notifications
             this._notifications.TryGetValue(message.ConversationId, out List<Notification> notifications);

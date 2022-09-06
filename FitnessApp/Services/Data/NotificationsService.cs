@@ -48,8 +48,8 @@
 
         public async Task<Notification> CreateUnreadMessageNotification(string recipientId, string senderId)
         {
-            var senderEmail = await this.usersService.GetUserEmailAsync(senderId);
-            var notificationBody = $"You have unread messages from {senderEmail}.";
+            var senderName = await this.usersService.GetNameAsync(senderId);
+            var notificationBody = $"You have unread messages from {senderName}.";
 
             var notification = new Notification()
             {

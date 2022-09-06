@@ -135,6 +135,7 @@
 
         private void AddCardioToLeastBusyDay(ICollection<WorkoutDay> workoutDays, Difficulty difficulty)
         {
+
             var cardioExercises = _exercises
                 .AllAsNoTracking()
                 .Where(x => x.Difficulty == difficulty && x.MuscleGroup == MuscleGroup.Cardio)

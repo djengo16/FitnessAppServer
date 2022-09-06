@@ -53,6 +53,7 @@ namespace FitnessApp.Controllers
                 return BadRequest(this.ModelState.Select(x => x.Value.Errors).ToList());
             }
         }
+
         [HttpPut("update")]
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Update(ExerciseUpdateDTO exercise)
