@@ -5,6 +5,6 @@ namespace FitnessApp.Services.SocketService
 {
     public interface IWebSocketService
     {
-        Task OnConnect(string socketId, WebSocket socket);
+        Task OnConnectAsync(string socketId, WebSocket socket);
     }
 }

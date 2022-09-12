@@ -18,6 +18,7 @@ namespace FitnessApp.Controllers
         {
             this.exercisesService = exercisesService;
         }
+
         [HttpGet]
         public ExercisesPageDTO Exercises(string search, int page, int count, Difficulty difficulty, MuscleGroup muscleGroup)
         {
@@ -26,6 +27,7 @@ namespace FitnessApp.Controllers
 
             return exercises;
         }
+
         [HttpGet("{id:int}")]
         [Authorize]
         public ActionResult<ExerciseDTО> Get(int id)

@@ -11,7 +11,9 @@
     public class WebSocketService : IWebSocketService
     {
         private readonly IServiceProvider serviceProvider;
-        private ConcurrentDictionary<string, List<WebSocket>> _sockets;
+
+        //communicationId with value list of sockets
+        private ConcurrentDictionary<string, List<WebSocket>> _communications;
 
         // key: communication Id / value: notifications
         private Dictionary<string, List<Notification>> _notifications;
@@ -19,33 +21,24 @@
         public WebSocketService(IServiceProvider serviceProvider)
         {
             _notifications = new Dictionary<string, List<Notification>>();
-            _sockets = new ConcurrentDictionary<string, List<WebSocket>>();
+            _communications = new ConcurrentDictionary<string, List<WebSocket>>();
             this.serviceProvider = serviceProvider;
         }
 
-        public async Task OnConnect(string socketId, WebSocket socket)
+        public async Task OnConnectAsync(string communicationId, WebSocket socket)
         {
-            if (socketId == null)
-            {
-                socketId = Guid.NewGuid().ToString();
-            }
-
-            var currKey = _sockets.Keys.Where(x => x == socketId).FirstOrDefault();
+            var currKey = _communications.Keys.Where(x => x == communicationId).FirstOrDefault();
 
             if (currKey == null)
             {
-                var currSockets = new List<WebSocket>() { socket };
-                _sockets.TryAdd(socketId, currSockets);
-            }
-            else
-            {
-                _sockets[currKey].Add(socket);
+                AddCommunication(communicationId);
             }
 
-            await Comunicate(socketId, socket);
+            AddSocketToCommunication(communicationId, socket);
+
+            await ComunicateAsync(communicationId, socket);
         }
-
-        private async Task Comunicate(string socketId, WebSocket webSocket)
+        private async Task ComunicateAsync(string communicationId, WebSocket webSocket)
         {
             var buffer = new byte[1024 * 4];
             var receiveResult = await webSocket.ReceiveAsync(
@@ -57,8 +50,8 @@
                 //from byte array -> json -> to c# object     
                 var message = DeserializeMessage(buffer, receiveResult.Count);
 
-                //foreach the socket list with socketId key
-                foreach (var socket in _sockets[socketId])
+                //foreach the socket list with communicationId key
+                foreach (var socket in _communications[communicationId])
                 {
                     await socket.SendAsync(
                         new ArraySegment<byte>(buffer, 0, receiveResult.Count),
@@ -69,7 +62,7 @@
 
                 //After sending the message to all the subscribed participants
                 //we save the message to the db
-                await HandleMessageCreation(message);
+                await HandleMessageCreationAsync(message);
 
 
                 //Waiting for a new message to continue the while cycle
@@ -78,10 +71,10 @@
             }
 
             //Remove socket from the list and close the connection
-            await OnClose(socketId, webSocket, receiveResult);
+            await OnClose(communicationId, webSocket, receiveResult);
         }
 
-        private async Task HandleMessageCreation(MessageResponseDTO message)
+        private async Task HandleMessageCreationAsync(MessageResponseDTO message)
         {
             using var scope = serviceProvider.CreateScope();
 
@@ -89,13 +82,15 @@
             var messagesService = scope.ServiceProvider.GetRequiredService<IMessagesService>();
             await messagesService.CreateAsync(message);
 
-            var notificationService = scope.ServiceProvider.GetRequiredService<INotificationsService>();
+           await this.NotifyAsync(message);
 
+        }
+        private async Task NotifyAsync(MessageResponseDTO message)
+        {
 
-            var socket = this._sockets[message.ConversationId];
-
+            var socket = this._communications[message.ConversationId];
             //They both opened the chat, we don't have to notify none of them
-            if(socket.Count > 1)
+            if (socket.Count > 1)
             {
                 return;
             }
@@ -106,6 +101,11 @@
                 return;
             }
 
+            //Create scope 
+            using var scope = serviceProvider.CreateScope();
+
+            var notificationService = scope.ServiceProvider.GetRequiredService<INotificationsService>();
+
             //Check the database
             if (notificationService.CheckUnreadMessageNotificationExistence(message.SenderId, message.RecipientId))
             {
@@ -114,12 +114,12 @@
 
             //Since we passed the checks above and got here, this means that the notification does not
             //exists neither in the _notifications field nor in the DB and we have to create one
-            
+
             //Get value if there is entry with this key othervise set null to notifications
             this._notifications.TryGetValue(message.ConversationId, out List<Notification> notifications);
 
             //If it's null add new list
-            if(notifications == null)
+            if (notifications == null)
             {
                 this._notifications.TryAdd(message.ConversationId, new List<Notification>());
             }
@@ -133,23 +133,23 @@
         {
             char[] chars = new char[resultCount];
             Decoder d = Encoding.UTF8.GetDecoder();
-            int charLen = d.GetChars(buffer, 0, resultCount, chars, 0);
+            d.GetChars(buffer, 0, resultCount, chars, 0);
             string json = new string(chars);
 
             MessageResponseDTO messageData = JsonConvert.DeserializeObject<MessageResponseDTO>(json);
             return messageData;
         }
 
-        private async Task OnClose(string socketId, WebSocket webSocket, WebSocketReceiveResult receiveResult)
+        private async Task OnClose(string communicationId, WebSocket webSocket, WebSocketReceiveResult receiveResult)
         {
-            _sockets[socketId].Remove(webSocket);
+            _communications[communicationId].Remove(webSocket);
 
             await webSocket.CloseAsync(
                 receiveResult.CloseStatus.Value,
                 receiveResult.CloseStatusDescription,
                 CancellationToken.None);
 
-            _notifications.Remove(socketId);
+            _notifications.Remove(communicationId);
         }
 
         /// <summary>
@@ -183,6 +183,15 @@
             //If the above checks are passed, this means that the 
             //notification already exists this class's _notifications field
             return true;
+        }
+        private void AddCommunication(string communicationId)
+        {
+            var currSockets = new List<WebSocket>();
+            _communications.TryAdd(communicationId, currSockets);
+        }
+        private void AddSocketToCommunication(string communicationId, WebSocket socket)
+        {
+            _communications[communicationId].Add(socket);
         }
     }
 }

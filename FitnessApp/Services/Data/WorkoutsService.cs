@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using FitnessApp.Data;
     using FitnessApp.Dto.ExerciseInWorkoutDay;
     using FitnessApp.Dto.WorkoutDays;
     using FitnessApp.Dto.Workouts;
@@ -311,20 +310,24 @@
             {
                 exercisesInWorkoutDay
                     .AddRange(GetSpecificExercisesForWorkoutDay(
-                        currBodyPartHardExercises, exercisesCount - 1,
+                        currBodyPartHardExercises, exercisesCount,
                         sets, minRepsHardExercise, minRepsMediumExercise));
             }
             if (inputModel.Difficulty == Difficulty.Medium)
             {
                 exercisesInWorkoutDay
                     .AddRange(GetSpecificExercisesForWorkoutDay(
-                        currBodyPartMediumExercises, exercisesCount - 2,
+                        currBodyPartMediumExercises, 1,
+                        sets, minRepsMediumExercise, maxRepsMediumExercise));
+                exercisesInWorkoutDay
+                    .AddRange(GetSpecificExercisesForWorkoutDay(
+                        currBodyPartMediumExercises, exercisesCount,
                         sets, minRepsMediumExercise, maxRepsMediumExercise));
             }
 
             exercisesInWorkoutDay
                 .AddRange(GetSpecificExercisesForWorkoutDay(
-                    currBodyPartMediumExercises, exercisesCount - 1,
+                    currBodyPartMediumExercises, exercisesCount,
                     sets, minRepsMediumExercise, maxRepsMediumExercise));
             exercisesInWorkoutDay
                 .AddRange(GetSpecificExercisesForWorkoutDay(

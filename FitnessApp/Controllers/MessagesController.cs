@@ -21,7 +21,7 @@
             if (HttpContext.WebSockets.IsWebSocketRequest)
             {
                 using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-                await webSocketService.OnConnect(id, webSocket);
+                await webSocketService.OnConnectAsync(id, webSocket);
             }
             else
             {
