@@ -29,17 +29,14 @@
                     MuscleGroup = importedExercise.MuscleGroup,
                     Difficulty = importedExercise.Difficulty,
                 };
-
                 if (importedExercise.Description != null && importedExercise.Description.Length != 0)
                 {
                     exercise.Description = String.Join("\n", importedExercise.Description).ToString();
                 }
-
                 if (!String.IsNullOrEmpty(importedExercise.PictureResourceUrl))
                 {
                     exercise.PictureResourceUrl = importedExercise.PictureResourceUrl;
                 }
-
                 if (!String.IsNullOrEmpty(importedExercise.VideoResourceUrl))
                 {
                     exercise.VideoResourceUrl = importedExercise.VideoResourceUrl;

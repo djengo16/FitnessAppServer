@@ -346,13 +346,13 @@
 
             if (inputModel.Goal == Goal.LoseWeight)
             {
-                minReps = 12;
-                maxReps = 16;
+                minReps = WorkoutConstants.AvgExerciseMinReps;
+                maxReps = WorkoutConstants.AvgExerciseMaxRepsLose;
             }
             else if (inputModel.Goal == Goal.GainMuscle)
             {
-                minReps = 6;
-                maxReps = 10;
+                minReps = WorkoutConstants.AvgExerciseMinRepsGain;
+                maxReps = WorkoutConstants.AvgExerciseMaxRepsGain;
             }
         }
         private int CalculateSetsByDifficulty(WorkoutGenerationInputModel inputModel)
