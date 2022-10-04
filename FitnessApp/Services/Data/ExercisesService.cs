@@ -6,7 +6,6 @@
     using FitnessApp.Models;
     using FitnessApp.Models.Enums;
     using FitnessApp.Models.Repositories;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using FitnessApp.Helper;
     using FitnessApp.Services.ServiceConstants;

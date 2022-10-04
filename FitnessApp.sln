@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessApp.Tests", "FitnessAppTests\FitnessApp.Tests.csproj", "{90CDED73-D6CE-4130-B211-388E35E66EAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{BE6465A6-3F0A-41CE-BA34-123DFC977297}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE6465A6-3F0A-41CE-BA34-123DFC977297}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE6465A6-3F0A-41CE-BA34-123DFC977297}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90CDED73-D6CE-4130-B211-388E35E66EAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90CDED73-D6CE-4130-B211-388E35E66EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90CDED73-D6CE-4130-B211-388E35E66EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90CDED73-D6CE-4130-B211-388E35E66EAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
