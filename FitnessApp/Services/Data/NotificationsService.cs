@@ -8,7 +8,6 @@
     using FitnessApp.Models.Enums;
     using FitnessApp.Models.Repositories;
 
-
     public class NotificationsService : INotificationsService
     {
         private readonly IWorkoutsService workoutsService;
@@ -29,8 +28,7 @@
         }
 
         public async Task<Notification> CreateTrainingDayNotificationAsync(string userId)
-        {
-
+        {           
             var notification = new Notification()
             {
                 RecipientId = userId,
@@ -44,6 +42,46 @@
             await notificationsStorage.SaveChangesAsync();
 
             return notification;
+        }
+        /// <summary>
+        /// Checks if it's training day.
+        /// Checks if notification of type training day already exist.
+        /// Creates new notification if the checks are passed.
+        /// </summary>
+        /// <param name="userId">Target user</param>
+        /// <param name="trainingDayId">User's training day id</param>
+        /// <returns></returns>
+        public async Task<Notification> SetupTrainingDayNotification(string userId, string activePlanId)
+        {
+            bool itsTrainingDay = workoutsService.IsTrainingDay(userId, activePlanId);
+
+            if (!itsTrainingDay)
+            {
+                return null;
+            }
+
+            bool itsExisting = DoesUnreadNotificationExist(NotificationType.TrainingDay, userId);
+
+            if (itsExisting)
+            {
+                return null;
+            }
+
+            var notification = await CreateTrainingDayNotificationAsync(userId);
+
+            return notification;
+        }
+
+        public bool DoesUnreadNotificationExist(NotificationType type, string userId)
+        {
+            var notification = notificationsStorage
+                .All()
+                .FirstOrDefault(x => x.RecipientId == userId
+                && x.CreatedOn.Date == DateTime.UtcNow.Date
+                && x.IsViewed == false
+                && x.Type == type);
+
+            return notification != null;
         }
 
         public async Task<Notification> CreateUnreadMessageNotification(string recipientId, string senderId)
@@ -89,22 +127,6 @@
             await this.notificationsStorage.SaveChangesAsync();
         }
 
-
-        public bool IsTrainingDayNotification(string userId, string planId)
-        {
-            var workoutPlan = workoutsService.GetUserWorkoutPlan(userId, planId);
-
-            foreach (var day in workoutPlan.WorkoutDays)
-            {
-                if (day.Day == DateTime.Today.DayOfWeek)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         /// <summary>
         /// Checks if unread message notification already exists for this sender and recipient.
         /// </summary>
@@ -124,70 +146,16 @@
         }
         public async Task<List<NotificationResponseDTO>> GetAllByRecipientId(string recipientId)
         {
-            var notifications = new List<NotificationResponseDTO>();
-            var trainingDayNotification = await this.GetTrainingNotificationAsync(recipientId);
-            var unreadMessageNotification = this.GetUnreadMessageNotifications(recipientId);
-
-            if(trainingDayNotification != null)
-            {
-                notifications.Add(trainingDayNotification);
-            }
-
-            if(unreadMessageNotification != null)
-            {
-                notifications.AddRange(unreadMessageNotification);
-            }
-
-            return notifications;
-        }
-        private List<NotificationResponseDTO> GetUnreadMessageNotifications(string userId)
-        {
-            var notifications = this.notificationsStorage
+            var notifications = notificationsStorage
                 .All()
-                .Where(x => x.RecipientId == userId
-                 && x.Type == NotificationType.UnreadMessage
+                .Where(x => x.RecipientId == recipientId
                  && x.IsViewed == false)
+                .OrderBy(x => x.CreatedOn)
                 .ProjectTo<NotificationResponseDTO>(this.mapper.ConfigurationProvider)
                 .ToList();
 
+
             return notifications;
-        }
-
-        private async Task<NotificationResponseDTO> GetTrainingNotificationAsync(string userId)
-        {
-            var activePlanId = usersService.GetActiveWorkoutPlanId(userId);
-
-            if(activePlanId == null)
-            {
-                return null;
-            }
-
-            var isTrainingDay = this.IsTrainingDayNotification(userId, activePlanId);
-
-            if (!isTrainingDay)
-            {
-                return null;
-            }
-
-            var notification = notificationsStorage
-                .All()
-                .FirstOrDefault(x => x.RecipientId == userId 
-                && x.CreatedOn.Date == DateTime.UtcNow.Date
-                && x.Title == NotificationConstants.TrainingDayNotificationTitle);
-
-            if (notification != null && notification.IsViewed)
-            { 
-                return null;
-            }
-
-            if (notification == null)
-            {
-                notification = await CreateTrainingDayNotificationAsync(userId);
-            }
-
-
-            return mapper.Map<NotificationResponseDTO>(notification);
-
         }
     }
 }

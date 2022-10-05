@@ -137,7 +137,7 @@
 
             var cardioExercises = _exercises
                 .AllAsNoTracking()
-                .Where(x => x.Difficulty == difficulty && x.MuscleGroup == MuscleGroup.Cardio)
+                .Where(x => x.MuscleGroup == MuscleGroup.Cardio)
                 .ToList();
 
             var randomCardio = cardioExercises.OrderBy(x => Guid.NewGuid()).Take(1).FirstOrDefault();
@@ -444,6 +444,21 @@
             }
 
             return workoutPlans;
+        }
+
+        public bool IsTrainingDay(string userId, string planId)
+        {
+            var workoutPlan = this.GetUserWorkoutPlan(userId, planId);
+
+            foreach (var day in workoutPlan.WorkoutDays)
+            {
+                if (day.Day == DateTime.Today.DayOfWeek)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
