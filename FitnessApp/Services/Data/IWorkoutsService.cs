@@ -11,6 +11,8 @@
         ICollection<GeneratedWorkoutPlanDTO> GetGeneratedWorkoutPlans();
 
         GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId, string planId);
+
+        bool IsTrainingDay(string userId, string planId);
         ICollection<UserWorkoutPlanInAllUserPlansDTO> GetUserWorkoutPlans(string userId);
     }
 }

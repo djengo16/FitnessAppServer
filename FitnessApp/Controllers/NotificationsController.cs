@@ -28,5 +28,12 @@
             return Ok();
         }
 
+        [HttpPost("setup/trainingDay/{userId}/{activePlanId}")]
+        public async Task<IActionResult> SetupTrainingDayNotification(string userId, string activePlanId)
+        {
+            await notificationsService.SetupTrainingDayNotification(userId, activePlanId);
+            return Ok();
+        }
+
     }
 }
