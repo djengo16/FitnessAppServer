@@ -2,11 +2,11 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using FitnessApp.Common;
     using FitnessApp.Dto.Notification;
     using FitnessApp.Models;
     using FitnessApp.Models.Enums;
     using FitnessApp.Models.Repositories;
+    using FitnessApp.Helper.Builders.Notification;
 
     public class NotificationsService : INotificationsService
     {
@@ -25,23 +25,6 @@
             this.notificationsStorage = notificationsStorage;
             this.usersService = usersService;
             this.mapper = mapper;
-        }
-
-        public async Task<Notification> CreateTrainingDayNotificationAsync(string userId)
-        {           
-            var notification = new Notification()
-            {
-                RecipientId = userId,
-                Type = NotificationType.TrainingDay,
-                IsViewed = false,
-                Title = NotificationConstants.TrainingDayNotificationTitle,
-                Body = NotificationConstants.TrainingDayNotificationBody,
-            };
-
-            await notificationsStorage.AddAsync(notification);
-            await notificationsStorage.SaveChangesAsync();
-
-            return notification;
         }
         /// <summary>
         /// Checks if it's training day.
@@ -67,40 +50,7 @@
                 return null;
             }
 
-            var notification = await CreateTrainingDayNotificationAsync(userId);
-
-            return notification;
-        }
-
-        public bool DoesUnreadNotificationExist(NotificationType type, string userId)
-        {
-            var notification = notificationsStorage
-                .All()
-                .FirstOrDefault(x => x.RecipientId == userId
-                && x.CreatedOn.Date == DateTime.UtcNow.Date
-                && x.IsViewed == false
-                && x.Type == type);
-
-            return notification != null;
-        }
-
-        public async Task<Notification> CreateUnreadMessageNotification(string recipientId, string senderId)
-        {
-            var senderName = await this.usersService.GetNameAsync(senderId);
-            var notificationBody = $"You have unread messages from {senderName}.";
-
-            var notification = new Notification()
-            {
-                RecipientId = recipientId,
-                RedirectId = senderId,
-                Type = NotificationType.UnreadMessage,
-                IsViewed = false,
-                Title = NotificationConstants.UnreadMessageNotificationTitle,
-                Body = notificationBody,
-            };
-
-            await notificationsStorage.AddAsync(notification);
-            await notificationsStorage.SaveChangesAsync();
+            var notification = await CreateNotificationAsync(userId, NotificationType.TrainingDay);
 
             return notification;
         }
@@ -144,7 +94,7 @@
 
             return notification != null;
         }
-        public async Task<List<NotificationResponseDTO>> GetAllByRecipientId(string recipientId)
+        public List<NotificationResponseDTO> GetAllByRecipientId(string recipientId)
         {
             var notifications = notificationsStorage
                 .All()
@@ -156,6 +106,40 @@
 
 
             return notifications;
+        }
+        public async Task<Notification> CreateNotificationAsync(string userId, NotificationType type, string redirectId = null)
+        {
+            var builder = new NotificationBuilder();
+            var director = new Director(builder, usersService);
+
+            switch(type)
+            {
+                case NotificationType.TrainingDay:
+                    director.BuildTrainingDayNotification(userId);
+                    break;
+                case NotificationType.UnreadMessage:
+                    await director.BuildUnreadMessageNotificationAsync(userId, redirectId);
+                    break;
+            }
+
+            var notification = builder.Build();
+            await this.notificationsStorage.AddAsync(notification);
+            await this.notificationsStorage.SaveChangesAsync();
+
+            return builder.Build();
+        }
+        public Notification GetById(int id) => this.notificationsStorage.GetById(id);
+
+        private bool DoesUnreadNotificationExist(NotificationType type, string userId)
+        {
+            var notification = notificationsStorage
+                .All()
+                .FirstOrDefault(x => x.RecipientId == userId
+                && x.CreatedOn.Date == DateTime.UtcNow.Date
+                && x.IsViewed == false
+                && x.Type == type);
+
+            return notification != null;
         }
     }
 }

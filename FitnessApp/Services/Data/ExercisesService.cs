@@ -9,6 +9,7 @@
     using System.Threading.Tasks;
     using FitnessApp.Helper;
     using FitnessApp.Services.ServiceConstants;
+    using FitnessApp.Helper.Builders.Exercise;
 
     public class ExercisesService : IExercisesService
     {
