@@ -2,6 +2,7 @@
 {
     using FitnessApp.Dto.Message;
     using FitnessApp.Models;
+    using FitnessApp.Models.Enums;
     using FitnessApp.Services.Data;
     using Newtonsoft.Json;
     using System.Collections.Concurrent;
@@ -125,7 +126,8 @@
             }
 
             //Create new notification and add it to _notifications collection
-            var unreadMessageNotification = await notificationService.CreateUnreadMessageNotification(message.RecipientId, message.SenderId);
+            var unreadMessageNotification = 
+                await notificationService.CreateNotificationAsync(message.RecipientId,NotificationType.UnreadMessage, message.SenderId);
             this._notifications[message.ConversationId].Add(unreadMessageNotification);
         }
 

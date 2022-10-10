@@ -17,7 +17,7 @@
         [HttpGet("all")]
         public async Task<IActionResult> GetAll(string id)
         {
-          var notifications = await notificationsService.GetAllByRecipientId(id);
+          var notifications = notificationsService.GetAllByRecipientId(id);
             return Ok(notifications);
         }
 
