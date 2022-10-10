@@ -1,4 +1,4 @@
-﻿namespace FitnessApp.Helper
+﻿namespace FitnessApp.Helper.Builders.Exercise
 {
     using FitnessApp.Models;
     using FitnessApp.Models.Enums;
@@ -8,7 +8,7 @@
 
         public ExerciseQueryBuilder(IQueryable<Exercise> currentQuery) : base(currentQuery)
         {
-            this.CurrentQuery = currentQuery;
+            CurrentQuery = currentQuery;
         }
         public override IQueryable<Exercise> CurrentQuery { get; set; }
         /// <summary>
@@ -21,24 +21,24 @@
         {
             var muscleGroup = MuscleGroupFinder.FindMuscleGroup(searchParams);
 
-            this.CurrentQuery = CurrentQuery
+            CurrentQuery = CurrentQuery
             .Where(x => !string.IsNullOrEmpty(searchParams)
-                            ? (x.Name.Contains(searchParams)
-                            || (int)x.MuscleGroup == muscleGroup)
+                            ? x.Name.Contains(searchParams)
+                            || (int)x.MuscleGroup == muscleGroup
                             : true);
             return this;
         }
-        public  QueryBuilder<Exercise> ApplyFilter(MuscleGroup muscleGroup, Difficulty difficulty)
+        public QueryBuilder<Exercise> ApplyFilter(MuscleGroup muscleGroup, Difficulty difficulty)
         {
             // When we get 0, we don't apply this filters, it's default values, so that means the user haven't filtered anything
             if (muscleGroup != 0)
             {
-                this.CurrentQuery = CurrentQuery
+                CurrentQuery = CurrentQuery
                     .Where(x => x.MuscleGroup == muscleGroup);
             }
             if (difficulty != 0)
             {
-                this.CurrentQuery = CurrentQuery
+                CurrentQuery = CurrentQuery
                 .Where(x => x.Difficulty == difficulty);
                 return this;
             }
