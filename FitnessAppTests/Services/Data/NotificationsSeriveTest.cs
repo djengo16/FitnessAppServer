@@ -108,6 +108,7 @@
 
             Assert.IsNull(result);
         }
+
         [Test]
         public async Task ViewNotificationAsyncWillSetIsViewedPropertyToTrueIfItsOfTypeTrainingDay()
         {
@@ -133,7 +134,6 @@
         public async Task CheckUnreadMessageNotificationExistenceWillReturnTrueIfNotificationExists()
         {
             await notificationsService.CreateNotificationAsync(TestUserId, NotificationType.UnreadMessage, TestRdirectId);
-            var not = notificationsService.GetById(1);
 
             var result = notificationsService.CheckUnreadMessageNotificationExistence(TestRdirectId, TestUserId);
 
