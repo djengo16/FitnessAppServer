@@ -100,17 +100,11 @@
             await usersService.AssignTrainingProgramToUser(chosenWorkoutPlan.Id, userId);
             return chosenWorkoutPlan.Id;
         }
-        private void LoadExerciseDefaultValues()
-        {
-            sets = WorkoutConstants.AvgExerciseSet;
-            minReps = WorkoutConstants.AvgExerciseMinReps;
-            maxReps = WorkoutConstants.AvgExerciseMaxReps;
-        }
-
-
 
         public void GenerateWorkoutPlans(WorkoutGenerationInputModel inputModel)
         {
+            generatedWorkoutPlans.Clear();
+
             for (int i = 0; i < inputModel.Count; i++)
             {
                 workoutSplit = workoutSplitFactory.CreateSplits(inputModel.Days);
@@ -130,6 +124,74 @@
                 generatedWorkoutPlans.Add(workoutPlan);
                 workoutPlan = new WorkoutPlan();
             }
+        }
+
+        public GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId, string planId)
+        {
+            var workoutPlan = workoutPlansStorage
+                .All()
+                .Where(x => x.Id == planId && x.UserId == userId)
+                .ProjectTo<GeneratedWorkoutPlanDTO>(this.mapper.ConfigurationProvider)
+                .FirstOrDefault();
+
+            var activeId = usersService.GetActiveWorkoutPlanId(userId);
+
+            if (activeId == planId)
+                workoutPlan.IsActive = true;
+
+            if (workoutPlan == null)
+                throw new ArgumentException(ErrorMessages.TrainingProgramIsNotAssigned);
+
+            return workoutPlan;
+        }
+
+        public ICollection<UserWorkoutPlanInAllUserPlansDTO> GetUserWorkoutPlans(string userId)
+        {
+            string activePlanId = usersService.GetActiveWorkoutPlanId(userId);
+
+            //User don't have workout plans
+            if (activePlanId == null)
+            {
+                return null;
+            }
+
+            var workoutPlans = workoutPlansStorage
+                .All()
+                .Where(x => x.UserId == userId)
+                .ProjectTo<UserWorkoutPlanInAllUserPlansDTO>(this.mapper.ConfigurationProvider)
+                .ToList();
+
+            foreach (var plan in workoutPlans)
+            {
+                if (activePlanId == plan.Id)
+                {
+                    plan.IsActive = true;
+                }
+            }
+
+            return workoutPlans;
+        }
+
+        public bool IsTrainingDay(string userId, string planId)
+        {
+            var workoutPlan = this.GetUserWorkoutPlan(userId, planId);
+
+            foreach (var day in workoutPlan.WorkoutDays)
+            {
+                if (day.Day == DateTime.Today.DayOfWeek)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void LoadExerciseDefaultValues()
+        {
+            sets = WorkoutConstants.AvgExerciseSet;
+            minReps = WorkoutConstants.AvgExerciseMinReps;
+            maxReps = WorkoutConstants.AvgExerciseMaxReps;
         }
 
         private void AddCardioToLeastBusyDay(ICollection<WorkoutDay> workoutDays, Difficulty difficulty)
@@ -398,67 +460,6 @@
             }
 
             return exercisesResult;
-        }
-
-        public GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId, string planId)
-        {
-            var workoutPlan = workoutPlansStorage
-                .All()
-                .Where(x => x.Id == planId && x.UserId == userId)
-                .ProjectTo<GeneratedWorkoutPlanDTO>(this.mapper.ConfigurationProvider)
-                .FirstOrDefault();
-
-            var activeId = usersService.GetActiveWorkoutPlanId(userId);
-
-            if(activeId == planId)
-                workoutPlan.IsActive = true;
-
-            if(workoutPlan == null)
-                throw new ArgumentException(ErrorMessages.TrainingProgramIsNotAssigned);
-
-            return workoutPlan;
-        }
-
-        public ICollection<UserWorkoutPlanInAllUserPlansDTO> GetUserWorkoutPlans(string userId)
-        {
-            string activePlanId = usersService.GetActiveWorkoutPlanId(userId);
-
-            //User don't have workout plans
-            if(activePlanId == null)
-            {
-                return null;
-            }
-
-            var workoutPlans = workoutPlansStorage
-                .All()
-                .Where(x => x.UserId == userId)
-                .ProjectTo<UserWorkoutPlanInAllUserPlansDTO>(this.mapper.ConfigurationProvider)
-                .ToList();
-             
-            foreach (var plan in workoutPlans)
-            {
-                if(activePlanId == plan.Id)
-                {
-                    plan.IsActive = true;
-                }
-            }
-
-            return workoutPlans;
-        }
-
-        public bool IsTrainingDay(string userId, string planId)
-        {
-            var workoutPlan = this.GetUserWorkoutPlan(userId, planId);
-
-            foreach (var day in workoutPlan.WorkoutDays)
-            {
-                if (day.Day == DateTime.Today.DayOfWeek)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }
