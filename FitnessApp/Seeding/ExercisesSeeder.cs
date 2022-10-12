@@ -8,7 +8,7 @@
     public class ExercisesSeeder : ISeeder
     {
         private const string ExercisesFileName = "Exercises.json";
-        private string ExercisesDataPath = Path.Combine(Environment.CurrentDirectory, @"Seeding\Data\", ExercisesFileName);
+        private string ExercisesDataPath = Path.Combine(Environment.CurrentDirectory, @"Seeding/Data", ExercisesFileName);
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             if (dbContext.Exercises.Any())
