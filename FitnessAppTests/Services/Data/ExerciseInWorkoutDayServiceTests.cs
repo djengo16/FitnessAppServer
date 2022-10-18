@@ -13,8 +13,6 @@
 
     public class ExerciseInWorkoutDayServiceTests
     {
-        private const string TestUserId = "myTestUser123";
-
         private IExerciseInWorkoutDayService exerciseInWorkoutDayService;
         private IWorkoutsService workoutsService;
         private ApplicationDbContext db;
@@ -35,7 +33,8 @@
         [Test]
         public async Task AddAsyncWillAddTheExercise()
         {
-            var plan = await SetupAndGetWorkoutPlanAsync();
+            string TestUserId = Guid.NewGuid().ToString();
+            var plan = await SetupAndGetWorkoutPlanAsync(TestUserId);
 
             var workoutDay = plan.WorkoutDays.First();
 
@@ -62,7 +61,8 @@
         [Test]
         public async Task AddToExistingWorkoutDayAsyncWillAddExercise()
         {
-            var plan = await SetupAndGetWorkoutPlanAsync();
+            string TestUserId = Guid.NewGuid().ToString();
+            var plan = await SetupAndGetWorkoutPlanAsync(TestUserId);
             var workoutDay = plan.WorkoutDays.First();
             var exercise = db.Exercises
                 .FirstOrDefault(x => !workoutDay.ExercisesInWorkoutDays.Select(x => x.ExerciseId).ToList().Contains(x.Id));
@@ -82,7 +82,8 @@
         [Test]
         public async Task AddToExistingWorkoutDayAsyncWillThrowExceptionWhenTryingToAddOneExerciseTwice()
         {
-            var plan = await SetupAndGetWorkoutPlanAsync();
+            string TestUserId = Guid.NewGuid().ToString();
+            var plan = await SetupAndGetWorkoutPlanAsync(TestUserId);
             var workoutDay = plan.WorkoutDays.First();
             var exercise = db.Exercises
                 .FirstOrDefault(x => !workoutDay.ExercisesInWorkoutDays.Select(x => x.ExerciseId).ToList().Contains(x.Id));
@@ -101,7 +102,8 @@
         [Test]
         public async Task DeleteAllWithExerciseIdAsyncWillDeleteAllEntitiesWithTheGivenExerciseId()
         {
-            var plan = await SetupAndGetWorkoutPlanAsync();
+            string TestUserId = Guid.NewGuid().ToString();
+            var plan = await SetupAndGetWorkoutPlanAsync(TestUserId);
             var workoutDay = plan.WorkoutDays.First();
 
             var exerciseInPlan = workoutDay.ExercisesInWorkoutDays.First();
@@ -116,7 +118,8 @@
         [Test]
         public async Task DeleteAsyncWillDeleteAndRemoveTheExerciseFromWorkoutDay()
         {
-            var plan = await SetupAndGetWorkoutPlanAsync();
+            string TestUserId = Guid.NewGuid().ToString();
+            var plan = await SetupAndGetWorkoutPlanAsync(TestUserId);
             var workoutDay = plan.WorkoutDays.First();
             var exerciseToDelete = workoutDay.ExercisesInWorkoutDays.First();
 
@@ -133,7 +136,8 @@
         [Test]
         public async Task UpdateRangeAsyncWillUpdateTheExercisesCorrectly()
         {
-            var plan = await SetupAndGetWorkoutPlanAsync();
+            string TestUserId = Guid.NewGuid().ToString();
+            var plan = await SetupAndGetWorkoutPlanAsync(TestUserId);
             var workoutDay = plan.WorkoutDays.First();
 
             int sets = 10;
@@ -165,14 +169,14 @@
             Assert.That(!updatedDay.ExercisesInWorkoutDays.Any(x => x.Sets != sets && x.MinReps != minReps && x.MaxReps != maxReps));
         }
 
-        private async Task<GeneratedWorkoutPlanDTO> SetupAndGetWorkoutPlanAsync()
+        private async Task<GeneratedWorkoutPlanDTO> SetupAndGetWorkoutPlanAsync(string userId)
         {
-            await db.Users.AddAsync(new ApplicationUser() { Id = TestUserId });
+            await db.Users.AddAsync(new ApplicationUser() { Id = userId });
             await db.SaveChangesAsync();
 
             WorkoutGenerationInputModel input = new WorkoutGenerationInputModel();
 
-            input.UserId = TestUserId;
+            input.UserId = userId;
             input.Days = 4;
             input.Difficulty = Difficulty.Hard;
             input.Goal = Goal.Maintain;
@@ -185,7 +189,7 @@
 
             var workoutPlanId = await this.workoutsService.SaveWorkoutPlanAsync(workoutPlan);
 
-            return workoutsService.GetUserWorkoutPlan(TestUserId, workoutPlanId);
+            return workoutsService.GetUserWorkoutPlan(userId, workoutPlanId);
         }
     }
 }

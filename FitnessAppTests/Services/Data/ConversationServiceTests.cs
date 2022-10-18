@@ -3,6 +3,7 @@
     using FitnessApp.Data;
     using FitnessApp.Services.Data;
     using FitnessApp.Tests.Helper;
+    using Microsoft.EntityFrameworkCore;
     using NUnit;
     public  class ConversationServiceTests
     {
@@ -38,7 +39,10 @@
 
             //second call
             var conversation = await this.conversationService.GetOrCreateAsync(testUserId, anotherTestUserId);
-            var result = this.conversationService.GetById(conversation.Id);
+            var result = db.Conversations
+                .Include(x => x.UserConversations)
+                .Where(x => x.Id == conversation.Id)
+                .FirstOrDefault();//this.conversationService.GetById(conversation.Id);
 
             //will have 1 conversation created
             var allConversations = db.Conversations.ToList();
