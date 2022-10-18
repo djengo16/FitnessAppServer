@@ -6,7 +6,7 @@
         //Avg
         public const int AvgExercisePerMuscle = 3;
         public const int AvgExerciseForAbs = 2;
-        public const int AvgExerciseSet = 4;
+        public const int AvgExerciseSets = 4;
 
         //Maintain
         public const int AvgExerciseMinReps = 8;

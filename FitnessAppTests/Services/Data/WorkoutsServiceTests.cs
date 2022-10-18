@@ -201,8 +201,5 @@
             Assert.That(resultPlan.Goal == Goal.LoseWeight);
             Assert.True(resultPlan.IsActive);
         }
-
-
-
     }
 }

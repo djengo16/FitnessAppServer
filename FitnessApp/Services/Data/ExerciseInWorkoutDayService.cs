@@ -1,9 +1,7 @@
 ﻿namespace FitnessApp.Services.Data
 {
-    using AutoMapper;
     using FitnessApp.Dto.ExerciseInWorkoutDay;
     using FitnessApp.Models;
-    using FitnessApp.Models.Enums;
     using FitnessApp.Models.Repositories;
     using FitnessApp.Services.ServiceConstants;
     using System.Collections.Generic;
@@ -13,19 +11,17 @@
         private readonly IRepository<ExerciseInWorkoutDay> exerciseInWorkoutDayStorage;
         private readonly IDeletableEntityRepository<Exercise> exerciseStorage;
         private readonly IWorkoutDaysService workoutDaysService;
-        private readonly IMapper mapper;
 
         public ExerciseInWorkoutDayService(
             IRepository<ExerciseInWorkoutDay> exerciseInWorkoutDayStorage,
             IDeletableEntityRepository<Exercise> exerciseStorage,
-            IWorkoutDaysService workoutDaysService,
-             IMapper mapper)
+            IWorkoutDaysService workoutDaysService)
         {
             this.exerciseInWorkoutDayStorage = exerciseInWorkoutDayStorage;
             this.exerciseStorage = exerciseStorage;
             this.workoutDaysService = workoutDaysService;
-            this.mapper = mapper;
         }
+
         public async Task AddAsync(ExerciseInWorkoutDayDTO exerciseInWorkoutDayDTO)
         {
             ExerciseInWorkoutDay exercise = new ExerciseInWorkoutDay
@@ -41,41 +37,37 @@
             await exerciseInWorkoutDayStorage.SaveChangesAsync();
         }
 
-        public async Task<GeneratedExerciseInWorkoutDayDTO> AddAsync(AddExerciseInWorkoutDayDTO dto)
+        /// <summary>
+        /// This method adds exercise to user's workout day if the exercise is not already in this day.
+        /// </summary>
+        /// <param name="dto">Exercise that will be added to user's workout day.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">When the exercise is already there. One exercise cannot be twice in one program.</exception>
+        public async Task<GeneratedExerciseInWorkoutDayDTO> AddToExistingWorkoutDayAsync(AddExerciseToExistingDayDTO dto)
         {
-            var exerciseIdsInWorkoutDay = this.workoutDaysService.GetExerciseIdsInWorkoutDay(dto.WorkoutDayId);
-
-            exerciseIdsInWorkoutDay.ForEach(id =>
+            if (DoesExerciseExistInWorkoutDay(dto.WorkoutDayId, dto.ExerciseId))
             {
-                if (id == dto.ExerciseId)
-                {
-                    throw new ArgumentException(ErrorMessages.ExerciseAlreadyInProgram);
-                }
-            });
+                throw new ArgumentException(ErrorMessages.ExerciseAlreadyInProgram);
+            }
 
-
-            ExerciseInWorkoutDay exercise = new ExerciseInWorkoutDay
+            await this.AddAsync(new ExerciseInWorkoutDayDTO ()
             {
-                ExerciseId = dto.ExerciseId,
                 WorkoutDayId = dto.WorkoutDayId,
-                MinReps = 8,
-                MaxReps = 12,
-                Sets = 3,
-            };
-
-            await exerciseInWorkoutDayStorage.AddAsync(exercise);
-            await exerciseInWorkoutDayStorage.SaveChangesAsync();
-
-            var exerciseDetails = exerciseStorage.GetById(exercise.ExerciseId);
+                ExerciseId = dto.ExerciseId,
+                MinReps = WorkoutConstants.AvgExerciseMinReps,
+                MaxReps = WorkoutConstants.AvgExerciseMaxReps,
+                Sets = WorkoutConstants.AvgExerciseSets
+            });
+            var exerciseDetails = exerciseStorage.GetById(dto.ExerciseId);
 
             return new GeneratedExerciseInWorkoutDayDTO()
             {
                 ExerciseId = dto.ExerciseId,
                 Name = exerciseDetails.Name,
                 Difficulty = exerciseDetails.Difficulty,
-                Sets = 3,
-                MinReps = 8,
-                MaxReps = 12,
+                Sets = WorkoutConstants.AvgExerciseSets,
+                MinReps = WorkoutConstants.AvgExerciseMinReps,
+                MaxReps = WorkoutConstants.AvgExerciseMaxReps,
                 Description = exerciseDetails.Description,
                 PictureResourceUrl = exerciseDetails.PictureResourceUrl,
                 VideoResourceUrl = exerciseDetails.VideoResourceUrl,
@@ -90,11 +82,11 @@
             await exerciseInWorkoutDayStorage.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int exerciseId, string workoutId)
+        public async Task DeleteAsync(int exerciseId, string workoutDayId)
         {
             var exerciseToDelete = exerciseInWorkoutDayStorage
                 .All()
-                .FirstOrDefault(x => x.ExerciseId == exerciseId && x.WorkoutDayId == workoutId);
+                .FirstOrDefault(x => x.ExerciseId == exerciseId && x.WorkoutDayId == workoutDayId);
 
             exerciseInWorkoutDayStorage.Delete(exerciseToDelete);
             await exerciseInWorkoutDayStorage.SaveChangesAsync();
@@ -113,6 +105,20 @@
                 exerciseInWorkoutDayStorage.Update(exercise);
             }
             await exerciseInWorkoutDayStorage.SaveChangesAsync();
+        }
+
+        private bool DoesExerciseExistInWorkoutDay(string workoutDayId, int exerciseId)
+        {
+            var exerciseIdsInWorkoutDay = this.workoutDaysService.GetExerciseIdsInWorkoutDay(workoutDayId);
+
+            foreach (var id in exerciseIdsInWorkoutDay)
+            {
+                if(id == exerciseId)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
