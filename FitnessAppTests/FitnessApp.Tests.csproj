@@ -40,4 +40,8 @@
     <ProjectReference Include="..\FitnessApp\FitnessApp.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Socket\" />
+  </ItemGroup>
+
 </Project>
