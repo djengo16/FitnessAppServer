@@ -54,12 +54,19 @@
             builder.Entity<ExerciseInWorkoutDay>()
                 .HasOne(e => e.Exercise)
                 .WithMany(w => w.ExerciseInWorkoutDay)
-                .HasForeignKey(e => e.ExerciseId);
+                .HasForeignKey(e => e.ExerciseId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ExerciseInWorkoutDay>()
                 .HasOne(w => w.WorkoutDay)
                 .WithMany(e => e.ExercisesInWorkoutDays)
-                .HasForeignKey(w => w.WorkoutDayId);
+                .HasForeignKey(w => w.WorkoutDayId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<WorkoutDay>()
+                .HasOne(w => w.WorkoutPlan)
+                .WithMany(wd => wd.WorkoutDays)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             builder.Entity<ExerciseInWorkoutDay>()

@@ -15,18 +15,19 @@ namespace FitnessApp.Controllers
         {
             this.exerciseInWorkoutDayservice = exerciseInWorkoutDayservice;
         }
+
         [HttpPost]
-        public async Task<IActionResult> Add(AddExerciseInWorkoutDayDTO dto)
+        public async Task<IActionResult> Add(AddExerciseToExistingDayDTO dto)
         {
-            var result = await exerciseInWorkoutDayservice.AddAsync(dto);
+            var result = await exerciseInWorkoutDayservice.AddToExistingWorkoutDayAsync(dto);
             return Ok(result);
         }
+
         [HttpDelete("exercise/{exerciseId}/workoutDay/{workoutdayId}")]
         [Authorize]
         public async Task<IActionResult> Delete(int exerciseId, string workoutdayId)
         {
             await exerciseInWorkoutDayservice.DeleteAsync(exerciseId, workoutdayId);
-
             return Ok();
         }
 
@@ -34,7 +35,6 @@ namespace FitnessApp.Controllers
         public async Task<IActionResult> UpdateRange(ICollection<UpdateExerciseInWorkoutDayDTO> dtos)
         {
             await exerciseInWorkoutDayservice.UpdateRangeAsync(dtos);
-
             return Ok();
         }
     }

@@ -189,7 +189,7 @@
 
         private void LoadExerciseDefaultValues()
         {
-            sets = WorkoutConstants.AvgExerciseSet;
+            sets = WorkoutConstants.AvgExerciseSets;
             minReps = WorkoutConstants.AvgExerciseMinReps;
             maxReps = WorkoutConstants.AvgExerciseMaxReps;
         }
