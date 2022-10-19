@@ -26,7 +26,7 @@
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
                 db = new ApplicationDbContext(options);
 
-            var workoutsStorage = new EfDeletableEntityRepository<WorkoutPlan>(db);
+            var workoutsStorage = new EfRepository<WorkoutPlan>(db);
             var exercisesStorage = new EfDeletableEntityRepository<Exercise>(db);
             var workoutDayService = new Mock<IWorkoutDaysService>();
             var exerciseInWorkoutDayService = new Mock<IExerciseInWorkoutDayService>();
