@@ -100,7 +100,14 @@
 
         public string GetActiveWorkoutPlanId(string userId)
         {
-            return this.usersRepository.All().FirstOrDefault(x => x.Id == userId).WorkoutPlanId;
+            var planId = this.usersRepository.All().FirstOrDefault(x => x.Id == userId).WorkoutPlanId;
+
+            if (planId == null)
+            {
+                throw new ArgumentException(ErrorMessages.PlanIsNotAssignedToUser);
+            }
+
+            return planId;
         }
 
         public async Task AssignTrainingProgramToUser(string programId, string userId)
