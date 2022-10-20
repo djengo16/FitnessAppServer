@@ -37,6 +37,12 @@
         public async Task<UserDetailsDTO> GetUserByIdAsync(string id)
         {
             var user =  await userManager.FindByIdAsync(id);
+
+            if(user == null)
+            {
+                throw new ArgumentException(ErrorMessages.UserNotFound);
+            }
+
             return mapper.Map<UserDetailsDTO>(user);
         }
 
@@ -102,7 +108,7 @@
         {
             var planId = this.usersRepository.All().FirstOrDefault(x => x.Id == userId).WorkoutPlanId;
 
-            if (planId == null)
+            if(planId == null)
             {
                 throw new ArgumentException(ErrorMessages.PlanIsNotAssignedToUser);
             }
