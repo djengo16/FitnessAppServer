@@ -1,4 +1,5 @@
 using FitnessApp.Data;
+using FitnessApp.Middlewares;
 using FitnessApp.Models;
 using FitnessApp.Models.Repositories;
 using FitnessApp.Repositories;
@@ -130,8 +131,9 @@ var webSocketOptions = new WebSocketOptions
 {
     KeepAliveInterval = TimeSpan.FromMinutes(2)
 };
-app.UseWebSockets(webSocketOptions);
 
+app.UseWebSockets(webSocketOptions);
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
