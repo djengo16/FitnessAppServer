@@ -12,6 +12,7 @@
     public class WebSocketService : IWebSocketService
     {
         private readonly IServiceProvider serviceProvider;
+        private const int BufferSize = 4096;
 
         //communicationId with value list of sockets
         private ConcurrentDictionary<string, List<WebSocket>> _communications;
@@ -30,6 +31,13 @@
         {
             var currKey = _communications.Keys.Where(x => x == communicationId).FirstOrDefault();
 
+            Console.WriteLine();
+            Console.WriteLine("------------------------------------------------------------------------");
+            Console.Write("Socket type: ");
+            Console.WriteLine(socket.GetType());
+            Console.WriteLine("------------------------------------------------------------------------");
+            Console.WriteLine();
+
             if (currKey == null)
             {
                 AddCommunication(communicationId);
@@ -39,15 +47,16 @@
 
             await ComunicateAsync(communicationId, socket);
         }
+
         private async Task ComunicateAsync(string communicationId, WebSocket webSocket)
         {
-            var buffer = new byte[1024 * 4];
+            var buffer = new byte[BufferSize];
+
             var receiveResult = await webSocket.ReceiveAsync(
                 new ArraySegment<byte>(buffer), CancellationToken.None);
 
             while (!receiveResult.CloseStatus.HasValue)
             {
-
                 //from byte array -> json -> to c# object     
                 var message = DeserializeMessage(buffer, receiveResult.Count);
 
@@ -64,7 +73,6 @@
                 //After sending the message to all the subscribed participants
                 //we save the message to the db
                 await HandleMessageCreationAsync(message);
-
 
                 //Waiting for a new message to continue the while cycle
                 receiveResult = await webSocket.ReceiveAsync(
@@ -86,6 +94,7 @@
            await this.NotifyAsync(message);
 
         }
+
         private async Task NotifyAsync(MessageResponseDTO message)
         {
 

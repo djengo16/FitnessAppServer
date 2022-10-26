@@ -26,6 +26,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.3" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="FitnessApp.Tests" />
+	</ItemGroup>
+
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="Repositories\" />
