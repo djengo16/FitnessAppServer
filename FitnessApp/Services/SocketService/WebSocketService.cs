@@ -31,13 +31,6 @@
         {
             var currKey = _communications.Keys.Where(x => x == communicationId).FirstOrDefault();
 
-            Console.WriteLine();
-            Console.WriteLine("------------------------------------------------------------------------");
-            Console.Write("Socket type: ");
-            Console.WriteLine(socket.GetType());
-            Console.WriteLine("------------------------------------------------------------------------");
-            Console.WriteLine();
-
             if (currKey == null)
             {
                 AddCommunication(communicationId);
