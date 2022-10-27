@@ -9,6 +9,7 @@
         public Difficulty Difficulty { get; set; }
         public int DaysInWeek { get; set; }
         public string UserId { get; set; }
+        public bool IsActive { get; set; } = false;
         public ICollection<GeneratedWorkoutDayDTO> WorkoutDays { get; set; }
     }
 }

@@ -21,6 +21,11 @@
         public DbSet<ExerciseInWorkoutDay> ExercisesInWorkoutDays { get; set; }
         public DbSet<WorkoutDay> WorkoutDays { get; set; }
         public DbSet<WorkoutPlan> WorkoutPlans { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<UserConversations> UserConversations { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -30,6 +35,13 @@
         }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
             this.SaveChangesAsync(true, cancellationToken);
+        public override Task<int> SaveChangesAsync(
+            bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = default)
+        {
+            this.ApplyAuditInfoRules();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             // Needed for Identity models configuration
@@ -42,17 +54,51 @@
             builder.Entity<ExerciseInWorkoutDay>()
                 .HasOne(e => e.Exercise)
                 .WithMany(w => w.ExerciseInWorkoutDay)
-                .HasForeignKey(e => e.ExerciseId);
+                .HasForeignKey(e => e.ExerciseId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ExerciseInWorkoutDay>()
                 .HasOne(w => w.WorkoutDay)
                 .WithMany(e => e.ExercisesInWorkoutDays)
-                .HasForeignKey(w => w.WorkoutDayId);
+                .HasForeignKey(w => w.WorkoutDayId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //builder.Entity<WorkoutPlan>()
-            //    .HasOne(w => w.User)
-            //    .WithOne(u => u.WorkoutPlan)
-            //    .HasForeignKey(w => w.UserId)
+            builder.Entity<WorkoutDay>()
+                .HasOne(w => w.WorkoutPlan)
+                .WithMany(wd => wd.WorkoutDays)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            builder.Entity<ExerciseInWorkoutDay>()
+                .HasKey(ew => new { ew.ExerciseId, ew.WorkoutDayId });
+
+            builder
+                .Entity<Message>()
+                .HasOne(m => m.Recipient)
+                .WithMany(r => r.RecievedMessages)
+                .HasForeignKey(m => m.RecipientId);
+
+            builder
+                .Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany(s => s.SentMessages)
+                .HasForeignKey(m => m.SenderId);
+
+            builder
+                .Entity<UserConversations>()
+                .HasKey(uc => new { uc.UserId, uc.ConversationId });
+
+            builder
+                .Entity<UserConversations>()
+                .HasOne(uc => uc.User)
+                .WithMany(u => u.UserConversations)
+                .HasForeignKey(uc => uc.UserId);
+
+            builder
+                .Entity<UserConversations>()
+                .HasOne(uc => uc.Conversation)
+                .WithMany(c => c.UserConversations)
+                .HasForeignKey(uc => uc.ConversationId);
 
 
             var entityTypes = builder.Model.GetEntityTypes().ToList();
@@ -94,11 +140,11 @@
                 var entity = (IAuditInfo)entry.Entity;
                 if (entry.State == EntityState.Added && entity.CreatedOn == default)
                 {
-                    entity.CreatedOn = DateTime.UtcNow;
+                    entity.CreatedOn = DateTime.Now;
                 }
                 else
                 {
-                    entity.ModifiedOn = DateTime.UtcNow;
+                    entity.ModifiedOn = DateTime.Now;
                 }
             }
         }

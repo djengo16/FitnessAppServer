@@ -14,10 +14,25 @@
             this.notificationsService = notificationsService;
         }
 
-        [HttpGet]
-        public IActionResult Get(string id)
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll(string id)
         {
-            return Ok(notificationsService.IsTrainingDayNotification(id));
+          var notifications = notificationsService.GetAllByRecipientId(id);
+            return Ok(notifications);
+        }
+
+        [HttpPut("view/{id:int}")]
+        public async Task<IActionResult> View(int id)
+        {
+           await notificationsService.ViewNotificationAsync(id);
+            return Ok();
+        }
+
+        [HttpPost("setup/trainingDay/{userId}/{activePlanId}")]
+        public async Task<IActionResult> SetupTrainingDayNotification(string userId, string activePlanId)
+        {
+            await notificationsService.SetupTrainingDayNotification(userId, activePlanId);
+            return Ok();
         }
 
     }

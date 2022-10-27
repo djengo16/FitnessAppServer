@@ -13,6 +13,10 @@
         private readonly ICollection<UserTrainingProgramCombinationDTO> combinations;
 
         private const string DefaultPassword = "asd123";
+        private string[] FirstNames = new string[]
+        {"George", "Peter", "Ivan", "Stephan", "Vasil", "Alex", "David", "Teodor", "Metodi", "Hristo"};
+        private string[] LastNames = new string[]
+        {"Ivanov", "Petrov", "Stoqnov", "Stefanov", "Vasilev", "Alexandrov", "Kaloqnov", "Grozev", "Dimitrov", "Iliqnov"};
 
         public UsersWithWorkoutPlanSeeder()
         {
@@ -34,11 +38,14 @@
 
             int userCounter = 1;
 
+            Random rnd = new Random();
             foreach (var combination in combinations)
             {
                 var user = new ApplicationUser()
                 {
                     Email = $"user{userCounter}@sample.com",
+                    FirstName = FirstNames[rnd.Next(0, FirstNames.Length)],
+                    LastName = LastNames[rnd.Next(0, LastNames.Length)],
                     UserName = $"user{userCounter}",
                 };
 
@@ -53,15 +60,19 @@
                     UserId = user.Id,
                 });
 
-
                 /**
                  * Since we generate and store training programs in WorkoutsService collection field
                  * we should get the one generated for the current user with [userCounter - 1]
                  * because we don't clear the collection
                  * */
-                await workoutsService.SaveWorkoutPlanAsync(
+                var workoutId = await workoutsService.SaveWorkoutPlanAsync(
                     workoutsService.GetGeneratedWorkoutPlans().ToList()[userCounter - 1]);
 
+                //add plan to user
+                var createdUser = dbContext.Users.FirstOrDefault(x => x.Id == user.Id);
+                createdUser.WorkoutPlanId = workoutId;
+                dbContext.Update(createdUser);
+                await dbContext.SaveChangesAsync();
 
                 userCounter++;
             }

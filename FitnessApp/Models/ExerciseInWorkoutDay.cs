@@ -1,4 +1,5 @@
-﻿using FitnessApp.Models.Enums;
+﻿using FitnessApp.Models.Common;
+using FitnessApp.Models.Enums;
 
 namespace FitnessApp.Models
 {

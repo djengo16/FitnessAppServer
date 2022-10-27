@@ -1,6 +1,8 @@
 ﻿using FitnessApp.Common;
 using FitnessApp.Dto.Exercises;
+using FitnessApp.Models.Enums;
 using FitnessApp.Services.Data;
+using FitnessApp.Services.ServiceConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,26 +19,35 @@ namespace FitnessApp.Controllers
             this.exercisesService = exercisesService;
         }
 
+        [HttpGet]
+        public ExercisesPageDTO Exercises(string search, int page, int count, Difficulty difficulty, MuscleGroup muscleGroup)
+        {
+            int skip = page != 1 ? (page - 1) * count : 0;
+            var exercises = exercisesService.GetExercises(search, take: count, skip, difficulty, muscleGroup);
+
+            return exercises;
+        }
+
         [HttpGet("{id:int}")]
         [Authorize]
-        public async Task<ActionResult<GetExerciseDetailsDTO>> Get(int id)
+        public ActionResult<ExerciseDTО> Get(int id)
         {
             var exercise = exercisesService.GetExerciseDetails(id);
 
             if (exercise == null)
             {
-                return BadRequest("Exercise not found!");
+                return BadRequest(ErrorMessages.ExerciseNotFound);
             }
             return Ok(exercise);
         }
 
         [HttpPost("create")]
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public async Task<IActionResult> Create(CreateOrUpdateExerciseDTO exerciseInput)
+        public async Task<IActionResult> Create(ExerciseInputDTO exercise)
         {
             if (ModelState.IsValid)
             {
-                await exercisesService.CreateExerciseAsync(exerciseInput);
+                await exercisesService.CreateAsync(exercise);
                 return this.Ok();
             }
             else
@@ -44,19 +55,27 @@ namespace FitnessApp.Controllers
                 return BadRequest(this.ModelState.Select(x => x.Value.Errors).ToList());
             }
         }
-        [HttpPost("update")]
+
+        [HttpPut("update")]
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public async Task<IActionResult> Update(int exerciseId, CreateOrUpdateExerciseDTO exerciseInput)
+        public async Task<IActionResult> Update(ExerciseUpdateDTO exercise)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                await exercisesService.UpdateExerciseAsync(exerciseId, exerciseInput);
+                await exercisesService.UpdateAsync(exercise);
                 return this.Ok();
             }
             else
             {
                 return BadRequest(this.ModelState.Select(x => x.Value.Errors).ToList());
             }
+        }
+        [HttpDelete("{id}")]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await exercisesService.Delete(id);
+            return Ok();
         }
     }
 }

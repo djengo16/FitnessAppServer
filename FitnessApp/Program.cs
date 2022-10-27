@@ -1,10 +1,12 @@
 using FitnessApp.Data;
+using FitnessApp.Middlewares;
 using FitnessApp.Models;
 using FitnessApp.Models.Repositories;
 using FitnessApp.Repositories;
 using FitnessApp.Seeding;
 using FitnessApp.Services.Data;
 using FitnessApp.Services.Security;
+using FitnessApp.Services.SocketService;
 using FitnessApp.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -15,9 +17,21 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var jwtSettingsSection = builder.Configuration.GetSection("JwtSettings");
 builder.Services.Configure<JwtSettings>(jwtSettingsSection);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                      });
+});
 
 // Automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -26,12 +40,16 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
+builder.Services.AddSingleton<IWebSocketService, WebSocketService>();
+
 builder.Services.AddTransient<IUsersService, UsersService>();
 builder.Services.AddTransient<IWorkoutsService, WorkoutsService>();
 builder.Services.AddTransient<IWorkoutDaysService, WorkoutDaysService>();
 builder.Services.AddTransient<IExerciseInWorkoutDayService, ExerciseInWorkoutDayService>();
 builder.Services.AddTransient<INotificationsService, NotificationsService>();
 builder.Services.AddTransient<IExercisesService, ExercisesService>();
+builder.Services.AddTransient<IConversationService, ConversationService>();
+builder.Services.AddTransient<IMessagesService, MessagesService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
 
 
@@ -89,9 +107,13 @@ builder.Services.AddSwaggerGen(options => {
 });
 
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
- //Seed data on application startup
+app.MapHealthChecks("/healthz");
+
+//Seed data on application startup
 using (var serviceScope = app.Services.CreateScope())
 {
     var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -105,9 +127,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
 
+app.UseWebSockets(webSocketOptions);
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
-
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 

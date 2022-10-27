@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using FitnessApp.Data;
     using FitnessApp.Dto.ExerciseInWorkoutDay;
     using FitnessApp.Dto.WorkoutDays;
     using FitnessApp.Dto.Workouts;
@@ -21,6 +20,7 @@
         private readonly IWorkoutDaysService workoutDaysService;
         private readonly IExerciseInWorkoutDayService exerciseInWorkoutDayService;
         private readonly IMapper mapper;
+        private readonly IUsersService usersService;
         private ICollection<WorkoutPlan> generatedWorkoutPlans;
         private WorkoutPlan workoutPlan;
         private WorkoutSplitFactory workoutSplitFactory = new WorkoutSplitFactory();
@@ -33,7 +33,8 @@
             IDeletableEntityRepository<WorkoutPlan> workoutPlansStorage,
             IWorkoutDaysService workoutDaysService,
             IExerciseInWorkoutDayService exerciseInWorkoutDayService,
-            IMapper mapper)
+            IMapper mapper,
+            IUsersService usersService)
         {
             _exercises = exercises;
             this.workoutPlansStorage = workoutPlansStorage;
@@ -41,6 +42,7 @@
             this.workoutDaysService = workoutDaysService;
             this.exerciseInWorkoutDayService = exerciseInWorkoutDayService;
             this.mapper = mapper;
+            this.usersService = usersService;
             this.generatedWorkoutPlans = new List<WorkoutPlan>();
 
             workoutSplit = new Dictionary<DayOfWeek, List<MuscleGroup>>();
@@ -61,7 +63,6 @@
         public async Task<string> SaveWorkoutPlanAsync(GeneratedWorkoutPlanDTO chosenWorkoutPlan)
         {
             var userId = chosenWorkoutPlan.UserId;
-
             var currWorkoutPlan = new WorkoutPlan(chosenWorkoutPlan.Id)
             {
                 UserId = userId,
@@ -95,19 +96,15 @@
                     });
                 }
             }
+
+            await usersService.AssignTrainingProgramToUser(chosenWorkoutPlan.Id, userId);
             return chosenWorkoutPlan.Id;
         }
-        private void LoadExerciseDefaultValues()
-        {
-            sets = WorkoutConstants.AvgExerciseSet;
-            minReps = WorkoutConstants.AvgExerciseMinReps;
-            maxReps = WorkoutConstants.AvgExerciseMaxReps;
-        }
-
-
 
         public void GenerateWorkoutPlans(WorkoutGenerationInputModel inputModel)
         {
+            generatedWorkoutPlans.Clear();
+
             for (int i = 0; i < inputModel.Count; i++)
             {
                 workoutSplit = workoutSplitFactory.CreateSplits(inputModel.Days);
@@ -129,11 +126,88 @@
             }
         }
 
+        public GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId, string planId)
+        {
+            var workoutPlan = workoutPlansStorage
+                .All()
+                .Where(x => x.Id == planId && x.UserId == userId)
+                .ProjectTo<GeneratedWorkoutPlanDTO>(this.mapper.ConfigurationProvider)
+                .FirstOrDefault();
+
+            var activeId = usersService.GetActiveWorkoutPlanId(userId);
+
+            if (activeId == planId)
+                workoutPlan.IsActive = true;
+
+            if (workoutPlan == null)
+                throw new ArgumentException(ErrorMessages.TrainingProgramIsNotAssigned);
+
+            return workoutPlan;
+        }
+
+        public ICollection<UserWorkoutPlanInAllUserPlansDTO> GetUserWorkoutPlans(string userId)
+        {
+            string activePlanId = usersService.GetActiveWorkoutPlanId(userId);
+
+            //User don't have workout plans
+            if (activePlanId == null)
+            {
+                return null;
+            }
+
+            var workoutPlans = workoutPlansStorage
+                .All()
+                .Where(x => x.UserId == userId)
+                .ProjectTo<UserWorkoutPlanInAllUserPlansDTO>(this.mapper.ConfigurationProvider)
+                .ToList();
+
+            foreach (var plan in workoutPlans)
+            {
+                if (activePlanId == plan.Id)
+                {
+                    plan.IsActive = true;
+                }
+            }
+
+            return workoutPlans;
+        }
+
+        public bool IsTrainingDay(string userId, string planId)
+        {
+            var workoutPlan = this.GetUserWorkoutPlan(userId, planId);
+
+            foreach (var day in workoutPlan.WorkoutDays)
+            {
+                if (day.Day == DateTime.Today.DayOfWeek)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        public ICollection<string> GetUserWorkoutPlanIds(string userId)
+        {
+            return workoutPlansStorage
+                .All()
+                .Where(x => x.UserId == userId)
+                .Select(x => x.Id)
+                .ToList();
+        }
+
+        private void LoadExerciseDefaultValues()
+        {
+            sets = WorkoutConstants.AvgExerciseSets;
+            minReps = WorkoutConstants.AvgExerciseMinReps;
+            maxReps = WorkoutConstants.AvgExerciseMaxReps;
+        }
+
         private void AddCardioToLeastBusyDay(ICollection<WorkoutDay> workoutDays, Difficulty difficulty)
         {
+
             var cardioExercises = _exercises
                 .AllAsNoTracking()
-                .Where(x => x.Difficulty == difficulty && x.MuscleGroup == MuscleGroup.Cardio)
+                .Where(x => x.MuscleGroup == MuscleGroup.Cardio)
                 .ToList();
 
             var randomCardio = cardioExercises.OrderBy(x => Guid.NewGuid()).Take(1).FirstOrDefault();
@@ -154,7 +228,7 @@
                 .Add(cardioExercise);
         }
 
-        /* Create workout day considering totalWorkoutDays, user (goal, experience)
+        /* CreateAsync workout day considering totalWorkoutDays, user (goal, experience)
          * Avg exercise count per muscle is 4 by my opinion (after looking at several programs)
          * we can manipulate this considering input data
          * 
@@ -306,20 +380,24 @@
             {
                 exercisesInWorkoutDay
                     .AddRange(GetSpecificExercisesForWorkoutDay(
-                        currBodyPartHardExercises, exercisesCount - 1,
+                        currBodyPartHardExercises, exercisesCount,
                         sets, minRepsHardExercise, minRepsMediumExercise));
             }
             if (inputModel.Difficulty == Difficulty.Medium)
             {
                 exercisesInWorkoutDay
                     .AddRange(GetSpecificExercisesForWorkoutDay(
-                        currBodyPartMediumExercises, exercisesCount - 2,
+                        currBodyPartMediumExercises, 1,
+                        sets, minRepsMediumExercise, maxRepsMediumExercise));
+                exercisesInWorkoutDay
+                    .AddRange(GetSpecificExercisesForWorkoutDay(
+                        currBodyPartMediumExercises, exercisesCount,
                         sets, minRepsMediumExercise, maxRepsMediumExercise));
             }
 
             exercisesInWorkoutDay
                 .AddRange(GetSpecificExercisesForWorkoutDay(
-                    currBodyPartMediumExercises, exercisesCount - 1,
+                    currBodyPartMediumExercises, exercisesCount,
                     sets, minRepsMediumExercise, maxRepsMediumExercise));
             exercisesInWorkoutDay
                 .AddRange(GetSpecificExercisesForWorkoutDay(
@@ -338,13 +416,13 @@
 
             if (inputModel.Goal == Goal.LoseWeight)
             {
-                minReps = 12;
-                maxReps = 16;
+                minReps = WorkoutConstants.AvgExerciseMinReps;
+                maxReps = WorkoutConstants.AvgExerciseMaxRepsLose;
             }
             else if (inputModel.Goal == Goal.GainMuscle)
             {
-                minReps = 6;
-                maxReps = 10;
+                minReps = WorkoutConstants.AvgExerciseMinRepsGain;
+                maxReps = WorkoutConstants.AvgExerciseMaxRepsGain;
             }
         }
         private int CalculateSetsByDifficulty(WorkoutGenerationInputModel inputModel)
@@ -390,22 +468,6 @@
             }
 
             return exercisesResult;
-        }
-
-        public GeneratedWorkoutPlanDTO GetUserWorkoutPlan(string userId)
-        {
-            var workoutPlan = workoutPlansStorage
-                .All()
-                .Where(x => x.UserId == userId)
-                .ProjectTo<GeneratedWorkoutPlanDTO>(this.mapper.ConfigurationProvider)
-                .FirstOrDefault();
-
-            if(workoutPlan == null)
-            {
-                throw new ArgumentException(ErrorMessages.TrainingProgramIsNotAssigned);
-            }
-
-            return workoutPlan;
         }
     }
 }
