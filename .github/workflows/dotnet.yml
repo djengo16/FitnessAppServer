@@ -16,7 +16,7 @@ jobs:
       with:
        find: "#{{jwtSecret}}"
        replace: "ajrho487ry34o9tcw13sda"
-       include: "**appsettings.json"
+       include: "appsettings.json"
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
