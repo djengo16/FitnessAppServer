@@ -54,6 +54,13 @@
 
             return dto;
         }
+
+        [HttpGet("workoutPlanIds")]
+        public async Task<IActionResult> WorkoutPlanIds(string userId)
+        {
+            return Ok(workoutsService.GetUserWorkoutPlanIds(userId));
+        }
+
         [HttpGet("{id}")]
         public async Task<UserDetailsDTO> UserDetails(string id)
         {

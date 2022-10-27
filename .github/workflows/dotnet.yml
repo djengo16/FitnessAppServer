@@ -8,10 +8,8 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
-    steps:
+    runs-on: ubuntu-latest   
+    steps:    
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
@@ -21,5 +19,12 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    - uses: actions/checkout@v2
+    - name: Find and Replace
+      uses: jacobtomlinson/gha-find-replace@v2
+      with:
+       find: "#{{jwtSecret}}"
+       replace: "ajrho487ry34o9tcw13sda"
+       include: "appsettings.json"
     - name: Test
       run: dotnet test --no-build --verbosity normal

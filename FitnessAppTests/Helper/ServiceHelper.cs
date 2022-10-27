@@ -46,7 +46,8 @@
                 .AddTransient<IExercisesService, ExercisesService>()
                 .AddTransient<IConversationService, ConversationService>()
                 .AddTransient<IMessagesService, MessagesService>()
-                .AddTransient<IJwtService, JwtService>();
+                .AddTransient<IJwtService, JwtService>()
+                .AddTransient<IWebSocketService, WebSocketService>();
 
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase(dbContextName));

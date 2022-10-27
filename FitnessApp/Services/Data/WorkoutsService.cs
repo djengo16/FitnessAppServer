@@ -186,6 +186,14 @@
 
             return false;
         }
+        public ICollection<string> GetUserWorkoutPlanIds(string userId)
+        {
+            return workoutPlansStorage
+                .All()
+                .Where(x => x.UserId == userId)
+                .Select(x => x.Id)
+                .ToList();
+        }
 
         private void LoadExerciseDefaultValues()
         {
