@@ -69,8 +69,6 @@
         [Test]
         public async Task GetUserWorkoutPlanDetailsWillRespondSuccessfullyWhenTheRequestComesFromTheAdministrator()
         {
-            var authHelper = new UserAuthHelper(httpClient);
-
             // Register Administrator's token to the http request's headers
             // so we can simulate that he tries to get the resources from this endpoint
             await GetRandomUserClaimsAsync(httpClient, true, GlobalConstants.AdministratorRoleName);
@@ -123,9 +121,11 @@
             string userId = claims[1].Value;
 
             var response = await httpClient.GetAsync($"/users/activePlanId?userId={userId}");
+            var responseContect = await response.Content.ReadAsStringAsync();
 
             Assert.IsTrue(response.IsSuccessStatusCode);
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+            Assert.That(responseContect.Length > 0);
         }
 
         [Test]
@@ -155,8 +155,6 @@
             Assert.False(response.IsSuccessStatusCode);
             Assert.That(response.StatusCode == HttpStatusCode.Unauthorized);
         }
-
-
 
         /// <summary>
         /// Gets and returns random user claims for testing cases.
