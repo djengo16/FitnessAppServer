@@ -27,10 +27,10 @@
             this.mapper = mapper;
         }
 
-        public async Task DeleteUserAsync(string userId)
+        public async Task HardDeleteUserAsync(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
-            usersRepository.Delete(user);
+            usersRepository.HardDelete(user);
             await usersRepository.SaveChangesAsync();
         }
 
@@ -89,9 +89,9 @@
                     || x.LastName.Contains(searchParams)).Count();
         }
 
-        public async Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model, string userId)
+        public async Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model)
         {
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(model.Id);
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
@@ -101,7 +101,7 @@
 
             await userManager.UpdateAsync(user);
 
-            return userId;
+            return model.Id;
         }
 
         public string GetActiveWorkoutPlanId(string userId)

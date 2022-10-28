@@ -10,11 +10,11 @@
         int GetCountBySearchParams(string searchParams);
         Task<UserDetailsDTO> GetUserByIdAsync(string id);
 
-        Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model, string userId);
+        Task<string> UpdateUserDetailsAsync(UpdateUserDetailsInputModel model);
         Task UpdateProfilePictureAsync(string userId, string pictureUrl);
         string GetProfilePictureUrl(string userId);
 
-        Task DeleteUserAsync(string userId);
+        Task HardDeleteUserAsync(string userId);
         Task AssignTrainingProgramToUser(string programId, string userId);
         Task AssignRoleAsync(string userId, string roleName);
         Task RemoveFromRoleAsync(string userId, string roleName);
