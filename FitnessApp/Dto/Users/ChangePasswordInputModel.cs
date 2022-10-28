@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FitnessApp.Services.ServiceConstants;
+using System.ComponentModel.DataAnnotations;
 
 namespace FitnessApp.Dto.Users
 {
@@ -14,7 +15,7 @@ namespace FitnessApp.Dto.Users
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Compare("NewPassword", ErrorMessage = ErrorMessages.PasswordsDoNotMatch)]
         public string ConfirmPassword { get; set; }
     }
 }
