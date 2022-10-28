@@ -110,6 +110,11 @@
                 LastName = userInput.LastName,
             };
 
+            if(userInput.Id != null)
+            {
+                user.Id = userInput.Id;
+            }
+
             var result = await this.userManager.CreateAsync(user, userInput.Password);
             return this.Ok(result);
         }
@@ -136,16 +141,18 @@
         }
 
         [HttpPut("edit")]
+        [Authorize]
         public async Task<IActionResult> Put(UpdateUserDetailsInputModel user)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userInContextId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-            if(userId == null)
+            if(userInContextId != user.Id && role != GlobalConstants.AdministratorRoleName)
             {
-                return Unauthorized();
+                return Forbid();
             }
 
-            await usersService.UpdateUserDetailsAsync(user, userId);
+            await usersService.UpdateUserDetailsAsync(user);
             
             return this.Ok();
         }
@@ -212,7 +219,16 @@
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            await usersService.DeleteUserAsync(id);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            // only user in the current context could delete his account
+            if (userId != id && role != GlobalConstants.AdministratorRoleName)
+            {
+                return Forbid();
+            }
+
+            await usersService.HardDeleteUserAsync(id);
             return this.NoContent();
         }
     }

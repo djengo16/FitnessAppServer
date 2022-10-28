@@ -3,6 +3,7 @@
     using System.ComponentModel.DataAnnotations;
     public class UserRegisterInputModel
     {
+        public string Id { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; } = "";
