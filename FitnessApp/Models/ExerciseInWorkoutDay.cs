@@ -1,7 +1,4 @@
-﻿using FitnessApp.Models.Common;
-using FitnessApp.Models.Enums;
-
-namespace FitnessApp.Models
+﻿namespace FitnessApp.Models
 {
     public class ExerciseInWorkoutDay
     {

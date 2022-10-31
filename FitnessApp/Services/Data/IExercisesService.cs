@@ -7,12 +7,21 @@
     public interface IExercisesService
     {
         ExerciseDTО GetExerciseDetails(int exerciseId);
+
         ExercisesPageDTO GetExercises(string searchParams, int? take = null, int skip = 0, Difficulty difficulty = 0, MuscleGroup muscleGroup = 0);
+
         int GetCount();
+
         int GetCountBySearchParams(string searchParams);
-        Task Delete(int id);
+
+        Task Delete(int id, bool hardDelete = false);
+
         Exercise GetById(int id);
+
+        int GetIdByName(string name);
+
         Task CreateAsync(ExerciseInputDTO exercise);
+
         Task UpdateAsync(ExerciseUpdateDTO exercise);
     }
 }

@@ -13,11 +13,23 @@
     [TestFixture]
     public class UsersControllerTests : IntegrationTest
     {
+        protected bool _ShouldClearTestUser = false;
+        private WebApplicationFactory<Program> appFactory;
+
         [SetUp]
         public void Setup()
         {
-            var appFactory = new WebApplicationFactory<Program>();
+            appFactory = new WebApplicationFactory<Program>();
             _TestHttpClient = appFactory.CreateDefaultClient();
+        }
+
+        [TearDown]
+        public async Task TearDown()
+        {
+            if( _ShouldClearTestUser)
+            {
+                await _TestHttpClient.DeleteAsync($"/users/{TestConstants.TestUserId}");
+            }
         }
 
         [Test]
@@ -152,12 +164,12 @@
 
             var response = await _TestHttpClient.PostAsJsonAsync("/users/register", userRegisterModel);
             var asString = await response.Content.ReadAsStringAsync();
+            _ShouldClearTestUser = true;
 
             Assert.That(response.IsSuccessStatusCode);
             Assert.That(asString != null);
 
             await AutheticateAsync(RoleType.TestUser);
-            await ClearUserData();
         }
 
         [Test]
@@ -167,6 +179,7 @@
 
             // successfull registration
             await _TestHttpClient.PostAsJsonAsync("/users/register", userRegisterModel);
+            _ShouldClearTestUser = true;
 
             // unauthorized with error msg
             var response = await _TestHttpClient.PostAsJsonAsync("/users/register", userRegisterModel);
@@ -177,7 +190,6 @@
             Assert.That(responseMessage == ErrorMessages.UserWithEmailAlreadyExists);
 
             await AutheticateAsync(RoleType.TestUser);
-            await ClearUserData();
         }
 
         [Test]
@@ -187,6 +199,7 @@
 
             // register
             await _TestHttpClient.PostAsJsonAsync("/users/register", userRegisterModel);
+            _ShouldClearTestUser = true;
 
             // auth with the user from context
             await this.AutheticateAsync(RoleType.TestUser);
@@ -196,7 +209,6 @@
 
             Assert.That(response.IsSuccessStatusCode);
             Assert.That(response.StatusCode == HttpStatusCode.OK);
-            await ClearUserData();
         }
 
         [Test]
@@ -206,6 +218,7 @@
 
             // register
             await _TestHttpClient.PostAsJsonAsync("/users/register", userRegisterModel);
+            _ShouldClearTestUser = true;
 
             // auth with administrator
             await this.AutheticateAsync(RoleType.Administrator);
@@ -215,8 +228,6 @@
 
             Assert.That(response.IsSuccessStatusCode);
             Assert.That(response.StatusCode == HttpStatusCode.OK);
-
-            await ClearUserData();
         }
 
         [Test]
@@ -226,18 +237,18 @@
 
             // register
             await _TestHttpClient.PostAsJsonAsync("/users/register", userRegisterModel);
-
             // auth with another user
             await this.AutheticateAsync(RoleType.User);
 
             // update 
             var response = await _TestHttpClient.PutAsJsonAsync("/users/edit", GetTestUserUpdateModel());
 
-            Assert.False(response.IsSuccessStatusCode);
-            Assert.That(response.StatusCode == HttpStatusCode.Forbidden);
 
             await this.AutheticateAsync(RoleType.TestUser);
-            await ClearUserData();
+            _ShouldClearTestUser = true;
+
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.That(response.StatusCode == HttpStatusCode.Forbidden);
         }
 
         [Test]
@@ -248,6 +259,7 @@
             // register
             await _TestHttpClient.PostAsJsonAsync("/users/register", userRegisterModel);
             await this.AutheticateAsync(RoleType.TestUser);
+            _ShouldClearTestUser = true;
 
             var response = await _TestHttpClient.PutAsJsonAsync("/users/changepassword", new ChangePasswordInputModel()
             {
@@ -258,8 +270,6 @@
 
             Assert.That(response.IsSuccessStatusCode);
             Assert.That(response.StatusCode == HttpStatusCode.OK);
-
-            await ClearUserData();
         }
 
         [Test]
@@ -270,6 +280,7 @@
             // register
             await _TestHttpClient.PostAsJsonAsync("/users/register", userRegisterModel);
             await this.AutheticateAsync(RoleType.TestUser);
+            _ShouldClearTestUser = true;
 
             var response = await _TestHttpClient.PutAsJsonAsync("/users/changepassword", new ChangePasswordInputModel()
             {
@@ -281,16 +292,10 @@
             var responseMessage = await response.Content.ReadFromJsonAsync<ApiResponse>();
             var errorMessage = responseMessage?.Errors["ConfirmPassword"][0];
 
+
             Assert.False(response.IsSuccessStatusCode);
             Assert.That(response.StatusCode == HttpStatusCode.BadRequest);
             Assert.That(errorMessage == ErrorMessages.PasswordsDoNotMatch);
-
-            await ClearUserData();
-        }
-
-        public async Task ClearUserData()
-        {
-            await _TestHttpClient.DeleteAsync($"/users/{TestConstants.TestUserId}");
         }
 
         private UserRegisterInputModel GetTestUserRegisterModel()
