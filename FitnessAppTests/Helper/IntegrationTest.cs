@@ -10,6 +10,7 @@
     using FitnessApp.Tests.Helper.Enum;
     using FitnessApp.Tests.Helper.Models;
     using FitnessApp.Services.ServiceConstants;
+    using Microsoft.AspNetCore.Mvc.Testing;
 
     /// <summary>
     /// Provides common functionalities, which integration
@@ -113,7 +114,7 @@
 
             return jwtSecurityToken.Claims.ToList();
         }
-
+        
         /// <summary>
         /// Returns user id based on auth token.
         /// </summary>

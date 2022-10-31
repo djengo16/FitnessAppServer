@@ -90,7 +90,7 @@
          * First (soft) deletes all ExerciseInWorkoutDay entities
          * with the given exercise id then (soft) deletes the specific Exercise.
          */
-        public async Task Delete(int id)
+        public async Task Delete(int id, bool hardDelete = false)
         {
             var exercise = GetById(id);
 
@@ -101,7 +101,14 @@
 
             await this.exerciseInWorkoutDayService.DeleteAllWithExerciseIdAsync(id);
 
-            this.exercisesStorage.Delete(exercise);
+            if (hardDelete)
+            {
+                this.exercisesStorage.HardDelete(exercise);
+            }
+            else
+            {
+                this.exercisesStorage.Delete(exercise);
+            }
 
             await this.exercisesStorage.SaveChangesAsync();
         }
@@ -140,5 +147,11 @@
             this.exercisesStorage.Update(exercise);
             await this.exercisesStorage.SaveChangesAsync();
         }
+
+        public int GetIdByName(string name) =>
+            this.exercisesStorage.All()
+            .Where(x => x.Name == name)
+            .FirstOrDefault()
+            .Id;
     }
 }

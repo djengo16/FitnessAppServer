@@ -38,6 +38,7 @@ namespace FitnessApp.Controllers
             {
                 return BadRequest(ErrorMessages.ExerciseNotFound);
             }
+
             return Ok(exercise);
         }
 
@@ -45,36 +46,41 @@ namespace FitnessApp.Controllers
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Create(ExerciseInputDTO exercise)
         {
-            if (ModelState.IsValid)
-            {
-                await exercisesService.CreateAsync(exercise);
-                return this.Ok();
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 return BadRequest(this.ModelState.Select(x => x.Value.Errors).ToList());
             }
+
+            await exercisesService.CreateAsync(exercise);
+            return this.Ok();
         }
 
         [HttpPut("update")]
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Update(ExerciseUpdateDTO exercise)
         {
-            if (ModelState.IsValid)
-            {
-                await exercisesService.UpdateAsync(exercise);
-                return this.Ok();
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 return BadRequest(this.ModelState.Select(x => x.Value.Errors).ToList());
             }
+
+            await exercisesService.UpdateAsync(exercise);
+            return this.Ok();
         }
+
         [HttpDelete("{id}")]
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Delete(int id)
         {
             await exercisesService.Delete(id);
+            return Ok();
+        }
+
+        [HttpDelete("hardDelete/{id}")]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> HardDelete(int id)
+        {
+            await exercisesService.Delete(id, true);
             return Ok();
         }
     }
